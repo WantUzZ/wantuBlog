@@ -7,13 +7,12 @@
 
 目前主要做的是：
 ```
-1、数据可视化
-2、数据分析
+1、数据可视化、分析相关
 
 技术栈：
   语言部分：java,nodeJs,javascript,略懂一些python、JQuery.
   框架：spring,springMVC,Express,MyBatis.
-  数据库：oracle,Mysql,ElasticSearch,Neo4J,Mangodb.
+  数据库：oracle,Mysql,ElasticSearch(入门),Neo4J(入门),Mangodb(入门).
   版本控制：git,svn.
   数据可视化相关：Echarts.
 ```
