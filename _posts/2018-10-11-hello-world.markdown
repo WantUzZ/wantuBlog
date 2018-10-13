@@ -68,8 +68,6 @@ want 的 Blog 就这么开通了。
 
 ## 后记
 
-具体搭建过程请参照[教程](https://my.oschina.net/u/1027043/blog/1794382)
-
-—— 转载至 Hux 
+具体搭建过程请参照[教程](https://my.oschina.net/u/1027043/blog/1794382) 
 
 
