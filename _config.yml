@@ -64,6 +64,11 @@ disqus_username: hux
 # Netease settings
 netease_comment: false
 
+# leancloud setting
+leancloud:
+  enable: true
+  app_id: th875Mgx0AVGVAwP5b13HspB-gzGzoHsz
+  app_key: nJwiVqpIQBrVSQX2bD1U2RYB
 
 
 # Analytics settings
