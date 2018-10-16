@@ -5,9 +5,31 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 16 Oct 2018 18:00:32 +0800</pubDate>
-    <lastBuildDate>Tue, 16 Oct 2018 18:00:32 +0800</lastBuildDate>
+    <pubDate>Tue, 16 Oct 2018 19:02:05 +0800</pubDate>
+    <lastBuildDate>Tue, 16 Oct 2018 19:02:05 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>书摘</title>
+        <description>&lt;h2 id=&quot;书摘&quot;&gt;书摘&lt;/h2&gt;
+
+&lt;h3 id=&quot;激荡四十年-中国企业1978-2018&quot;&gt;激荡四十年 中国企业1978-2018&lt;/h3&gt;
+
+&lt;h4 id=&quot;节选&quot;&gt;节选&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;    我们的国家就是一艘驶往未来的大船，途经无数险阻、渡口，很难有人可以至始至终随行到终点，
+每一代人离去之时，均心怀不甘和不舍，而下一代人则感念前辈却又注定反叛。
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Wed, 17 Oct 2018 02:43:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/10/17/bookSummary/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/17/bookSummary/</guid>
+        
+        <category>小说</category>
+        
+        
+      </item>
     
       <item>
         <title>个人已知的一些mysql查询性能优化</title>
@@ -237,9 +259,7 @@ mysql是有查询优化器帮忙优化，但是正如卓哥（店达架构师）
         <link>http://localhost:4000/2018/10/11/hello-world/</link>
         <guid isPermaLink="true">http://localhost:4000/2018/10/11/hello-world/</guid>
         
-        <category>生活</category>
-        
-        <category>Meta</category>
+        <category>jekyll+github page</category>
         
         
       </item>
