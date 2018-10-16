@@ -29,8 +29,16 @@ layout: default
                 </select>
                 {% endif %}
 
-				{{ content }}
-
+                {{ content }}
+                
+                {% if site.leancloud.enable %}
+                <div>
+                <span id="{{ page.url }}" class="leancloud_visitors" data-flag-title="{{ page.title }}">
+                    访问:
+                    <a href="#"><span class="leancloud-visitors-count"></span>次</a>
+                </span>
+                </div>
+                {% endif %}
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     {% if page.previous.url %}
@@ -176,11 +184,3 @@ layout: default
 </style>
 {% endif %}
 
-
-{% if site.leancloud.enable %}
-<span id="{{ page.url }}" class="leancloud_visitors" data-flag-title="{{ page.title }}">
- <span class="post-meta-divider">|</span>
- <span class="post-meta-item-text"> Hits:  </span>
- <span class="leancloud-visitors-count"></span>
-</span>
-{% endif %}

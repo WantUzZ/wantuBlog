@@ -11,16 +11,33 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="你好 - 老王 | want">
+    <meta property="og:title" content="个人已知的一些mysql查询性能优化 - 老王 | want">
     
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="关于程序与设计、黑客与画家 | 王涛，Web & Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。">
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="前言
+直奔正文 
+
+  到店达之后一开始接到了大量的导数的数据需求。还记得当时有一个需求是从数据库中拉每周的周报数据（财务）。那个SQL写的非常的大而且开始的时候执行的速度很慢，差点就逼近了赤狐系统的临界执行时长。
+因为一开始没想去用程序处理，也只是想把需求先搞出来。后面数据慢慢稳定。于是想把整个查询进行一些优化。
+
+  以下就是对于mysql查询性能优化的一些心得（无查询缓存情况下）。
+
+">
+    
+    <meta property="article:published_time" content="2018-10-13T23:06:00Z">
+    
+    
+    <meta property="article:author" content="wantu">
+    
+    
+    <meta property="article:tag" content="mysql">
+    
     
     <meta property="og:image" content="http://localhost:4000/img/wantu.jpg">
-    <meta property="og:url" content="http://localhost:4000/portfolio/">
+    <meta property="og:url" content="http://localhost:4000/2018/10/13/myql/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>你好 - 老王 | want</title>
+    <title>个人已知的一些mysql查询性能优化 - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -29,7 +46,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/portfolio/">
+    <link rel="canonical" href="http://localhost:4000/2018/10/13/myql/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -354,25 +371,335 @@
 </script>
 
 
-    <!DOCTYPE html>
-<html class="no-js">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Timeline</title>
-		<link rel="stylesheet" type="text/css" href="css/timeline.css" />
-		<script src="js/modernizr.custom.js"></script>
-	</head>
-	<body>
-			<div class="container" style="margin:0;padding:0;width:100%;">
-					<header>
-						<img width="175" height="175" style="border-radius:50%;" src="/img/aiy.jpg">
-						<h1>...</h1>
-					</header>
-				</div>
-	</body>
-</html>
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/post-bg-2015.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/post-bg-2015.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+<header class="intro-header" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=mysql" title="mysql">mysql</a>
+                        
+                    </div>
+                    <h1>个人已知的一些mysql查询性能优化</h1>
+                    
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by wantu on October 13, 2018</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+                <h2 id="前言">前言</h2>
+<p><a href="#build">直奔正文</a> 
+<br />
+  到店达之后一开始接到了大量的导数的数据需求。还记得当时有一个需求是从数据库中拉每周的周报数据（财务）。那个SQL写的非常的大而且开始的时候执行的速度很慢，差点就逼近了赤狐系统的临界执行时长。
+因为一开始没想去用程序处理，也只是想把需求先搞出来。后面数据慢慢稳定。于是想把整个查询进行一些优化。
+<br />
+  以下就是对于mysql查询性能优化的一些心得（无查询缓存情况下）。</p>
+
+<p id="build"></p>
+<hr />
+
+<h2 id="正文">正文</h2>
+<p>先大致了解一下mysql的架构设计和查询执行路径。<br />
+mysql的逻辑架构分为三层。最上层大多数是基于网络的客户端。第二层是mysql的核心，mysql的核心服务功能都在此层，包括查询解析、分析、优化、缓存以及所有的内置函数。第三层则是存储引擎，引擎的职责是负责mysql中数据的存储和提取。各个引擎各有所长。服务器通过API与存储引擎进行通信。<br /></p>
+
+<h3 id="查询慢可能的原因">查询慢可能的原因：</h3>
+<p>1.计算能力不足<br />
+2.设计表存在问题<br />
+3.建表时并没有建立高效的索引<br />
+4.SQL语句有提高的空间(避免返回不需要的数据)<br /></p>
+
+<h3 id="解决办法">解决办法：</h3>
+<p>1.如果数据体量比较大，mysql处理起来比较费力，可以考虑一些分布式计算框架。<br />
+2.如果一个表的基础数据量就已经够大了并且伴随较大的增量数据，可以考虑分表（按时间分等策略…）<br />
+3.索引，建立高性能的索引策略。（下面会细讲）<br />
+4.优化自己的SQL语句<br />
+5.基础数据预处理（中间表）<br /></p>
+
+<p>抛开数据量一上来就建索引就是耍流氓，因为mysql自身维护它也是需要消耗资源的，小表全表扫描简单粗暴又高效，超大型的表也不适合，索引的代价太高可用考虑分区技术。中到大型表，嘿嘿嘿，就是你了。
+在innodb引擎使用的是B+tree索引,基于B-tree对索引列是顺序组织存储的缘故，所以很适合查找范围数据。</p>
+<h4 id="创建高性能的索引">创建高性能的索引：</h4>
+<p>1.查询中列不是独立的<br />
+独立的列指的是索引列不能是表达式的一部分，也不能是函数的参数。
+select stu.name from stu where stu.id + 1 = 5.即使你在stu(前提：stu表中的id不是主键)的id建了索引，并没有什么用。<br />
+   2.前缀索引<br />
+有的时候需要索引很长的字符，这会导致索引变得大且慢，可以考虑索引开始的部分字符，此举可大大节约索引空间，从而提高索引效率，但也会导致另一索引选择性降低。（索引选择性 = 不重复的索引值/表的记录总数）
+如何确定前缀索引的长度？</p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="k">select</span> <span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">total</span><span class="p">,</span><span class="n">colu_name</span>
+<span class="k">from</span> <span class="k">table_name</span> <span class="n">t</span>
+<span class="k">group</span> <span class="k">by</span> <span class="n">colu_name</span>
+<span class="k">order</span> <span class="k">by</span> <span class="n">total</span> <span class="k">desc</span> 
+<span class="k">limit</span> <span class="mi">10</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>可以得到某个列最频繁出现的前10个值，记录下来这10个值得范围作为标准。</p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="k">select</span> <span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">total</span><span class="p">,</span><span class="k">left</span><span class="p">(</span><span class="n">colu_name</span><span class="p">,</span><span class="n">n</span><span class="p">)</span> <span class="k">as</span> <span class="n">pref</span>
+<span class="k">from</span> <span class="k">table_name</span> <span class="n">t</span>
+<span class="k">group</span> <span class="k">by</span> <span class="n">pref</span> 
+<span class="k">order</span> <span class="k">by</span> <span class="n">total</span> <span class="k">desc</span>
+<span class="k">limit</span> <span class="mi">10</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>通过不断的调整上面n的值(前缀索引的长度)得到的范围值是接近标准中的最小的数值。
+打个比方，当n=7时得到的范围值就已经很接近标准了，但是n=8的时候比7更接近但时范围差距很小，那么n=7较为合适。
+创建前缀索引：</p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">key</span> <span class="p">(</span><span class="n">colu_name</span><span class="p">(</span><span class="n">best_index_length</span><span class="p">))</span> 
+<span class="o">//</span><span class="n">best_index_length</span><span class="err">最佳前缀索引长度</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>3.多列索引<br />
+如果在用explain查看SQL的执行计划中有发现有索引合并（type值为index_merge）的时候应该好好检查一下查询和表的结构。
+a、当表中的多个单独的索引列做相交操作时(通常有多个AND条件)，通常需要一个包含所有相关列的所列索引而不是多个独立的单列索引。<br />
+   4.选择合适的索引顺序<br />
+通常做法：将选择性高的列放到索引最前列<br />
+   5.聚簇索引<br />
+   6.删除未使用的索引和冗余的索引<br />
+   这些索引是累赘，可以通过一些工具帮忙定位后删除。<br /></p>
+
+<h3 id="要是我不知道建高性能索引怎么办">要是我不知道建高性能索引怎么办？</h3>
+<p>1.看where子句哪些列出现比较频繁。给那些频繁的列（主要）、有更多不同值（次要）的列建上索引。(次要做法的目的是高效的过滤掉不要的行)<br /></p>
+
+<h4 id="优化sql">优化sql</h4>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="k">select</span> <span class="n">t</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="k">max</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">score</span><span class="p">)</span> <span class="k">as</span> <span class="s1">'this_is_my_best_student_score'</span>
+<span class="k">from</span> <span class="n">teacher</span> <span class="n">t</span><span class="p">,</span><span class="n">student</span> <span class="n">s</span>
+<span class="k">where</span> <span class="n">t</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">tid</span>
+<span class="k">group</span> <span class="k">by</span> <span class="n">t</span><span class="p">.</span><span class="n">id</span>
+<span class="k">having</span> <span class="n">t</span><span class="p">.</span><span class="n">name</span> <span class="k">like</span> <span class="s1">'%王%'</span> <span class="o">//</span><span class="s1">'%keyword%'</span><span class="err">这种是不会走索引</span>
+<span class="k">order</span> <span class="k">by</span> <span class="n">t</span><span class="p">.</span><span class="n">id</span> <span class="k">desc</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>首先得知道整个SQL的执行顺序：<br />
+from -&gt; where -&gt; group by -&gt;having -&gt;select -&gt; order by -&gt; limit<br />
+from过程中如果使用的是自然连接那么会导致产生一张笛卡尔积的虚拟表，这样做是很蠢的。推荐使用外连接(会减少虚拟表的数据量)。<br />
+where 对虚拟表中的数据进行过滤，能放在这里的过滤别放having中进行过滤<br />
+group by<br />
+having 主要就是聚合函数结果进行过滤<br />
+select 只要自己要的数据！不需要的字段一个不要。<br />
+order by <br />
+limit <br />
+此外上面这个sql中的like可以替成一些方法：locate、position、instr等</p>
+
+<h4 id="基础数据预处理">基础数据预处理</h4>
+<p>针对业务上的一些统计数据，可以将数据按日统计好在放入一张中间表中，之后将相关的定时任务脚本部署好，每日进行统计数据的增量更新。此举会明显加快系统的相应时间。增量更新与全量更新相结合更能保证数据的可靠性。</p>
+
+<h4 id="读写分离定期同步">读写分离，定期同步。</h4>
+<p>主库写从库读，定期同步数据。</p>
+
+<h2 id="后记">后记</h2>
+
+<p>这应该是我所知道的关于SQL查询优化的所有技能了。<br />
+mysql是有查询优化器帮忙优化，但是正如卓哥（店达架构师）说的一样：一定要有写高性能的sql语句的意识。<br /></p>
+
+<p>再补充几点：<br />
+1、不要想把所有的事情都交给mysql交给SQL。SQL语句整个执行是一个黑盒。我们没有办法去debug看看具体的数据流。<br />
+一个较为恰当的做法就是粗加工基础数据，再把这些数据用程序来进行相关的计算。这样即便是有问题，我们也可以轻松的定位问题。<br />
+2、个人心得：SQL书写的准确性不是难在语法，而是业务上的。我们需要对用到的每张表有所认知。知道每张表的细粒度。<br />
+也就是这样，我们才会对各种连接查询之后的那个虚拟的表的数据结构有一个清楚的认识。也就是这样才能保证我们的数据是正确的。<br /></p>
+
+<p>后期还会更新一些东西，今晚要休息了。<br />
+转载请注明出处。</p>
+
+
+                
+                
+                <div>
+                <span id="/2018/10/13/myql/" class="leancloud_visitors" data-flag-title="个人已知的一些mysql查询性能优化">
+                    访问:
+                    <a href="#"><span class="leancloud-visitors-count"></span>次</a>
+                </span>
+                </div>
+                
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/10/11/hello-world/" data-toggle="tooltip" data-placement="top" title="Hello world">
+                        Previous<br>
+                        <span>Hello world</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        
+        
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "hux";
+    var disqus_identifier = "/2018/10/13/myql";
+    var disqus_url = "http://localhost:4000/2018/10/13/myql/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
 
 
     <!-- Footer -->
@@ -504,6 +831,64 @@
 
 
 <!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
 
 
 
