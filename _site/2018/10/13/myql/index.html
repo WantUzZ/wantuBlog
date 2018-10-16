@@ -74,7 +74,7 @@
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("th875Mgx0AVGVAwP5b13HspB-gzGzoHsz", "nJwiVqpIQBrVSQX2bD1U2RYB");</script>
+  <script>AV.initialize("", "");</script>
   <script>
     //新增访问次数
     function addCount(Counter) {
@@ -416,7 +416,7 @@
 
 
 
-
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <!-- Post Content -->
 <article>
     <div class="container">
@@ -508,7 +508,7 @@ a、当表中的多个单独的索引列做相交操作时(通常有多个AND条
    6.删除未使用的索引和冗余的索引<br />
    这些索引是累赘，可以通过一些工具帮忙定位后删除。<br /></p>
 
-<h3 id="要是我不知道建高性能索引怎么办">要是我不知道建高性能索引怎么办？</h3>
+<h4 id="通俗做法">通俗做法</h4>
 <p>1.看where子句哪些列出现比较频繁。给那些频繁的列（主要）、有更多不同值（次要）的列建上索引。(次要做法的目的是高效的过滤掉不要的行)<br /></p>
 
 <h4 id="优化sql">优化sql</h4>
@@ -559,11 +559,10 @@ mysql是有查询优化器帮忙优化，但是正如卓哥（店达架构师）
 
                 
                 
-                <div>
-                <span id="/2018/10/13/myql/" class="leancloud_visitors" data-flag-title="个人已知的一些mysql查询性能优化">
-                    访问:
-                    <a href="#"><span class="leancloud-visitors-count"></span>次</a>
-                </span>
+                <div style="margin-left: auto;margin-right: auto;">
+                    <span id="busuanzi_container_page_pv">
+                    本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+                    </span>  
                 </div>
                 
                 <hr style="visibility: hidden;">
@@ -650,7 +649,7 @@ mysql是有查询优化器帮忙优化，但是正如卓哥（店达架构师）
 <!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = "hux";
+    var disqus_shortname = "want";
     var disqus_identifier = "/2018/10/13/myql";
     var disqus_url = "http://localhost:4000/2018/10/13/myql/";
 
@@ -731,10 +730,17 @@ mysql是有查询优化器帮忙优化，但是正如卓哥（店达架构师）
   
   
 </ul>
-
+                <p class="copyright text-muted">
+                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span> | <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+                   <!-- <a href="http://gfwant.com">want</a> | -->
+                  <iframe
+                      style="margin-left: 2px; margin-bottom:-5px;"
+                      frameborder="0" scrolling="0" width="100px" height="20px"
+                      src="" >
+                  </iframe>
+                </p>
                 <p class="copyright text-muted">
                     Copyright &copy; want 2018
-                    <br>
                      <!-- <a href="http://gfwant.com">want</a> | -->
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
@@ -898,7 +904,7 @@ mysql是有查询优化器帮忙优化，但是正如卓哥（店达架构师）
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("th875Mgx0AVGVAwP5b13HspB-gzGzoHsz", "nJwiVqpIQBrVSQX2bD1U2RYB");</script>
+  <script>AV.initialize("", "");</script>
   <script>
     //新增访问次数
     function addCount(Counter) {

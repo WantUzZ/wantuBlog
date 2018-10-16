@@ -8,7 +8,7 @@ layout: default
 
 <!-- Post Header -->
 {% include intro-header.html type='post' %}
-
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <!-- Post Content -->
 <article>
     <div class="container">
@@ -32,11 +32,10 @@ layout: default
                 {{ content }}
                 
                 {% if site.leancloud.enable %}
-                <div>
-                <span id="{{ page.url }}" class="leancloud_visitors" data-flag-title="{{ page.title }}">
-                    访问:
-                    <a href="#"><span class="leancloud-visitors-count"></span>次</a>
-                </span>
+                <div style="margin-left: auto;margin-right: auto;">
+                    <span id="busuanzi_container_page_pv">
+                    本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+                    </span>  
                 </div>
                 {% endif %}
                 <hr style="visibility: hidden;">

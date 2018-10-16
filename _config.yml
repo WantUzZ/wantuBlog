@@ -7,7 +7,8 @@ description: "关于程序与设计、黑客与画家 | 王涛，Web & Mobile Lo
 keyword: "王涛, want王涛, want, huxpro, @huxpro, 王涛的博客, Hux Blog, 博客, 个人网站, 互联网, Web, JavaScript, 大数据"
 url: "gfwant.com"              # your host, for absolute URL
 baseurl: ""                             # for example, '/blog' if your blog hosted on 'host/blog'
-
+visite: <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span>
+totalVisited: <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
 # Publish posts or collection documents with a future date.
 future: true
 
@@ -59,7 +60,7 @@ kramdown:
 
 
 # Disqus settings
-disqus_username: hux
+disqus_username: want
 
 # Netease settings
 netease_comment: false
@@ -67,8 +68,8 @@ netease_comment: false
 # leancloud setting
 leancloud:
   enable: true
-  app_id: th875Mgx0AVGVAwP5b13HspB-gzGzoHsz
-  app_key: nJwiVqpIQBrVSQX2bD1U2RYB
+  app_id: 
+  app_key: 
 
 
 # Analytics settings

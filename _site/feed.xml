@@ -5,8 +5,8 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 16 Oct 2018 10:07:20 +0800</pubDate>
-    <lastBuildDate>Tue, 16 Oct 2018 10:07:20 +0800</lastBuildDate>
+    <pubDate>Tue, 16 Oct 2018 13:36:49 +0800</pubDate>
+    <lastBuildDate>Tue, 16 Oct 2018 13:36:49 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -88,7 +88,7 @@ a、当表中的多个单独的索引列做相交操作时(通常有多个AND条
    6.删除未使用的索引和冗余的索引&lt;br /&gt;
    这些索引是累赘，可以通过一些工具帮忙定位后删除。&lt;br /&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;要是我不知道建高性能索引怎么办&quot;&gt;要是我不知道建高性能索引怎么办？&lt;/h3&gt;
+&lt;h4 id=&quot;通俗做法&quot;&gt;通俗做法&lt;/h4&gt;
 &lt;p&gt;1.看where子句哪些列出现比较频繁。给那些频繁的列（主要）、有更多不同值（次要）的列建上索引。(次要做法的目的是高效的过滤掉不要的行)&lt;br /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;优化sql&quot;&gt;优化sql&lt;/h4&gt;
@@ -149,7 +149,7 @@ mysql是有查询优化器帮忙优化，但是正如卓哥（店达架构师）
       <item>
         <title>Hello world</title>
         <description>&lt;blockquote&gt;
-  &lt;p&gt;“Yeah It’s on. ”&lt;/p&gt;
+  &lt;p&gt;“10000km”&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
