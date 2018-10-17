@@ -11,15 +11,15 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="ElasticSearch使用中的一些注意点 - 老王 | want">
+    <meta property="og:title" content="回顾ElasticSearch的使用(持续更新...) - 老王 | want">
     
     <meta property="og:type" content="article">
     <meta property="og:description" content="前言
 es背景故事
-多年前，一个叫做Shay Banon的刚结婚不久的失业开发者，由于妻子要去伦敦学习厨师，他便跟着也去了。
+  多年前，一个叫做Shay Banon的刚结婚不久的失业开发者，由于妻子要去伦敦学习厨师，他便跟着也去了。
 在他找工作的过程中，为了给妻子构建一个食谱的搜索引擎，他开始构建一个早期版本的Lucene。
 直接基于Lucene工作会比较困难，所以Shay开始抽象Lucene代码以便Java程序员可以在应用中添加搜索功能。他发布了他的第一个开源项目，叫做“Compass”。
-后来...">
+...">
     
     <meta property="article:published_time" content="2018-10-17T02:43:00Z">
     
@@ -38,7 +38,7 @@ es背景故事
     <meta property="og:url" content="http://localhost:4000/2018/10/17/elasticSearchQuery/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>ElasticSearch使用中的一些注意点 - 老王 | want</title>
+    <title>回顾ElasticSearch的使用(持续更新...) - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -407,7 +407,7 @@ es背景故事
                         <a class="tag" href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90" title="数据分析">数据分析</a>
                         
                     </div>
-                    <h1>ElasticSearch使用中的一些注意点</h1>
+                    <h1>回顾ElasticSearch的使用(持续更新...)</h1>
                     
                     <h2 class="subheading"></h2>
                     <span class="meta">Posted by wantu on October 17, 2018</span>
@@ -438,14 +438,14 @@ es背景故事
 
                 <h2 id="前言">前言</h2>
 <h3 id="es背景故事">es背景故事</h3>
-<p>多年前，一个叫做Shay Banon的刚结婚不久的失业开发者，由于妻子要去伦敦学习厨师，他便跟着也去了。<br />
-在他找工作的过程中，为了给妻子构建一个食谱的搜索引擎，他开始构建一个早期版本的Lucene。<br />
-直接基于Lucene工作会比较困难，所以Shay开始抽象Lucene代码以便Java程序员可以在应用中添加搜索功能。他发布了他的第一个开源项目，叫做“Compass”。<br />
-后来Shay找到一份工作，这份工作处在高性能和内存数据网格的分布式环境中，因此高性能的、实时的、分布式的搜索引擎也是理所当然需要的。<br />
+<p>  多年前，一个叫做Shay Banon的刚结婚不久的失业开发者，由于妻子要去伦敦学习厨师，他便跟着也去了。
+在他找工作的过程中，为了给妻子构建一个食谱的搜索引擎，他开始构建一个早期版本的Lucene。
+直接基于Lucene工作会比较困难，所以Shay开始抽象Lucene代码以便Java程序员可以在应用中添加搜索功能。他发布了他的第一个开源项目，叫做“Compass”。
+后来Shay找到一份工作，这份工作处在高性能和内存数据网格的分布式环境中，因此高性能的、实时的、分布式的搜索引擎也是理所当然需要的。
 然后他决定重写Compass库使其成为一个独立的服务叫做Elasticsearch。<br />
-第一个公开版本出现在2010年2月，在那之后Elasticsearch已经成为Github上最受欢迎的项目之一，代码贡献者超过300人。<br />
+  第一个公开版本出现在2010年2月，在那之后Elasticsearch已经成为Github上最受欢迎的项目之一，代码贡献者超过300人。
 一家主营Elasticsearch的公司就此成立，他们一边提供商业支持一边开发新功能，不过Elasticsearch将永远开源且对所有人可用。<br />
-Shay的妻子依旧等待着她的食谱搜索……</p>
+  Shay的妻子依旧等待着她的食谱搜索……</p>
 <h3 id="基础知识">基础知识：</h3>
 <p>1、es本质上是一个分布式文档(document)数据库，允许多台机器协同工作，每台机器可以运行多个es实例。单个es实例称之为节点。一组节点构成一个集群。<br />
 2、index:type = 1:n type:document = 1:n 但是6.x版本只允许每个index包含一个Type。<br />
@@ -460,7 +460,7 @@ Shay的妻子依旧等待着她的食谱搜索……</p>
 <h3 id="相关问题">相关问题</h3>
 <h4 id="为啥主分片的数量后期无法修改">为啥主分片的数量后期无法修改？</h4>
 
-<p>####脑裂问题</p>
+<h4 id="脑裂问题">脑裂问题</h4>
 
                 
                 
