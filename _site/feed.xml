@@ -5,8 +5,8 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 17 Oct 2018 18:43:11 +0800</pubDate>
-    <lastBuildDate>Wed, 17 Oct 2018 18:43:11 +0800</lastBuildDate>
+    <pubDate>Thu, 18 Oct 2018 09:51:55 +0800</pubDate>
+    <lastBuildDate>Thu, 18 Oct 2018 09:51:55 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -86,8 +86,8 @@
 
 &lt;h2 id=&quot;正文&quot;&gt;正文&lt;/h2&gt;
 &lt;p&gt;  先大致了解一下mysql的架构设计和查询执行路径。&lt;br /&gt;
-mysql的逻辑架构分为三层。最上层大多数是基于网络的客户端。第二层是mysql的核心，mysql的核心服务功能都在此层，包括查询解析、分析、优化、缓存以及所有的内置函数。第三层则是存储引擎，引擎的职责是负责mysql中数据的存储和提取。各个引擎各有所长。服务器通过API与存储引擎进行通信。&lt;br /&gt;&lt;/p&gt;
-
+mysql的逻辑架构分为三层。最上层大多数是基于网络的客户端。第二层是mysql的核心，mysql的核心服务功能都在此层，包括查询解析、分析、优化、缓存以及所有的内置函数。第三层则是存储引擎，引擎的职责是负责mysql中数据的存储和提取。各个引擎各有所长。服务器通过API与存储引擎进行通信。&lt;br /&gt;
+&lt;img src=&quot;/img/mysqlDoQuery.jpg&quot; alt=&quot;查询执行路径图&quot; /&gt;&lt;/p&gt;
 &lt;h3 id=&quot;查询慢可能的原因&quot;&gt;查询慢可能的原因：&lt;/h3&gt;
 &lt;p&gt;1.计算能力不足&lt;br /&gt;
 2.设计表存在问题&lt;br /&gt;
