@@ -437,7 +437,7 @@ es背景故事
                 
 
                 <h2 id="前言">前言</h2>
-<h3 id="es背景故事">es背景故事</h3>
+<h4 id="es背景故事">es背景故事</h4>
 <p>  多年前，一个叫做Shay Banon的刚结婚不久的失业开发者，由于妻子要去伦敦学习厨师，他便跟着也去了。
 在他找工作的过程中，为了给妻子构建一个食谱的搜索引擎，他开始构建一个早期版本的Lucene。
 直接基于Lucene工作会比较困难，所以Shay开始抽象Lucene代码以便Java程序员可以在应用中添加搜索功能。他发布了他的第一个开源项目，叫做“Compass”。
@@ -446,7 +446,7 @@ es背景故事
   第一个公开版本出现在2010年2月，在那之后Elasticsearch已经成为Github上最受欢迎的项目之一，代码贡献者超过300人。
 一家主营Elasticsearch的公司就此成立，他们一边提供商业支持一边开发新功能，不过Elasticsearch将永远开源且对所有人可用。<br />
   Shay的妻子依旧等待着她的食谱搜索……</p>
-<h3 id="基础知识">基础知识：</h3>
+<h4 id="基础知识">基础知识：</h4>
 <p>1、es本质上是一个分布式文档(document)数据库，允许多台机器协同工作，每台机器可以运行多个es实例。单个es实例称之为节点。一组节点构成一个集群。<br />
 2、index:type = 1:n type:document = 1:n 但是6.x版本只允许每个index包含一个Type。<br />
 3、因为单节点（硬件限制）不可能存储太大的数据量，es提供了将index（一组document的集合）划分为分片的功能。分片数据只是整个index数据的一部分。<br />
@@ -455,6 +455,49 @@ es背景故事
 5、默认情况下es会为每一个index分配5个主分片和一个副本（5个复制分片）。同一份shard是不会在一个节点中保存的(容灾、提高查询性能考量)。<br /></p>
 
 <h2 id="正文">正文</h2>
+<h4 id="结构化查询or结构化过滤">结构化查询or结构化过滤？</h4>
+<p>  最近负责的项目开始的时候并不觉得这两者有何不同，所以在项目的开始阶段无论需求是啥，一律采用结构化
+查询方式去进行相关的数据的检索。但是后来回顾的时候发现这样的行为是不符合规范的。两者的侧重点不一样查询语句做全
+文搜索或者其他需要进行相关性评分的时候是可以的因为_score会给一个评分，可以通过这个评分筛出最符合要求的数据
+但是如果只是检索范围数据或者是满足部分条件的数据我们更应该去使用结构化过滤语句。</p>
+
+<p><strong>性能相关:</strong> 
+   使用过滤语句得到的是一个结果集–简单的documen列表，快速匹配运算并存入内存是十分方便的， 每个文档仅需要1个字节。这些缓存的过滤结果集与后续请求的结合使用是非常高效的。查询语句不仅要查找相匹配的document还得计算每个document的相关性，所以一般查询语句的性能要低于过滤语句的，并且查询语句的结果也是不可缓存的。但是，由于倒排索引的缘故，一个只匹配少量文档的简单查询语句在百万级文档中的查询效率会与一条经过缓存 的过滤语句旗鼓相当，甚至略占上风。但是一般情况下，一条经过缓存的过滤查询要远胜一条查询语句的执行效率。
+<strong>标准语法:</strong></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="nx">GET</span> <span class="o">/</span><span class="nx">_search</span>
+<span class="p">{</span>
+  <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span> 
+    <span class="s2">"bool"</span><span class="p">:</span> <span class="p">{</span> 
+      <span class="s2">"must"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">"match"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"title"</span><span class="p">:</span>   <span class="s2">"Search"</span>        <span class="p">}},</span> 
+        <span class="p">{</span> <span class="s2">"match"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"Elasticsearch"</span> <span class="p">}}</span>  
+      <span class="p">],</span>
+      <span class="s2">"filter"</span><span class="p">:</span> <span class="p">[</span> 
+        <span class="p">{</span> <span class="s2">"term"</span><span class="p">:</span>  <span class="p">{</span> <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"published"</span> <span class="p">}},</span> 
+        <span class="p">{</span> <span class="s2">"range"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"publish_date"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"gte"</span><span class="p">:</span> <span class="s2">"2015-01-01"</span> <span class="p">}}}</span> 
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="索引别名的实用性">索引别名的实用性</h4>
+<p>  最近分析系统的数据源和采集系统数据源数据结构不一致问题牵出了这个问题。周知索引一旦建立就不能修改其mapping，但是如果需求方确实要进行相关的mapping修改那怎么办？只得重建索引然后再把数据进行导入。这个过程很可能造成服务的中断。别名就能大大缓解这个问题。<br /></p>
 
 <h2 id="后记">后记</h2>
 <h3 id="相关问题">相关问题</h3>
