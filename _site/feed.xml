@@ -5,8 +5,8 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 18 Oct 2018 13:18:34 +0800</pubDate>
-    <lastBuildDate>Thu, 18 Oct 2018 13:18:34 +0800</lastBuildDate>
+    <pubDate>Fri, 19 Oct 2018 13:10:17 +0800</pubDate>
+    <lastBuildDate>Fri, 19 Oct 2018 13:10:17 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -97,13 +97,40 @@
         <title>书摘</title>
         <description>&lt;h2 id=&quot;书摘&quot;&gt;书摘&lt;/h2&gt;
 
-&lt;h3 id=&quot;激荡四十年-中国企业1978-2018&quot;&gt;激荡四十年 中国企业1978-2018&lt;/h3&gt;
+&lt;h4 id=&quot;激荡四十年-中国企业1978-2018&quot;&gt;激荡四十年 中国企业1978-2018&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;   我们的国家就是一艘驶往未来的大船，途经无数险阻、渡口，很难有人可以至始至终随行到终点，
+每一代人离去之时，均心怀不甘和不舍，而下一代人则感念前辈却又注定反叛。&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;h4 id=&quot;节选&quot;&gt;节选&lt;/h4&gt;
+&lt;h4 id=&quot;关键对话如何高效沟通&quot;&gt;关键对话：如何高效沟通&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;  世事本无好坏，皆因思想使然。&lt;/li&gt;
+  &lt;li&gt;  当我深陷于受害者、大反派和无助者等错误想法时，当我出现错误动机时，一心只想证明自己正确时，往往会模糊自己的眼睛，看不到事情的真相。&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;  我们的国家就是一艘驶往未来的大船，途经无数险阻、渡口，很难有人可以至始至终随行到终点，
-每一代人离去之时，均心怀不甘和不舍，而下一代人则感念前辈却又注定反叛。&lt;/p&gt;
+&lt;h4 id=&quot;皮囊&quot;&gt;皮囊&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;  他们一方面到处打听那些勇敢迈进舞厅的人，打听那白白的大腿和金色的墙面，另一方面又马上摆出一种道貌岸然的神情。&lt;/li&gt;
+  &lt;li&gt;  我期许自己要活得更真实也更诚实，要更接受甚至喜欢自己身上起伏的每部分，才能更喜欢这世界。
+我希望自己懂得处理、欣赏各种欲求，各种人性的丑陋与美妙，找到和它们相处的最好方式。我也希望自己能把这一路看到的风景，最终能全部用审美的笔触表达出来。&lt;/li&gt;
+&lt;/ul&gt;
 
+&lt;h4 id=&quot;悟空传&quot;&gt;悟空传&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;  （阿月对天蓬说的话）我说你傻吧，其实我花这么多时间来做星辰银河，只有你一个人欣赏，我一粒一粒地摆它，只是因为你看了高兴……我心中真正在乎的是什么，你不懂么？&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;黄金时代&quot;&gt;黄金时代&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;  人生时一条寂寞的路，需要一本有趣的书来消磨旅途。&lt;/li&gt;
+  &lt;li&gt;  所谓破鞋者，乃是一个指称，大家都说你是破鞋，你就是破鞋，没什么道理可讲。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;边城&quot;&gt;边城&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;  像貌堂堂是女子倾心的原由，但一个过分美观的身材，却只作成了与女子相远的方便。谁不承认狮子是孤独兽物？狮子永远孤独，就只为了狮子全身的纹彩与众不同。&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         <pubDate>Wed, 17 Oct 2018 02:43:00 +0800</pubDate>
         <link>http://localhost:4000/2018/10/17/bookSummary/</link>
