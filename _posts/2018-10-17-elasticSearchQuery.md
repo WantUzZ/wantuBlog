@@ -59,10 +59,45 @@ GET /_search
 
 #### 索引别名的实用性
 &nbsp;&#8195;最近分析系统的数据源和采集系统数据源数据结构不一致问题牵出了这个问题。周知索引一旦建立就不能修改其mapping，但是如果需求方确实要进行相关的mapping修改那怎么办？只得重建索引然后再把数据进行导入。这个过程很可能造成服务的中断。别名就能大大缓解这个问题。<br>
+索引别名相当于一个指针，只不过这个指针可以指向一个或多个索引。
 
+**相关语法：**
+```javascript
+//新增索引别名
+POST /_aliases
+{
+    "actions" : [
+        { "add" : { "index" : "test1", "alias" : "alias1" } }
+    ]
+}
+或者是：PUT /{index}/_alias/{name}
+
+//移除索引别名
+POST /_aliases
+{
+    "actions" : [
+        { "remove" : { "index" : "test1", "alias" : "alias1" } }
+    ]
+}
+//重命名索引别名，此操作是原子操作。
+POST /_aliases
+{
+    "actions" : [
+        { "remove" : { "index" : "test1", "alias" : "alias1" } },
+        { "add" : { "index" : "test2", "alias" : "alias1" } }
+    ]
+}
+
+```
 
 ## 后记
 ### 相关问题
 #### 为啥主分片的数量后期无法修改？
-
+es通过以下公式计算文档对应的分片：
+```
+shard = hash(routing) % number_of_primary_shards
+//routing 默认是文档的id
+//number_of_primary_shards 主分片的数量
+```
+从这个公式可以看出如果主分片数量发生改变很有可能造成文档对应的分片找不到的情况。
 #### 脑裂问题
