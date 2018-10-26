@@ -62,7 +62,7 @@ GET /_search
 &nbsp;&#8195;最近分析系统的数据源和采集系统数据源数据结构不一致问题牵出了这个问题。周知索引一旦建立就不能修改其mapping，但是如果需求方确实要进行相关的mapping修改那怎么办？只得重建索引然后再把数据进行导入。这个过程很可能造成服务的中断。别名就能大大缓解这个问题。<br>
 索引别名相当于一个指针，只不过这个指针可以指向一个或多个索引。
 
-**相关语法：**
+**相关语法（局部）：**
 ```javascript
 //新增索引别名
 POST /_aliases
@@ -90,6 +90,106 @@ POST /_aliases
 }
 
 ```
+#### from+size的不足和深分页的解决方法
+&nbsp;&#8195;es进行后端分页常用的方法是使用from+size的那种方式进行，一旦页数比较大，那么由于分布式搜索的缘故会导致CPU和内存的大量消耗。<br>
+**分布式搜索解析**<br>
+*第一阶段：查询阶段（解决取谁这个问题)*<br>
+* 客户端发送搜索请求给某个节点A（协调节点），该节点创建一个from+size的空优先级队列。
+* 节点A转发这个搜索请求到索引中的每个分片的原本或副本，每个分片在本地执行这个查询并且会将结果保存到一个大小为from+size的有*序本地优先级队列中。
+* 每个分片返回document的ID和它的优先级队列的所有document的排序值给协调节点A,节点A会把这些值合并到自己的优先级队列里产生全局排序结果。<br>
+
+*第二阶段：取回阶段（解决取的是谁这个问题)*<br>
+* 协调节点会根据全局排序结果辨别出哪个document需要取回，并且向相关的分片发送GET请求。
+* 每个分片加载document并且根据需要丰富它们（丰富：补全一些必要的信息），然后将document返回给协调节点。
+* 一旦所有的document都被取回，协调节点会将返回结果返回给客户端。
+
+根据上面的对分布式搜索的认知我们知道使用from+size的这种方式进行分页操作，每个分片都要构造一个from+size长度的优先级队列，而协调节点则要对  分片数量*（from+size） 个document进行排序找size个document。这就是消耗CPU和内存的原因了。而且在实际工作中会出现from+size查询10000以后数据为空的情况（在网上还发现部分出现报错提示）。
+
+**解决**<br>
+1、通过修改index.max_result_window的值来继续使用from+size。但是...
+2、使用scroll做深度分页
+
+**scroll做深度分页**
+直接上DSL：
+```javascript
+POST (这个供参考)
+{
+	"index": "chat",
+	"from": 0,
+	"size": "1",
+	"scroll": "5m",//5分钟之后失效
+	"body": {
+		"query": {},
+		"sort": {
+			"time": "desc"
+		}
+	}
+}
+(下面这个好想是比较普遍的写法)
+GET: /index/_search?scroll = 10m
+{
+    "query":{},
+    "from":0,
+    "size":10
+}
+```
+scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。
+
+**code(xxx.iced)**
+```javascript
+// 刚开始的一次scroll查询
+  searchRBN: (query, cb)->
+    dsl = _.cloneDeep DSL.COMMUNICATION_RECORD_BETWEEN_NODES
+    dsl.index = query.index
+    if query.sort and query.sort is 'asc'
+      dsl.body.sort[0].time = 'asc'
+
+    dsl.scroll = query.scroll if query.scroll
+    dsl.body.query.bool.should[0].bool.must[0].term.source = query.source
+    dsl.body.query.bool.should[0].bool.must[1].term.target = query.target
+    dsl.body.query.bool.should[1].bool.must[0].term.source = query.target
+    dsl.body.query.bool.should[1].bool.must[1].term.target = query.source
+
+    console.info JSON.stringify dsl
+    allHits = []
+    scrollData = (response, allHits)-> 
+      return new Promise((resolve, reject) -> 
+        response.hits.hits.forEach((hit) -> allHits.push(hit))
+        console.info(allHits.length)
+        objArr = module.exports.buildRBNSData allHits
+        resolve({scrollId:response._scroll_id,scroll:dsl.scroll,data:objArr})
+      )
+    
+    esClient.search(dsl)
+      .then((response)-> 
+        scrollData(response, allHits)
+      )
+      .then((result, err)->
+        cb err, result
+      )
+  //查询下一页接口     
+  searchRBNScrollData:(query,callback) ->
+    sq = {scroll_id: query.scrollId, scroll: query.scroll} 
+    esClient.scroll(sq).then((response) -> 
+      callback null,module.exports.buildRBNSData response.hits.hits
+    ).catch((error) -> 
+      callback error
+    )
+  //组装数据
+  buildRBNSData : (dataArr)->
+    objArr = []
+    for item in dataArr
+      obj = {}
+      obj.id = item._id
+      obj.source = item._source.source
+      obj.target = item._source.target
+      obj.type = item._source.type
+      obj.time = item._source.time
+      obj.content = item._source.content
+      objArr.push obj
+    return objArr 
+```
+
 
 ## 后记
 ### 相关问题
