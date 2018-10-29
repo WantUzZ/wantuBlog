@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "数据可视化--第三方库的使用"
+title:      "数据可视化--jQuery datatables"
 subtitle:   ""
 date:       2018-10-25 19:43:00
 author:     "wantu"
@@ -8,8 +8,6 @@ header-img: "img/post-bg-universe.jpg"
 catalog: true
 tags:
     - 数据可视化
-    - Echats
-    - Cytoscape.js
     - jQuery Datatables
 ---
 ## 前言
@@ -24,13 +22,13 @@ tags:
 3、cytoscape.js<br>
 
 ## 正文
-#### jQuery的DataTables
+**jQuery的DataTables**
 表格是一种常见的数据组织形式。对标的部门应该是财务部吧，因为财务每天都要接触大量的报表。企业数据部门从数据库抓取相关数据进行一系列的运算处理将数据以报表的形式提供给财务部门是一种常见的需求形式。<br>
 原先是如何制作表格的呢？我们知道html中有一个table标签，这个是我实习前接触最多的关于表格功能的解决办法。但是table标签使用是非的麻烦需要我们手动的组装dom。并且table不够灵活，往往对一些常用的需求（对每列进行求和，排序，分页，数据导出）的解决比较麻烦。<br>
 那么请尝试使用jQuery的datatables吧。
 它提供灵活和强大的api。
 
-**使用**
+#### 使用
 > 引入css和js文件
 ```javascript
 <link rel="stylesheet" type="text/css"
@@ -57,7 +55,8 @@ $('# t1').ready(function(){
     }
 )
 
-//一个工作中的例子
+//一个工作中的例子 
+//一定注意以下列设置中的对象数组中每个对象的data属性的值一定要和数据库查询出来的列名对上！
 oTable = $('#sales-details').DataTable({
             "ajax": {
                 //请求数据
@@ -142,27 +141,22 @@ oTable = $('#sales-details').DataTable({
                 {"sTitle": "购买金额", "data": "asum"},
                 {"sTitle": "送达时间", "data": "arrived_time"},
             ],
-            //特殊列数据处理
+            //特殊列数据处理 对第7列（从0开始）的值进行时间的格式化
             "aoColumnDefs": [
                 {
                     'aTargets': [6], 'mRender': function (data) {
                         return moment(data).format('YYYY-MM-DD HH:mm:ss');
                     }
-                },
-                {
-                    'aTargets': [5], 'mRender': function (data) {
-                        return parseFloat(data).toFixed(2);
-                    }
-                },
+                }
             ]
 
         });
 
 ```
-以上是关于jQuery的datatables的简单的使用。
-**表格底部新增总计**
+以上是关于jQuery的datatables的简单的使用。<br>
+#### 表格底部新增总计
 ![查询执行路径图](/img/xzhj.jpg)
-***首先在table体中加上tfoot***
+**首先在table体中加上tfoot**
 ```javascript
 <table id="sales-details"
                class="table-condensed font-small table-hover table-striped dataTable no-footer" cellspacing="0"
@@ -220,6 +214,7 @@ oTable = $('#sales-details').DataTable({
             },
             "processing": false,
             "iDisplayLength": 100,
+            //默认对第7列进行降序排
             "aaSorting": [[6, "desc"]],
             "oLanguage": {
                 "sLengthMenu": "显示 _MENU_ 记录",
@@ -336,7 +331,7 @@ oTable = $('#sales-details').DataTable({
         });
 ```
 
-**复杂表头需求**
+#### 复杂表头需求
 
 ![查询执行路径图](/img/fzbt.jpg)
 其实就是在表头改动一下就行了：<br>
@@ -372,13 +367,6 @@ oTable = $('#sales-details').DataTable({
                     </tbody>
                 </table>
 ```
-
-#### ECharts
-
-
-#### cytoscape.js
-
-
-
-
 ## 小结
+&nbsp;&#8195;说说自己的使用的疑惑，一开始使用觉得初始化的东西太多列，记都记不住。但是希望你明白一个道理，先使用它做个demo看看。
+国际化操作那一块，我个人是没有记的，每次都是直接copy过来使用。其他地方熟能生巧。相信会很快上手。
