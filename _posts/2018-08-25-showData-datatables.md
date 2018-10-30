@@ -4,7 +4,7 @@ title:      "数据可视化--jQuery datatables"
 subtitle:   ""
 date:       2018-10-25 19:43:00
 author:     "wantu"
-header-img: "img/post-bg-universe.jpg"
+header-img: "img/star1.jpg"
 catalog: true
 tags:
     - 数据可视化
@@ -14,11 +14,11 @@ tags:
 数据可视化就是借助图形化手段将原本冷冰冰的数据生动的传达给用户。用户能够轻松的获取有价值的数据并及时的做出相应的决策支撑。<br>
 目前接触到的数据表示形式有一下几点：<br>
 1、表格<br>
-2、常见的统计图行（柱状、条形、饼图、折现）<br>
-3、关系图<br>
+2、常见的统计图行（柱状、条形、饼图、折线，雷达等）<br>
+3、关系图（连通图）<br>
 那么有哪些技术可以轻松的帮助我们对以上需求进行处理呢？<br>
 1、jQuery的datatables<br>
-2、ECharts<br>
+2、ECharts、D3.js<br>
 3、cytoscape.js<br>
 
 ## 正文
@@ -30,6 +30,7 @@ tags:
 
 #### 使用
 > 引入css和js文件
+
 ```javascript
 <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/b-1.4.2/b-html5-1.4.2/datatables.min.css"/>
@@ -368,5 +369,5 @@ oTable = $('#sales-details').DataTable({
                 </table>
 ```
 ## 小结
-&nbsp;&#8195;说说自己的使用的疑惑，一开始使用觉得初始化的东西太多列，记都记不住。但是希望你明白一个道理，先使用它做个demo看看。
+&nbsp;&#8195;说说自己的使用的疑惑，一开始使用觉得初始化的东西太多了，记都记不住。但是希望你明白一个道理，先使用它做个demo看看。
 国际化操作那一块，我个人是没有记的，每次都是直接copy过来使用。其他地方熟能生巧。相信会很快上手。
