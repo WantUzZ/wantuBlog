@@ -5,8 +5,8 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 01 Nov 2018 15:18:07 +0800</pubDate>
-    <lastBuildDate>Thu, 01 Nov 2018 15:18:07 +0800</lastBuildDate>
+    <pubDate>Thu, 01 Nov 2018 15:39:30 +0800</pubDate>
+    <lastBuildDate>Thu, 01 Nov 2018 15:39:30 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -1101,7 +1101,7 @@ series//展示设置
         <description>&lt;p&gt;&lt;strong&gt;相关代码已经托管到github上，欢迎指正bug.&lt;a href=&quot;https://github.com/WantUzZ/Algorithm-implementation&quot;&gt;戳我&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id=&quot;排序&quot;&gt;排序&lt;/h2&gt;
 &lt;h4 id=&quot;冒泡&quot;&gt;冒泡&lt;/h4&gt;
-&lt;p&gt;冒泡排序，就跟它的名字一样，你可以想想一条🐟现在在一个湖底。鱼肚子里面是我们将要排序的数据。这个鱼每隔一段时间会打个嗝（吐个泡泡），而这个泡泡中的数总是鱼肚子里面的最大值或者最小值。然后一个小朋友在岸上拿了一个泡泡收集器，把它吐出的泡泡一个一个按顺序放进机器里面。最后整个泡泡收集器中的数据都是有序的了。&lt;/p&gt;
+&lt;p&gt;  冒泡排序，就跟它的名字一样，你可以想象一条🐟现在在一个湖底。鱼肚子里面是我们将要排序的数据。这个鱼每隔一段时间会打个嗝（吐个泡泡），而这个泡泡中的数总是鱼肚子里面的最大值或者最小值。然后一个小朋友在岸上拿了一个泡泡收集器，把它吐出的泡泡一个一个按顺序放进机器里面。最后整个泡泡收集器中的数据都是有序的了。&lt;/p&gt;
 &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
 3
@@ -1126,13 +1126,27 @@ series//展示设置
 时间复杂度：O(n*n)&lt;/p&gt;
 
 &lt;h4 id=&quot;二分插入排序&quot;&gt;（二分）插入排序&lt;/h4&gt;
-&lt;p&gt;插入排序有一个前提：就是已经存在了一个已经排好顺序的数组了，这个时候我们在不断的将新的数插入到这个数组的过程。
+&lt;p&gt;  插入排序有一个前提：就是已经存在了一个已经排好顺序的数组了，这个时候我们在不断的将新的数插入到这个数组的过程。
 二分策略（二分查找也是基于这种策略）：小时候玩的游戏–猜价格。一件商品让你猜价格。100？高了。这个时候再猜50？低了，再猜75…整个策略就是下一次取值总是取区间的中间位的数值。
 查找的时间复杂度：O（nLog2^n）以2为底n的对数
 平均时间复杂度：O(n*n)&lt;/p&gt;
 
 &lt;h4 id=&quot;希尔排序&quot;&gt;希尔排序&lt;/h4&gt;
-&lt;p&gt;希尔排序是一种分治思想的体现。最后一次步长为1的数组其实就是直接插入排序。但是因为之前步长每次减少的时候进行插入排序导致最后一次排序时数组元素基本有序。所以希尔排序的时间复杂的会比O(n*n)好一些。&lt;/p&gt;
+&lt;p&gt;  希尔排序是一种分治思想的体现。&lt;br /&gt;
+&lt;strong&gt;关于分治：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;将原问题分成若干个较小的子问题，在递归的解决这些子问题，最后将自问题的解合并成原问题的解。主要分为三个步骤：
+分解：将原问题分解成为一些列的子问题。
+解决：递归的解决各个子问题，若子问题足够小，就直接解决。
+合并：将子问题的解合并成原问题的解。
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;基本思想&lt;/strong&gt;&lt;br /&gt;
+  先将整个集合，根据不同的步长分成若干个子集和，然后对各个子集和分别
+进行直接插入排序，不断缩小步长直至1，最后一次步长为1的数组其实就是直接插入排序。但是因为之前步长每次减少的时候进行插入排序导致最后一次排序时数组元素基本有序。所以希尔排序的时间复杂的会比O(n*n)好一些。&lt;br /&gt;
+&lt;strong&gt;核心代码&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
 3
@@ -1177,29 +1191,17 @@ series//展示设置
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;h4 id=&quot;堆排序&quot;&gt;堆排序&lt;/h4&gt;
-&lt;p&gt;基于堆这中数据结构弄的一个排序。
+&lt;p&gt;  基于堆这中数据结构弄的一个排序。
 堆：有点像一个完全二叉树。一般分为小根堆大根堆。小根堆就是根节点放整个堆的最小值咯。同理大根堆你懂得。
-堆的几个操作：&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;上浮&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;如果当前节点和它的父节点进行比较，如果这是一颗小根堆。如果存在当前节点比它的父节点小的情况，交换它们的位置。&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;下沉&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;如果小根堆中的父节点（如果有子节点）由于某种原因（经历过上浮操作被换到父节点这个位置或者是经历过…）大于它左右两个子节点，那么请交换它和左右两个子节点中最小的那个节点。&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;插入&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;每次把新添加的元素添加到最后一个节点位置，再让它进行上浮操作。&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;弹出&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;一种思想：将堆最上层（1号节点）的节点同最后一号位的节点进行交换，然后对1号节点进行下沉操作。&lt;/p&gt;
+堆的几个操作：&lt;br /&gt;
+&lt;strong&gt;上浮&lt;/strong&gt; &lt;br /&gt;
+  如果当前节点和它的父节点进行比较，如果这是一颗小根堆。如果存在当前节点比它的父节点小的情况，交换它们的位置。&lt;br /&gt;
+&lt;strong&gt;下沉&lt;/strong&gt; &lt;br /&gt;
+  如果小根堆中的父节点（如果有子节点）由于某种原因（经历过上浮操作被换到父节点这个位置或者是经历过…）大于它左右两个子节点，那么请交换它和左右两个子节点中最小的那个节点。&lt;br /&gt;
+&lt;strong&gt;插入&lt;/strong&gt; &lt;br /&gt;
+  每次把新添加的元素添加到最后一个节点位置，再让它进行上浮操作。&lt;br /&gt;
+&lt;strong&gt;弹出&lt;/strong&gt; &lt;br /&gt;
+  一种思想：将堆最上层（1号节点）的节点同最后一号位的节点进行交换，然后对1号节点进行下沉操作。&lt;br /&gt;&lt;/p&gt;
 &lt;h4 id=&quot;快速排序&quot;&gt;快速排序&lt;/h4&gt;
 
 &lt;h2 id=&quot;堆&quot;&gt;堆&lt;/h2&gt;
