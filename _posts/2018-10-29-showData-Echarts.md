@@ -17,10 +17,12 @@ tags:
 [D3js](https://d3js.org/) <br>
 
 ## 正文
-**我要怎么开始呢？**
+#### 我要怎么开始呢？
 因为是国人开发的所以开发文档必须有中文格式的。这点对于英文差的小伙伴那是大大的好啊（本人英文很不好）。Echarts在其官网提供了大量的实例。新手可以通过实例很快的上手。那么[传送门](http://echarts.baidu.com/examples/) <br>
 
 #### 使用
+**样例展示**
+![查询执行路径图](/img/echartsShow.jpg)
 **引入相关的js文件**
 ```javascript
  <script src="/lib/echarts/echarts.min.js"></script>
@@ -40,91 +42,108 @@ tags:
 //这是一个较全的例子
 var month_legend = ['上年同期','上期数据','当期数据'];
 $.ajax({
-                url: "/xxxx",
-                type: "post",
-                data: {
-                    //请求参数
-                },
-                success: function (data) {
-                    //初始化echarts
-                    var c1 = echarts.init(document.getElementById('chart1'));
-                    var c1_option;
+    url: "/xxxx",
+    type: "post",
+    data: {
+        //请求参数
+    },
+    success: function (data) {
+        //初始化echarts
+        var c1 = echarts.init(document.getElementById('chart1'));
+        var c1_option;
 
-                    if (data.tag == 'success') {
-                        //渲染Echarts
-                        function draw_echar1(data) {
-                          //图表的设置
-                            c1_option = {
-                                color: ['#4EA1AC', '#2A4556',  '#D2312C'],
-                                itemStyle: {
-                                    emphasis: {
-                                        shadowBlur: 10,
-                                        shadowOffsetX: 0,
-                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                    }
-                                },
-                                tooltip: {
-                                    trigger: 'axis',
-                                    axisPointer: {
-                                        type: 'cross',
-                                        crossStyle: {
-                                            color: '#3398DB'
-                                        }
-                                    }
-                                },
-                                legend: {
-                                  //echart的顶部标识 数组
-                                    data: month_legend
-                                },
-                                //y轴树值设置为单位万
-                                yAxis: [
-                                    {
-                                        type: 'value',
-                                        min:0,
-                                        axisLabel: {
-                                            formatter: function (value) {
-                                                return Math.round(value/10000)+'万';
-                                            }
-                                        }
-                                    }
-                                ],
-                                xAxis: {
-                                    type: 'category',
-                                    axisPointer: {
-                                        type: 'shadow'
-                                    },
-                                    data: ['全平台','自营汇总']
-                                },
-                                series: //放上后端组装好的数据
-                            };
-                            //渲染Echarts
-                            c1.setOption(c1_option);
-                        }}}});
+        if (data.tag == 'success') {
+            //渲染Echarts
+            function draw_echar1(data) {
+                //单个柱状图中间字体的设置
+                var seriesLabel = {
+                        normal: {
+                            show: true,
+                            textBorderColor: '#33',
+                            textBorderWidth: 2
+                        }
+                    }
+                //图表的设置
+                c1_option = {
+                        title: {
+                            text: '天气统计'
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        legend: {
+                            data: ['北京', '上海', '深圳']
+                        },
+                        grid: {
+                            left: 100
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                saveAsImage: {}
+                            }
+                        },
+                        yAxis: {
+                            type: 'value',
+                            name: '天数',
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        },
+                        xAxis: {
+                            type: 'category',
+                            inverse: true,
+                            data: ['晴天', '多云', '下雨']
+                        },
+                        //一般来说series属性直接拿后台组装的数据前端不负责数据的组装
+                        series: [
+                            {
+                                name: '北京',
+                                type: 'bar',
+                                data: [165, 170, 30],
+                                label: seriesLabel
+                            },
+                            {
+                                name: '上海',
+                                type: 'bar',
+                                label: seriesLabel,
+                                data: [150, 105, 110]
+                            },
+                            {
+                                name: '深圳',
+                                type: 'bar',
+                                label: seriesLabel,
+                                data: [220, 82, 63]
+                            }
+                        ]
+                };
+                //渲染Echarts
+                c1.setOption(c1_option);
+}}}});
 ```
-后段数据格式
+后端数据格式
 ```javascript
 [
     {
-        name: '上年同期',
+        name: '北京',
         type: 'bar',
-        barGap:0,
-        data: [12, 23
-        ]
-
+        data: [165, 170, 30],
+        label: seriesLabel
     },
     {
-        name: '上期数据',
+        name: '上海',
         type: 'bar',
-        data: [23, 34
-
-        ]
-
+        label: seriesLabel,
+        data: [150, 105, 110]
     },
     {
-        name: '当期数据',
+        name: '深圳',
         type: 'bar',
-        data: [34, 45
-        ]
+        label: seriesLabel,
+        data: [220, 82, 63]
     }
 ]
 ```
@@ -134,7 +153,29 @@ draw_echar1(data)
 ```
 
 ## 小结
-option中的设置就是对图表的一些属性的设置。请多关注option。对这echats的实例多多练习几次你就会很快掌握它。
+1、echarts封装的很不错，所以很多设置可能只是一个属性的设置，请多在官方实例中进行尝试修改，并记住常用的属性设置。<br>
+#### 常用属性
+*后续继续补充*
+```
+一些常用的属性设置：
+xAxis//x轴设置
+yAxis//y轴设置 
+    type:类型
+    min:最小值
+    axisLabel:对y轴的单位进行设置 (例子中将单位元设置为单位为万元)
+        eg:formatter: function (value) {
+                        return Math.round(value/10000)+'万';
+                    }
+toolbox//工具设置其中支持将展示的图表保存成图片
+title//图表标题
+legend//图表头部索引
+series//展示设置
+    type//图表类型 常见pie饼图bar柱状图
+    lable//图内显示设置
+    data//实际数据
+```
+2、option中的设置就是对图表的一些属性的设置。请多关注option。<br>
+对这echats的实例多多练习几次你就会很快掌握它。<br>
 我个人觉得一些图标的数据组装过程还是比较复杂的。因为前端一般会让后端把series组装好。多看多练。如果条形图，饼图，柱状图都联系过了感觉很轻松。那么请尝试实现这个图表,可以考虑把x,y轴进行转一下。
-所有的数据要写活来哦。
+所有的数据要写活来哦。<br>
 [demo](http://echarts.baidu.com/examples/editor.html?c=bar-y-category-stack) <br>
