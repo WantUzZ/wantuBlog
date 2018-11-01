@@ -1,21 +1,18 @@
 > 写代码，走走路，  
 > 问题总是存在，下次不犯的人其实也很牛X。
 
-老王（大学同窗外号），学的是软件。希望和你多多交流，一起进步。
+老王（大学同窗外号），华东交通大学14级软件工程专业。多多交流，一起进步。<br>
+* wechat:gf_wt_tobeNo1
+* QQ:596434244
+* mail:beursuperman@163.com
 
+**技术栈**
+* 语言部分：Java,Node.js,JavaScript,略懂一些Python、jQuery.<br>
+* 框架：Spring,Spring MVC,Express,MyBatis.<br>
+* 数据库：Oracle,MySQL,Elasticsearch,Neo4J,Mongodb,Redis.<br>
+* 版本控制：Git,SVN.<br>
+* 数据可视化相关：ECharts.<br>
 
-
-目前主要做的是：
-```
-1、数据可视化、分析相关
-
-技术栈：
-  语言部分：Java,Node.js,JavaScript,略懂一些Python、jQuery.
-  框架：Spring,Spring MVC,Express,MyBatis.
-  数据库：Oracle,MySQL,Elasticsearch,Neo4J,Mongodb.
-  版本控制：Git,SVN.
-  数据可视化相关：ECharts.
-```
 
 
 一些作品和开源软件项目，👉 戳 [Github](http://github.com/WantUzZ)。
