@@ -10,11 +10,11 @@
 1、数据可视化、分析相关
 
 技术栈：
-  语言部分：java,nodeJs,javascript,略懂一些python、JQuery.
-  框架：spring,springMVC,Express,MyBatis.
-  数据库：oracle,Mysql,ElasticSearch(入门),Neo4J(入门),Mangodb(入门).
-  版本控制：git,svn.
-  数据可视化相关：Echarts.
+  语言部分：Java,Node.js,JavaScript,略懂一些python、jQuery.
+  框架：Spring,Spring MVC,Express,MyBatis.
+  数据库：Oracle,MySQL,Elasticsearch,Neo4J,Mongodb.
+  版本控制：Git,SVN.
+  数据可视化相关：ECharts.
 ```
 
 
@@ -22,7 +22,7 @@
 
 
 
-##### Talks
+##### ...
 
 <!-- - [Upgrading to Progressive Web Apps][9] · [JSConf CN 上海 2017](http://2017.jsconf.cn/)
 - Building Progressive Web Apps · [CSDI 广州 2017](http://www.csdisummit.com/)
