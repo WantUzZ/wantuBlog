@@ -10,7 +10,7 @@
 1、数据可视化、分析相关
 
 技术栈：
-  语言部分：Java,Node.js,JavaScript,略懂一些python、jQuery.
+  语言部分：Java,Node.js,JavaScript,略懂一些Python、jQuery.
   框架：Spring,Spring MVC,Express,MyBatis.
   数据库：Oracle,MySQL,Elasticsearch,Neo4J,Mongodb.
   版本控制：Git,SVN.
