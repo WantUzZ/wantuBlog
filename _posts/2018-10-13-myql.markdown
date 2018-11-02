@@ -4,7 +4,7 @@ title:      "个人已知的一些mysql查询性能优化"
 subtitle:   ""
 date:       2018-10-13 15:06:00
 author:     "wantu"
-header-img: "img/post-bg-digital-native.jpg"
+header-img: "img/sea.jpg"
 catalog: true
 tags:
     - mysql

@@ -4,7 +4,7 @@ title:      "回顾搭建一个基于express的web项目遇到的问题"
 subtitle:   ""
 date:       2018-10-23 19:43:00
 author:     "wantu"
-header-img: "img/post-bg-universe.jpg"
+header-img: "img/shan.jpg"
 catalog: true
 tags:
     - Node.js
