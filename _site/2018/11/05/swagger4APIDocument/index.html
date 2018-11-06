@@ -11,41 +11,29 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="常用算法实现 - 老王 | want">
+    <meta property="og:title" content="搭建基于swagger的接口文档系统 - 老王 | want">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="相关代码已经托管到github上，欢迎指正bug.戳我
-排序
-冒泡
-  冒泡排序，就跟它的名字一样，你可以想象一条🐟现在在一个湖底。鱼肚子里面是我们将要排序的数据。这个鱼每隔一段时间会打个嗝（吐个泡泡），而这个泡泡中的数总是鱼肚子里面的最大值或者最小值。然后一个小朋友在岸上拿了一个泡泡收集器，把它吐出的泡泡一个一个按顺序放进机器里面。最后整个泡泡收集器中的数据都是有序的了。
-1
-2
-3
-4
-...">
+    <meta property="og:description" content="前言
+  程序员恐怕很多都是不想写文档的，但是一旦接手他人的项目又是第一时间说：文档呢？这确实是一个很常见的现象。其本质反应的就是书写文档比较耗时，技术人员不想做这种“无用功”与接手他人的项目，技术人员又不想看别人的代码，想通过阅读相关的文档加快上手速度之间的矛盾。
+  个人观点：好的规范一定要尽早养成。个人在刚刚参加工作的时候一开始的做法是在service层上写好接口注释，在注释中将相关的...">
     
-    <meta property="article:published_time" content="2018-10-26T03:43:00Z">
+    <meta property="article:published_time" content="2018-11-05T00:00:00Z">
     
     
     <meta property="article:author" content="wantu">
     
     
-    <meta property="article:tag" content="algorithm">
+    <meta property="article:tag" content="swagger">
     
-    <meta property="article:tag" content="排序">
-    
-    <meta property="article:tag" content="数据结构">
-    
-    <meta property="article:tag" content="最短路算法">
-    
-    <meta property="article:tag" content="树">
+    <meta property="article:tag" content="文档管理">
     
     
     <meta property="og:image" content="http://localhost:4000/img/wantu.jpg">
-    <meta property="og:url" content="http://localhost:4000/2018/10/26/algorithm/">
+    <meta property="og:url" content="http://localhost:4000/2018/11/05/swagger4APIDocument/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>常用算法实现 - 老王 | want</title>
+    <title>搭建基于swagger的接口文档系统 - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -54,7 +42,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/10/26/algorithm/">
+    <link rel="canonical" href="http://localhost:4000/2018/11/05/swagger4APIDocument/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -383,7 +371,7 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/post-bg-universe.jpg" width="0" height="0"> -->
+<!-- <img src="/img/lake.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -392,7 +380,7 @@
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/post-bg-universe.jpg');
+        background-image: url('/img/lake.jpg');
         background: ;
     }
 
@@ -409,21 +397,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=algorithm" title="algorithm">algorithm</a>
+                        <a class="tag" href="/archive/?tag=swagger" title="swagger">swagger</a>
                         
-                        <a class="tag" href="/archive/?tag=%E6%8E%92%E5%BA%8F" title="排序">排序</a>
-                        
-                        <a class="tag" href="/archive/?tag=%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" title="数据结构">数据结构</a>
-                        
-                        <a class="tag" href="/archive/?tag=%E6%9C%80%E7%9F%AD%E8%B7%AF%E7%AE%97%E6%B3%95" title="最短路算法">最短路算法</a>
-                        
-                        <a class="tag" href="/archive/?tag=%E6%A0%91" title="树">树</a>
+                        <a class="tag" href="/archive/?tag=%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86" title="文档管理">文档管理</a>
                         
                     </div>
-                    <h1>常用算法实现</h1>
+                    <h1>搭建基于swagger的接口文档系统</h1>
                     
                     <h2 class="subheading"></h2>
-                    <span class="meta">Posted by wantu on October 26, 2018</span>
+                    <span class="meta">Posted by wantu on November 5, 2018</span>
                 </div>
             </div>
         </div>
@@ -449,56 +431,22 @@
                 <!-- Multi-Lingual -->
                 
 
-                <p><strong>相关代码已经托管到github上，欢迎指正bug.<a href="https://github.com/WantUzZ/Algorithm-implementation">戳我</a></strong></p>
-<h2 id="排序">排序</h2>
-<h4 id="冒泡">冒泡</h4>
-<p>  冒泡排序，就跟它的名字一样，你可以想象一条🐟现在在一个湖底。鱼肚子里面是我们将要排序的数据。这个鱼每隔一段时间会打个嗝（吐个泡泡），而这个泡泡中的数总是鱼肚子里面的最大值或者最小值。然后一个小朋友在岸上拿了一个泡泡收集器，把它吐出的泡泡一个一个按顺序放进机器里面。最后整个泡泡收集器中的数据都是有序的了。</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="rouge-code"><pre><span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="err">待排序数组</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="err">的长度</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-    <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="nx">j</span><span class="o">&lt;</span><span class="err">待排序数组</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="err">的长度</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="nx">i</span><span class="p">;</span><span class="nx">j</span><span class="o">++</span><span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span><span class="o">&gt;</span><span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]){</span>
-            <span class="kd">let</span> <span class="nx">temp</span> <span class="o">=</span> <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
-            <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
-            <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p>第一层for循环就是把鱼肚子里面的最大数吐出去。<br />
-第二层循环就是一个泡泡上升（不断交换）的过程。<br />
-时间复杂度：O(n*n)</p>
+                <h2 id="前言">前言</h2>
+<p>  程序员恐怕很多都是不想写文档的，但是一旦接手他人的项目又是第一时间说：文档呢？这确实是一个很常见的现象。其本质反应的就是书写文档比较耗时，技术人员不想做这种“无用功”与接手他人的项目，技术人员又不想看别人的代码，想通过阅读相关的文档加快上手速度之间的矛盾。<br />
+  个人观点：好的规范一定要尽早养成。个人在刚刚参加工作的时候一开始的做法是在service层上写好接口注释，在注释中将相关的接口的功能、请求参数、响应进行描述。到后来采用Rap进行文档管理，Rap管理的好处就是简单、快速。相关的参数像填表一样的填好，比较简单无脑。但是Rap存在很多不足之处：比如说多人同时编辑存在互斥现象，单一文档同一时间只允许一个用户编辑，亦或是接口不支持在线的请求测试（可能自己不知道）等。而且Rap服务器（私服部署情况除外）是外部的，相关的安全性可能不是很靠得住。个人也没有搭建过公司自用的rap。所以相关的复杂度不是很清楚。但是今天，我想向你推荐的这个东西确实对于搭建一个自用的文档管理系统是很方便、高效的。<br />
+  它就是swagger。</p>
 
-<h4 id="二分插入排序">（二分）插入排序</h4>
-<p>  插入排序有一个前提：就是已经存在了一个已经排好顺序的数组了，这个时候我们在不断的将新的数插入到这个数组的过程。
-二分策略（二分查找也是基于这种策略）：小时候玩的游戏–猜价格。一件商品让你猜价格。100？高了。这个时候再猜50？低了，再猜75…整个策略就是下一次取值总是取区间的中间位的数值。
-查找的时间复杂度：O（nLog2^n）以2为底n的对数
-平均时间复杂度：O(n*n)</p>
+<h2 id="正文">正文</h2>
+<h4 id="what">what?</h4>
+<p>  维基百科:Swagger是一个开源软件框架，由大型工具生态系统支持，可帮助开发人员设计，构建，记录和使用RESTful Web服务。 虽然大多数用户通过Swagger UI工具识别Swagger，但Swagger工具集包括对自动化文档，代码生成和测试用例生成的支持。<br />
+  其有三大工具：swagger-ui、swagger-editor、swagger-codegen。swagger-ui是用来显示API文档的，并且它还支持编辑和在线的请求测试。
+swagger-editor是一个在线的文档编辑文件工具，有助于整个框架中其他工具的使用，左边编辑右边显示。swagger-codegen,可以根据swagger.json或者swagger.yml文件生成指定的计算机语言指定框架的代码。</p>
 
-<h4 id="希尔排序">希尔排序</h4>
-<p>  希尔排序是一种分治思想的体现。<br />
-<strong>关于分治：</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-</pre></td><td class="rouge-code"><pre>将原问题分成若干个较小的子问题，在递归的解决这些子问题，最后将自问题的解合并成原问题的解。主要分为三个步骤：
-分解：将原问题分解成为一些列的子问题。
-解决：递归的解决各个子问题，若子问题足够小，就直接解决。
-合并：将子问题的解合并成原问题的解。
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>基本思想</strong><br />
-  先将整个集合，根据不同的步长分成若干个子集和，然后对各个子集和分别
-进行直接插入排序，不断缩小步长直至1，最后一次步长为1的数组其实就是直接插入排序。但是因为之前步长每次减少的时候进行插入排序导致最后一次排序时数组元素基本有序。所以希尔排序的时间复杂的会比O(n*n)好一些。<br />
-<strong>核心代码</strong></p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<h4 id="搭建过程">搭建过程</h4>
+<p>1、新建一个项目，执行 npm init初始化package.json。<br />
+2、运行npm install swagger -g –save-dev安装Swagger包。<br />
+3、在项目的根目录下新建一个api/swagger/swagger.yaml。并将一下部分复制进来。<br /></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -519,81 +467,268 @@
 19
 20
 21
-</pre></td><td class="rouge-code"><pre><span class="kd">function</span> <span class="nx">doSort</span><span class="p">(</span><span class="nx">a</span><span class="p">){</span>
-  <span class="kd">let</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-  <span class="c1">//stepSize 步长 其实就是不断的将一个数组划分为步长为stepSize的若干个子数组</span>
-  <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">stepSize</span> <span class="o">=</span> <span class="nx">len</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">;</span><span class="nx">stepSize</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">;</span><span class="nx">stepSize</span> <span class="o">=</span> <span class="nx">stepSize</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">){</span>
-    <span class="c1">//第一次步长为5 ，那么划分后的子数组为：0-5 1-6 2-7 3-8 4-9  5个子数组</span>
-    <span class="c1">//第二次步长为2，那么划分后的子数组为：0-2-4-6-8 和1-3-5-7-9 2个子数组</span>
-    <span class="c1">//第三次步长为1，那么划分后的子数组为：0-1-2-3-4-5-6-7-8-9   1个子数组</span>
-    <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">stepSize</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-      <span class="c1">//对每个子数组进行排序</span>
-      <span class="c1">//这个地方要理解一个东西，比如说现在i是5,stepSize = 2,</span>
-      <span class="c1">//那么a[j](a[3])要是大于a[j](a[3+2]),两者交换，交换完之后j-= 2,所以a[3]是会和a[1]也会进行比较的。</span>
-      <span class="c1">//最好自己模拟一下加深一下印象</span>
-      <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="nx">i</span> <span class="o">-</span> <span class="nx">stepSize</span><span class="p">;</span><span class="nx">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">&amp;&amp;</span> <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="nx">stepSize</span><span class="p">];</span><span class="nx">j</span><span class="o">-=</span><span class="nx">stepSize</span><span class="p">){</span>
-        <span class="kd">let</span> <span class="nx">temp</span> <span class="o">=</span> <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
-        <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="nx">stepSize</span><span class="p">];</span>
-        <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="nx">stepSize</span><span class="p">]</span> <span class="o">=</span> <span class="nx">temp</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
-<span class="p">}</span>
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+</pre></td><td class="rouge-code"><pre><span class="na">swagger</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2.0"</span>
+<span class="na">info</span><span class="pi">:</span>
+ <span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">1.0.0"</span>
+ <span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">xxx后台API"</span>
+ <span class="na">description</span><span class="pi">:</span> <span class="s2">"</span><span class="s">接口文档说明以及测试"</span>
+ <span class="na">contact</span><span class="pi">:</span>
+   <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">want"</span>
+   <span class="na">email</span><span class="pi">:</span> <span class="s2">"</span><span class="s">beursuperman@163.com"</span> 
+<span class="na">host</span><span class="pi">:</span> <span class="s2">"</span><span class="s">localhost:5500"</span>
+<span class="na">schemes</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s2">"</span><span class="s">http"</span>
+<span class="na">consumes</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s2">"</span><span class="s">application/json"</span>
+<span class="na">produces</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s2">"</span><span class="s">application/json"</span>
+<span class="na">paths</span><span class="pi">:</span>
+  <span class="s">/api/v1/queryAllGroupMemberChatRecordByChatroomId</span><span class="pi">:</span>
+    <span class="na">post</span><span class="pi">:</span>
+      <span class="na">summary</span><span class="pi">:</span> <span class="s">查询群组所有节点之间的聊天记录.</span>
+      <span class="na">consumes</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">application/json</span>
+      <span class="na">parameters</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">in</span><span class="pi">:</span> <span class="s">body</span>
+          <span class="na">name</span><span class="pi">:</span> <span class="s">param</span>
+          <span class="na">description</span><span class="pi">:</span> <span class="s">请求体对象</span>
+          <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
+          <span class="na">schema</span><span class="pi">:</span>
+            <span class="s">$ref</span><span class="pi">:</span> <span class="s2">"</span><span class="s">#/definitions/queryAllGroupMemberChatRecordByChatroomIdReq"</span>
+      <span class="na">responses</span><span class="pi">:</span>
+        <span class="na">200</span><span class="pi">:</span>
+          <span class="na">description</span><span class="pi">:</span> <span class="s">A responsed object</span>      
+<span class="na">definitions</span><span class="pi">:</span>
+  <span class="na">queryAllGroupMemberChatRecordByChatroomIdReq</span><span class="pi">:</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">object</span>
+    <span class="na">required</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">scroll</span>
+      <span class="pi">-</span> <span class="s">chatRoomId</span>
+      <span class="pi">-</span> <span class="s">size</span>
+      <span class="pi">-</span> <span class="s">sort</span>
+      <span class="pi">-</span> <span class="s">index</span>
+    <span class="na">properties</span><span class="pi">:</span>
+      <span class="na">scroll</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">5m'</span>
+      <span class="na">size</span><span class="pi">:</span> 
+        <span class="na">type</span><span class="pi">:</span> <span class="s">integer</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="s">20</span>
+      <span class="na">sort</span><span class="pi">:</span> 
+        <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">desc'</span>
+      <span class="na">chatRoomId</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">8477243337@chatroom'</span>
+      <span class="na">index</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">chat'</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<h4 id="堆排序">堆排序</h4>
-<p>  基于堆这中数据结构弄的一个排序。
-堆：有点像一个完全二叉树。一般分为小根堆大根堆。小根堆就是根节点放整个堆的最小值咯。同理大根堆你懂得。
-堆的几个操作：<br />
-<strong>上浮</strong> <br />
-  如果当前节点和它的父节点进行比较，如果这是一颗小根堆。如果存在当前节点比它的父节点小的情况，交换它们的位置。<br />
-<strong>下沉</strong> <br />
-  如果小根堆中的父节点（如果有子节点）由于某种原因（经历过上浮操作被换到父节点这个位置或者是经历过…）大于它左右两个子节点，那么请交换它和左右两个子节点中最小的那个节点。<br />
-<strong>插入</strong> <br />
-  每次把新添加的元素添加到最后一个节点位置，再让它进行上浮操作。<br />
-<strong>弹出</strong> <br />
-  思想：将堆最上层（1号节点）的节点同最后一号位的节点进行交换，然后对1号节点进行下沉操作。<br /></p>
-<h4 id="快速排序">快速排序</h4>
-<p>  思想：</p>
+<p>4、运行Swagger project edit，此时会自动打开一个swagger编辑窗口，读取的内容就是上一步中的yaml文件<br />
+5、尝试修改编辑窗口的内容，此时右侧会及时修改更新，而且api/swagger/swagger.yaml也会跟着自动更新<br />
+6、下载Swagger-ui，拷贝dist文件夹中的代码到根目录下新建的public文件夹<br />
+7、创建一个express项目，在根目录下新建index.js。代码如下：</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="c1">//先执行一下npm install</span>
+<span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span> 
+<span class="kd">var</span> <span class="nx">opn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'opn'</span><span class="p">);</span> 
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+  <span class="nx">opn</span><span class="p">(</span><span class="s1">'http://localhost:3000/api-doc'</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'App listening on port 3000!'</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/api-doc'</span><span class="p">,</span> <span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="s1">'public'</span><span class="p">));</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>8、运行node index.js会启用swagger-ui功能，自动打开api展示页面，但是页面是默认的官网上的东西；<br />
+9、将api/swagger文件夹下的/swagger.yaml文件复制到public文件夹下，打开public/index.html，在脚本中修改url为’./swagger.yaml’,刷新浏览器，即可看到我们的内容<br />
+10、如何将swagger-editor文件的变化实时反馈到swagger-ui上，运行npm install gulp -g –save-dev安装gulp包，在根目录下新建gulpfile.js，代码如下(记得先安装好依赖)：<br /></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">yaml</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'js-yaml'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'path'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'fs'</span><span class="p">);</span>
+
+<span class="c1">// 建立api/swagger的swagger.yaml到public下的swagger.yaml联系</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'swagger'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">doc</span> <span class="o">=</span> <span class="nx">yaml</span><span class="p">.</span><span class="nx">safeLoad</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'./api/swagger/swagger.yaml'</span><span class="p">)));</span> 
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'./public/swagger.yaml'</span><span class="p">),</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">doc</span><span class="p">,</span><span class="kc">null</span><span class="p">,</span><span class="s1">' '</span><span class="p">));</span>
+<span class="p">});</span>
+
+<span class="c1">// 实时更新</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'default'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s1">'./api/swagger/swagger.yaml'</span><span class="p">,[</span><span class="s1">'swagger'</span><span class="p">]);</span>
+<span class="p">})</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>11、再看下package.json中的内容：</p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"doc-api"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"main"</span><span class="p">:</span><span class="w"> </span><span class="s2">"index.js"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"node index.js"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"swg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"swagger project edit"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gulp"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">"want"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ISC"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"devDependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"express"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^4.15.2"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"swagger"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.7.5"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.9.1"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"js-yaml"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.8.3"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"opn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5.0.0"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"cors"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^2.8.5"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>12、新增readme.md添加使用说明：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>&gt; 须知
+* npm start 启动项目并跳转接口展示页面 
+* swagger project edit 接口文档在线编辑
+* npm run gulp 开始同步编辑 （项目一开始就要执行的命令,因为要实时监控api/swagger/swagger.yaml的编辑变动）
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="效果图">效果图</h4>
+<p><strong>API编就页面</strong>
+<img src="/img/swagger-editor.jpg" alt="编辑页面" />
+<strong>API展示页面</strong>
+<img src="/img/swagger-ui.jpg" alt="展示页面" />
+<strong>API在线测试页面</strong>
+<img src="/img/swagger-test.jpg" alt="测试页面" />
+<strong>API在线测试响应</strong>
+<img src="/img/swagger-result.jpg" alt="测试页面" /></p>
+
+<h4 id="期间遇到的问题">期间遇到的问题：</h4>
+<p>1、跨域问题。这个问题发生在swagger-ui中进行接口测试的时候。出现这个问题,谷歌并询问了宝哥,确认是跨域导致的，所以设置相关的跨域访问进行解决。但是通过查看Network发现又一个OPTION请求每次404？<br />
+<img src="/img/cors.jpg" alt="报错" />
+预检(OPTION)请求产生的大概率原因：<br /></p>
 <ol>
-  <li>先设置一个基准位（一般来以数组0号位置）。</li>
-  <li>从需排序数组的右边扫描一个小于基准点位元素值的值A，后暂时停止从右往左的扫描。</li>
-  <li>从需排序数组的左边开始扫描一个小于基准位元素值的值B，后暂时停止从左往右扫描。</li>
-  <li>在A的下标小于B的下标的前提下，交换A，B两个元素。</li>
-  <li>继续从右往左的扫描活动，并找到值C</li>
-  <li>继续从左往右的扫描活动，并找到值D</li>
-  <li>…</li>
-  <li>当最后从右往左扫描与从左往右扫描暂时停下的位置时，停止所有的扫描活动，并且在这个时候交换基准位元素值和两侧扫描停止位置的元素值。确定第一个基准数。</li>
-  <li>基准数确定后，数组将被基准数一分为二个数组。分别对左右两个数组进行递归的调用同样的查找基准数策略即可。<br />
-时间复杂度：n * log n
-    <h4 id="桶排序">桶排序</h4>
-    <p>思想：借助一个一维数组进行维护相关排序值和出现的频次。数组索引位对应排序值，数组索元素的值对应相关的出现频次。最后遍历整个数组输出元素不为0的索引位。<br />
-缺点：空间占用比较大，尤其是排序值中有一个数值很大的数。<br />
-优点：稳定、快。<br /></p>
-    <h2 id="堆">堆</h2>
+  <li>Get、Head、Post方法以外的请求方法</li>
+  <li>如果是POST请求,Content-Type取这三个值以外的值：
+    <ul>
+      <li>application/x-www-form-urlencoded</li>
+      <li>multipart/form-data</li>
+      <li>text/plain
+那么很明显，consumes的值为application/json肯定是要发送预检请求(OPTION)的。那么如何处理。我暂时的做法是在项目中放掉OPTION请求，一旦预检请求没有响应那么后续的请求是不会发送的。
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre>app.use (req, res, next)-&gt;
+res.header("Access-Control-Allow-Origin", "*");
+res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
+res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials");
+res.header("Access-Control-Allow-Credentials", "true");
+if req.method == 'OPTIONS'
+ res.send(200)
+else 
+ next()
+</pre></td></tr></tbody></table></code></pre></div>        </div>
+      </li>
+    </ul>
   </li>
 </ol>
 
-<h2 id="栈">栈</h2>
+<p>2、yaml语法
+注意我这书写的格式OAS2的格式。别把OAS3的格式就往上写。相关的语法书写参考官方文档。
+<a href="https://swagger.io/docs/specification/describing-request-body/">官方文档</a></p>
 
-<h2 id="图">图</h2>
-<h4 id="dfs">DFS</h4>
-
-<h4 id="bfs">BFS</h4>
-
-<h4 id="dijkstra">Dijkstra</h4>
-
-<h4 id="floyd">Floyd</h4>
-
-<h2 id="树">树</h2>
-<h4 id="线段树">线段树</h4>
-
-<h2 id="贪心">贪心</h2>
-<h4 id="并查集">并查集</h4>
-<h4 id="克鲁斯卡尔">克鲁斯卡尔</h4>
-
-<h2 id="dp">DP</h2>
-
+<p>搭建参考：<a href="https://zhuanlan.zhihu.com/p/26741562">必至</a></p>
 
                 
                 
@@ -601,19 +736,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/10/24/buildExpressProject/" data-toggle="tooltip" data-placement="top" title="回顾搭建一个基于express的web项目遇到的问题">
+                        <a href="/2018/11/02/git/" data-toggle="tooltip" data-placement="top" title="git相关命令以及好的提交规范">
                         Previous<br>
-                        <span>回顾搭建一个基于express的web项目遇到的问题</span>
+                        <span>git相关命令以及好的提交规范</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2018/10/26/showData-datatables/" data-toggle="tooltip" data-placement="top" title="数据可视化--jQuery datatables">
-                        Next<br>
-                        <span>数据可视化--jQuery datatables</span>
-                        </a>
-                    </li>
                     
                 </ul>
                 <hr style="visibility: hidden;">
