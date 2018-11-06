@@ -5,16 +5,16 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 06 Nov 2018 20:01:02 +0800</pubDate>
-    <lastBuildDate>Tue, 06 Nov 2018 20:01:02 +0800</lastBuildDate>
+    <pubDate>Tue, 06 Nov 2018 20:08:21 +0800</pubDate>
+    <lastBuildDate>Tue, 06 Nov 2018 20:08:21 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
-        <title>搭建基于swagger的接口文档系统</title>
+        <title>搭建基于Swagger的接口文档系统</title>
         <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
 &lt;p&gt;  程序员恐怕很多都是不想写文档的，但是一旦接手他人的项目又是第一时间说：文档呢？这确实是一个很常见的现象。其本质反应的就是书写文档比较耗时，技术人员不想做这种“无用功”与接手他人的项目，技术人员又不想看别人的代码，想通过阅读相关的文档加快上手速度之间的矛盾。&lt;br /&gt;
   个人观点：好的规范一定要尽早养成。个人在刚刚参加工作的时候一开始的做法是在service层上写好接口注释，在注释中将相关的接口的功能、请求参数、响应进行描述。到后来采用Rap进行文档管理，Rap管理的好处就是简单、快速。相关的参数像填表一样的填好，比较简单无脑。但是Rap存在很多不足之处：比如说多人同时编辑存在互斥现象，单一文档同一时间只允许一个用户编辑，亦或是接口不支持在线的请求测试（可能自己不知道）等。而且Rap服务器（私服部署情况除外）是外部的，相关的安全性可能不是很靠得住。个人也没有搭建过公司自用的rap。所以相关的复杂度不是很清楚。但是今天，我想向你推荐的这个东西确实对于搭建一个自用的文档管理系统是很方便、高效的。&lt;br /&gt;
-  它就是swagger。&lt;/p&gt;
+  它就是Swagger。&lt;/p&gt;
 
 &lt;h2 id=&quot;正文&quot;&gt;正文&lt;/h2&gt;
 &lt;h4 id=&quot;what&quot;&gt;what?&lt;/h4&gt;
@@ -314,7 +314,7 @@ else
         <link>http://localhost:4000/2018/11/05/swagger4APIDocument/</link>
         <guid isPermaLink="true">http://localhost:4000/2018/11/05/swagger4APIDocument/</guid>
         
-        <category>swagger</category>
+        <category>Swagger</category>
         
         <category>文档管理</category>
         
