@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "回顾ElasticSearch的使用(持续更新...)"
+title:      "回顾ElasticSearch的使用(1108更新)"
 subtitle:   ""
 date:       2018-10-16 18:43:00
 author:     "wantu"
@@ -12,6 +12,10 @@ tags:
     - 数据分析
 ---
 ## 前言
+#### 写在最前面
+&ensp;&#8195;[官方文档](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)<br>
+&ensp;&#8195;[中文文档翻译](https://scsundefined.gitbooks.io/elasticsearch-reference-cn/content/)<br>
+&ensp;&#8195;**es更新速度很快，最好的学习方法就是跟着官方文档走！！！**
 #### es背景故事
 &ensp;&#8195;多年前，一个叫做Shay Banon的刚结婚不久的失业开发者，由于妻子要去伦敦学习厨师，他便跟着也去了。
 在他找工作的过程中，为了给妻子构建一个食谱的搜索引擎，他开始构建一个早期版本的Lucene。
@@ -113,10 +117,11 @@ POST /_aliases
 根据上面的对分布式搜索的认知我们知道使用from+size的这种方式进行分页操作，每个分片都要构造一个from+size长度的优先级队列，而协调节点则要对  分片数量*（from+size） 个document进行排序找size个document。这就是消耗CPU和内存的原因了。而且在实际工作中会出现from+size查询10000以后数据为空的情况（在网上还发现部分出现报错提示）。
 
 **解决**<br>
-1、通过修改index.max_result_window的值来继续使用from+size。但是...
-2、使用scroll做深度分页
+1、通过修改index.max_result_window的值来继续使用from+size。但是对内存的占用很大。不推荐。
+2、使用scroll API做深度分页。
+3、使用search_after API。
 
-**scroll做深度分页**
+**scroll做深度分页**<br>
 直接上DSL：
 ```javascript
 POST (这个供参考)
@@ -142,7 +147,7 @@ GET: /index/_search?scroll = 10m
 ```
 scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。
 
-**code(xxx.iced)**
+**code(xxx.iced)**<br>
 ```javascript
 // 刚开始的一次scroll查询
   searchRBN: (query, cb)->
@@ -196,10 +201,48 @@ scroll分页请求头必须携带一个scroll属性，表示scroll的失效时�
       objArr.push obj
     return objArr 
 ```
+**scroll API的不足**<br>
+&nbsp;&#8195;虽然es官方文档中也建议我们使用scroll API进行高效的深度滚动，但是使用scroll context的花费是很高的，建议不要将其用在用户实时请求上。那么实时请求的处理可以交给search_after。
+
+**search_after API做深度分页**<br>
+&nbsp;&#8195;search_after参数通过提供实时的游标来解决这个问题。它的策略是使用上一页的结果来帮助检索下一页。值得注意的是：分页的前提是对数据集进行排序，涉及排序需要将文档中的某一个字段作为排序依据。那个字段必须是能够标识某一个文档的，否则具有相同值的文档的顺序将无法确定。建议使用字段_id因为它是每一个文档的唯一值。search_after是实时的，它始终针对最新版本的搜索器进行解析。它也不是解决自由跳转的方案。因为是实时的所以排序顺序可能会在索引更新或者删除的时候发生变化。<br>
+先模拟查询一次：
+```javascript
+GET twitter/_search
+{
+    "size": 10,
+    "query": {
+        "match" : {
+            "title" : "elasticsearch"
+        }
+    },
+    "sort": [
+        {"date": "asc"},
+        {"_id": "desc"}
+    ]
+}
+```
+模拟获取下一页数据：
+```javascript
+GET twitter/_search
+{
+    "size": 10,
+    "query": {
+        "match" : {
+            "title" : "elasticsearch"
+        }
+    },
+    "search_after": [1463538857, "654323"],
+    "sort": [
+        {"date": "asc"},
+        {"_id": "desc"}
+    ]
+}
+//search_afetr就是根据你的sort排序规则，填写上一次获取的最后一个数据的值，我们第一次查的是按照date、_id排序，所以填写上次获取的最后一个数据的date和_id即可。
+```
 
 
-## 后记
-### 相关问题
+## 问题
 #### 为啥主分片的数量后期无法修改？
 es通过以下公式计算文档对应的分片：
 ```

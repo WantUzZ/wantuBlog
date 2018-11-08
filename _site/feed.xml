@@ -5,8 +5,8 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 07 Nov 2018 12:03:27 +0800</pubDate>
-    <lastBuildDate>Wed, 07 Nov 2018 12:03:27 +0800</lastBuildDate>
+    <pubDate>Thu, 08 Nov 2018 12:40:20 +0800</pubDate>
+    <lastBuildDate>Thu, 08 Nov 2018 12:40:20 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -1771,8 +1771,12 @@ series//展示设置
       </item>
     
       <item>
-        <title>回顾ElasticSearch的使用(持续更新...)</title>
+        <title>回顾ElasticSearch的使用(1108更新)</title>
         <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+&lt;h4 id=&quot;写在最前面&quot;&gt;写在最前面&lt;/h4&gt;
+&lt;p&gt;  &lt;a href=&quot;https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html&quot;&gt;官方文档&lt;/a&gt;&lt;br /&gt;
+  &lt;a href=&quot;https://scsundefined.gitbooks.io/elasticsearch-reference-cn/content/&quot;&gt;中文文档翻译&lt;/a&gt;&lt;br /&gt;
+  &lt;strong&gt;es更新速度很快，最好的学习方法就是跟着官方文档走！！！&lt;/strong&gt;&lt;/p&gt;
 &lt;h4 id=&quot;es背景故事&quot;&gt;es背景故事&lt;/h4&gt;
 &lt;p&gt;  多年前，一个叫做Shay Banon的刚结婚不久的失业开发者，由于妻子要去伦敦学习厨师，他便跟着也去了。
 在他找工作的过程中，为了给妻子构建一个食谱的搜索引擎，他开始构建一个早期版本的Lucene。
@@ -1917,10 +1921,11 @@ series//展示设置
 &lt;p&gt;根据上面的对分布式搜索的认知我们知道使用from+size的这种方式进行分页操作，每个分片都要构造一个from+size长度的优先级队列，而协调节点则要对  分片数量*（from+size） 个document进行排序找size个document。这就是消耗CPU和内存的原因了。而且在实际工作中会出现from+size查询10000以后数据为空的情况（在网上还发现部分出现报错提示）。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;解决&lt;/strong&gt;&lt;br /&gt;
-1、通过修改index.max_result_window的值来继续使用from+size。但是…
-2、使用scroll做深度分页&lt;/p&gt;
+1、通过修改index.max_result_window的值来继续使用from+size。但是对内存的占用很大。不推荐。
+2、使用scroll API做深度分页。
+3、使用search_after API。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;scroll做深度分页&lt;/strong&gt;
+&lt;p&gt;&lt;strong&gt;scroll做深度分页&lt;/strong&gt;&lt;br /&gt;
 直接上DSL：&lt;/p&gt;
 &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
@@ -1965,7 +1970,7 @@ series//展示设置
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;code(xxx.iced)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;code(xxx.iced)&lt;/strong&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
 3
@@ -2069,9 +2074,73 @@ series//展示设置
       &lt;span class=&quot;nx&quot;&gt;objArr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;objArr&lt;/span&gt; 
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;scroll API的不足&lt;/strong&gt;&lt;br /&gt;
+  虽然es官方文档中也建议我们使用scroll API进行高效的深度滚动，但是使用scroll context的花费是很高的，建议不要将其用在用户实时请求上。那么实时请求的处理可以交给search_after。&lt;/p&gt;
 
-&lt;h2 id=&quot;后记&quot;&gt;后记&lt;/h2&gt;
-&lt;h3 id=&quot;相关问题&quot;&gt;相关问题&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;search_after API做深度分页&lt;/strong&gt;&lt;br /&gt;
+  search_after参数通过提供实时的游标来解决这个问题。它的策略是使用上一页的结果来帮助检索下一页。值得注意的是：分页的前提是对数据集进行排序，涉及排序需要将文档中的某一个字段作为排序依据。那个字段必须是能够标识某一个文档的，否则具有相同值的文档的顺序将无法确定。建议使用字段_id因为它是每一个文档的唯一值。search_after是实时的，它始终针对最新版本的搜索器进行解析。它也不是解决自由跳转的方案。因为是实时的所以排序顺序可能会在索引更新或者删除的时候发生变化。&lt;br /&gt;
+先模拟查询一次：&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nx&quot;&gt;GET&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;twitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;_search&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;size&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;query&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s2&quot;&gt;&quot;match&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;elasticsearch&quot;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;sort&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;date&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;asc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;_id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;desc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;模拟获取下一页数据：&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nx&quot;&gt;GET&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;twitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;_search&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;size&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;query&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s2&quot;&gt;&quot;match&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&quot;title&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;elasticsearch&quot;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;search_after&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1463538857&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;654323&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;sort&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;date&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;asc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;_id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;desc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//search_afetr就是根据你的sort排序规则，填写上一次获取的最后一个数据的值，我们第一次查的是按照date、_id排序，所以填写上次获取的最后一个数据的date和_id即可。&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;问题&quot;&gt;问题&lt;/h2&gt;
 &lt;h4 id=&quot;为啥主分片的数量后期无法修改&quot;&gt;为啥主分片的数量后期无法修改？&lt;/h4&gt;
 &lt;p&gt;es通过以下公式计算文档对应的分片：&lt;/p&gt;
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
