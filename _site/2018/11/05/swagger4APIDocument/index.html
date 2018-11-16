@@ -11,37 +11,29 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="那些年读过的书 - 老王 | want">
+    <meta property="og:title" content="搭建基于Swagger的接口文档系统 - 老王 | want">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="记录
-技术读完
-
-  大话数据结构
-  疯狂Java讲义
-  你不知道的js上
-  Git学习指南
-  JavaScript语言精粹
-  JavaScript高级程序设计
-  深入浅出NodeJs
-
-
-">
+    <meta property="og:description" content="前言
+  程序员恐怕很多都是不想写文档的，但是一旦接手他人的项目又是第一时间说：文档呢？这确实是一个很常见的现象。其本质反应的就是书写文档比较耗时，技术人员不想做这种“无用功”与接手他人的项目，技术人员又不想看别人的代码，想通过阅读相关的文档加快上手速度之间的矛盾。
+  个人观点：好的规范一定要尽早养成。个人在刚刚参加工作的时候一开始的做法是在service层上写好接口注释，在注释中将相关的...">
     
-    <meta property="article:published_time" content="2018-10-30T06:34:00Z">
+    <meta property="article:published_time" content="2018-11-05T00:00:00Z">
     
     
     <meta property="article:author" content="wantu">
     
     
-    <meta property="article:tag" content="书">
+    <meta property="article:tag" content="Swagger">
+    
+    <meta property="article:tag" content="文档管理">
     
     
     <meta property="og:image" content="http://localhost:4000/img/wantu.jpg">
-    <meta property="og:url" content="http://localhost:4000/2018/10/30/tbook/">
+    <meta property="og:url" content="http://localhost:4000/2018/11/05/swagger4APIDocument/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>那些年读过的书 - 老王 | want</title>
+    <title>搭建基于Swagger的接口文档系统 - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -50,7 +42,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/10/30/tbook/">
+    <link rel="canonical" href="http://localhost:4000/2018/11/05/swagger4APIDocument/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -379,7 +371,7 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/post-bg-rwd.jpg" width="0" height="0"> -->
+<!-- <img src="/img/sea20181105.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -388,7 +380,7 @@
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/post-bg-rwd.jpg');
+        background-image: url('/img/sea20181105.jpg');
         background: ;
     }
 
@@ -405,13 +397,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=%E4%B9%A6" title="书">书</a>
+                        <a class="tag" href="/archive/?tag=Swagger" title="Swagger">Swagger</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86" title="文档管理">文档管理</a>
                         
                     </div>
-                    <h1>那些年读过的书</h1>
+                    <h1>搭建基于Swagger的接口文档系统</h1>
                     
                     <h2 class="subheading"></h2>
-                    <span class="meta">Posted by wantu on October 30, 2018</span>
+                    <span class="meta">Posted by wantu on November 5, 2018</span>
                 </div>
             </div>
         </div>
@@ -437,78 +431,304 @@
                 <!-- Multi-Lingual -->
                 
 
-                <h2 id="记录">记录</h2>
-<h4 id="技术读完">技术读完</h4>
-<ul>
-  <li>大话数据结构</li>
-  <li>疯狂Java讲义</li>
-  <li>你不知道的js上</li>
-  <li>Git学习指南</li>
-  <li>JavaScript语言精粹</li>
-  <li>JavaScript高级程序设计</li>
-  <li>深入浅出NodeJs</li>
-</ul>
+                <h2 id="前言">前言</h2>
+<p>  程序员恐怕很多都是不想写文档的，但是一旦接手他人的项目又是第一时间说：文档呢？这确实是一个很常见的现象。其本质反应的就是书写文档比较耗时，技术人员不想做这种“无用功”与接手他人的项目，技术人员又不想看别人的代码，想通过阅读相关的文档加快上手速度之间的矛盾。<br />
+  个人观点：好的规范一定要尽早养成。个人在刚刚参加工作的时候一开始的做法是在service层上写好接口注释，在注释中将相关的接口的功能、请求参数、响应进行描述。到后来采用Rap进行文档管理，Rap管理的好处就是简单、快速。相关的参数像填表一样的填好，比较简单无脑。但是Rap存在很多不足之处：比如说多人同时编辑存在互斥现象，单一文档同一时间只允许一个用户编辑，亦或是接口不支持在线的请求测试（可能自己不知道）等。而且Rap服务器（私服部署情况除外）是外部的，相关的安全性可能不是很靠得住。个人也没有搭建过公司自用的rap。所以相关的复杂度不是很清楚。但是今天，我想向你推荐的这个东西确实对于搭建一个自用的文档管理系统是很方便、高效的。<br />
+  它就是Swagger。</p>
 
-<h4 id="技术选读">技术选读</h4>
-<ul>
-  <li>算法竞赛入门经典第一版</li>
-  <li>python编程快速-让繁琐工作自动化</li>
-  <li>Effective Java中文版</li>
-  <li>大话设计模式</li>
-  <li>计算机网络</li>
-  <li>高性能MySql</li>
-  <li>深入理解Java虚拟机</li>
-</ul>
+<h2 id="正文">正文</h2>
+<h4 id="what">what?</h4>
+<p>  维基百科:Swagger是一个开源软件框架，由大型工具生态系统支持，可帮助开发人员设计，构建，记录和使用RESTful Web服务。 虽然大多数用户通过Swagger UI工具识别Swagger，但Swagger工具集包括对自动化文档，代码生成和测试用例生成的支持。<br />
+  其有三大工具：swagger-ui、swagger-editor、swagger-codegen。swagger-ui是用来显示API文档的，并且它还支持编辑和在线的请求测试。
+swagger-editor是一个在线的文档编辑文件工具，有助于整个框架中其他工具的使用，左边编辑右边显示。swagger-codegen,可以根据swagger.json或者swagger.yml文件生成指定的计算机语言指定框架的代码。</p>
 
-<h4 id="非技术读完">非技术读完</h4>
-<ul>
-  <li>达芬奇密码</li>
-  <li>狼图腾</li>
-  <li>追风筝的人</li>
-  <li>偷影子的人</li>
-  <li>人生</li>
-  <li>平凡的世界</li>
-  <li>活着</li>
-  <li>穷爸爸富爸爸</li>
-  <li>教父第一部第二部</li>
-  <li>白鹿原</li>
-  <li>呐喊</li>
-  <li>解忧杂货店</li>
-  <li>嫌疑人x的献身</li>
-  <li>挪威的森林</li>
-  <li>悟空传</li>
-  <li>大江东去（第一、二部）</li>
-  <li>犯罪心理画像</li>
-  <li>我与地坛</li>
-  <li>皮囊</li>
-  <li>边城</li>
-  <li>曾国藩传</li>
-  <li>天才在左疯子在右</li>
-  <li>李世民秘史</li>
-  <li>芙蓉镇</li>
-  <li>人生本来如寄</li>
-  <li>呼兰河传</li>
-  <li>亲爱的安德烈</li>
-  <li>尘埃落定</li>
-  <li>人间失格</li>
-  <li>十字街84号</li>
-  <li>图解美国史</li>
-  <li>黑客与画家</li>
-  <li>少女</li>
-  <li>关键对话</li>
-  <li>人类简史</li>
-  <li>激荡四十年</li>
-  <li>周正毅问题调查</li>
-  <li>三十年前的一次长跑比赛</li>
-</ul>
+<h4 id="搭建过程">搭建过程</h4>
+<p>1、新建一个项目，执行 npm init初始化package.json。<br />
+2、运行npm install swagger -g –save-dev安装Swagger包。<br />
+3、在项目的根目录下新建一个api/swagger/swagger.yaml。并将一下部分复制进来。<br /></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+</pre></td><td class="rouge-code"><pre><span class="na">swagger</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2.0"</span>
+<span class="na">info</span><span class="pi">:</span>
+ <span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">1.0.0"</span>
+ <span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">xxx后台API"</span>
+ <span class="na">description</span><span class="pi">:</span> <span class="s2">"</span><span class="s">接口文档说明以及测试"</span>
+ <span class="na">contact</span><span class="pi">:</span>
+   <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">want"</span>
+   <span class="na">email</span><span class="pi">:</span> <span class="s2">"</span><span class="s">beursuperman@163.com"</span> 
+<span class="na">host</span><span class="pi">:</span> <span class="s2">"</span><span class="s">localhost:5500"</span>
+<span class="na">schemes</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s2">"</span><span class="s">http"</span>
+<span class="na">consumes</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s2">"</span><span class="s">application/json"</span>
+<span class="na">produces</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s2">"</span><span class="s">application/json"</span>
+<span class="na">paths</span><span class="pi">:</span>
+  <span class="s">/api/v1/queryAllGroupMemberChatRecordByChatroomId</span><span class="pi">:</span>
+    <span class="na">post</span><span class="pi">:</span>
+      <span class="na">summary</span><span class="pi">:</span> <span class="s">查询群组所有节点之间的聊天记录.</span>
+      <span class="na">consumes</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">application/json</span>
+      <span class="na">parameters</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">in</span><span class="pi">:</span> <span class="s">body</span>
+          <span class="na">name</span><span class="pi">:</span> <span class="s">param</span>
+          <span class="na">description</span><span class="pi">:</span> <span class="s">请求体对象</span>
+          <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
+          <span class="na">schema</span><span class="pi">:</span>
+            <span class="s">$ref</span><span class="pi">:</span> <span class="s2">"</span><span class="s">#/definitions/queryAllGroupMemberChatRecordByChatroomIdReq"</span>
+      <span class="na">responses</span><span class="pi">:</span>
+        <span class="na">200</span><span class="pi">:</span>
+          <span class="na">description</span><span class="pi">:</span> <span class="s">A responsed object</span>      
+<span class="na">definitions</span><span class="pi">:</span>
+  <span class="na">queryAllGroupMemberChatRecordByChatroomIdReq</span><span class="pi">:</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">object</span>
+    <span class="na">required</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">scroll</span>
+      <span class="pi">-</span> <span class="s">chatRoomId</span>
+      <span class="pi">-</span> <span class="s">size</span>
+      <span class="pi">-</span> <span class="s">sort</span>
+      <span class="pi">-</span> <span class="s">index</span>
+    <span class="na">properties</span><span class="pi">:</span>
+      <span class="na">scroll</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">5m'</span>
+      <span class="na">size</span><span class="pi">:</span> 
+        <span class="na">type</span><span class="pi">:</span> <span class="s">integer</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="s">20</span>
+      <span class="na">sort</span><span class="pi">:</span> 
+        <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">desc'</span>
+      <span class="na">chatRoomId</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">8477243337@chatroom'</span>
+      <span class="na">index</span><span class="pi">:</span>
+        <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">chat'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>4、运行Swagger project edit，此时会自动打开一个swagger编辑窗口，读取的内容就是上一步中的yaml文件<br />
+5、尝试修改编辑窗口的内容，此时右侧会及时修改更新，而且api/swagger/swagger.yaml也会跟着自动更新<br />
+6、下载Swagger-ui，拷贝dist文件夹中的代码到根目录下新建的public文件夹<br />
+7、创建一个express项目，在根目录下新建index.js。代码如下：</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="c1">//先执行一下npm install</span>
+<span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span> 
+<span class="kd">var</span> <span class="nx">opn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'opn'</span><span class="p">);</span> 
 
-<h4 id="非技术未完结">非技术未完结</h4>
-<ul>
-  <li>仓央嘉措诗传</li>
-  <li>黄金时代</li>
-  <li>拿破仑传</li>
-  <li>智囊</li>
-</ul>
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+  <span class="nx">opn</span><span class="p">(</span><span class="s1">'http://localhost:3000/api-doc'</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'App listening on port 3000!'</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/api-doc'</span><span class="p">,</span> <span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="s1">'public'</span><span class="p">));</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>8、运行node index.js会启用swagger-ui功能，自动打开api展示页面，但是页面是默认的官网上的东西；<br />
+9、将api/swagger文件夹下的/swagger.yaml文件复制到public文件夹下，打开public/index.html，在脚本中修改url为’./swagger.yaml’,刷新浏览器，即可看到我们的内容<br />
+10、如何将swagger-editor文件的变化实时反馈到swagger-ui上，运行npm install gulp -g –save-dev安装gulp包，在根目录下新建gulpfile.js，代码如下(记得先安装好依赖)：<br /></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">yaml</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'js-yaml'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'path'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'fs'</span><span class="p">);</span>
+
+<span class="c1">// 建立api/swagger的swagger.yaml到public下的swagger.yaml联系</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'swagger'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">doc</span> <span class="o">=</span> <span class="nx">yaml</span><span class="p">.</span><span class="nx">safeLoad</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'./api/swagger/swagger.yaml'</span><span class="p">)));</span> 
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'./public/swagger.yaml'</span><span class="p">),</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">doc</span><span class="p">,</span><span class="kc">null</span><span class="p">,</span><span class="s1">' '</span><span class="p">));</span>
+<span class="p">});</span>
+
+<span class="c1">// 实时更新</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'default'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s1">'./api/swagger/swagger.yaml'</span><span class="p">,[</span><span class="s1">'swagger'</span><span class="p">]);</span>
+<span class="p">})</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>11、再看下package.json中的内容：</p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"doc-api"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"main"</span><span class="p">:</span><span class="w"> </span><span class="s2">"index.js"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"node index.js"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"swg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"swagger project edit"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gulp"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">"want"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ISC"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"devDependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"express"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^4.15.2"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"swagger"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.7.5"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.9.1"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"js-yaml"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.8.3"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"opn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5.0.0"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"cors"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^2.8.5"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>12、新增readme.md添加使用说明：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>&gt; 须知
+* npm start 启动项目并跳转接口展示页面 
+* swagger project edit 接口文档在线编辑
+* npm run gulp 开始同步编辑 （项目一开始就要执行的命令,因为要实时监控api/swagger/swagger.yaml的编辑变动）
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="效果图">效果图</h4>
+<p><strong>API编就页面</strong>
+<img src="/img/swagger-editor.jpg" alt="编辑页面" />
+<strong>API展示页面</strong>
+<img src="/img/swagger-ui.jpg" alt="展示页面" />
+<strong>API在线测试页面</strong>
+<img src="/img/swagger-test.jpg" alt="测试页面" />
+<strong>API在线测试响应</strong>
+<img src="/img/swagger-result.jpg" alt="测试页面" /></p>
+
+<h4 id="期间遇到的问题">期间遇到的问题：</h4>
+<p>1、跨域问题。这个问题发生在swagger-ui中进行接口测试的时候。出现这个问题,谷歌并询问了宝哥,确认是跨域导致的，所以设置相关的跨域访问进行解决。但是通过查看Network发现又一个OPTION请求每次404？<br />
+<img src="/img/cors.jpg" alt="报错" />
+预检(OPTION)请求产生的大概率原因：<br /></p>
+<ol>
+  <li>Get、Head、Post方法以外的请求方法</li>
+  <li>如果是POST请求,Content-Type取这三个值以外的值：
+    <ul>
+      <li>application/x-www-form-urlencoded</li>
+      <li>multipart/form-data</li>
+      <li>text/plain
+那么很明显，consumes的值为application/json肯定是要发送预检请求(OPTION)的。那么如何处理。我暂时的做法是在项目中放掉OPTION请求，一旦预检请求没有响应那么后续的请求是不会发送的。
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre>app.use (req, res, next)-&gt;
+res.header("Access-Control-Allow-Origin", "*");
+res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
+res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials");
+res.header("Access-Control-Allow-Credentials", "true");
+if req.method == 'OPTIONS'
+ res.send(200)
+else 
+ next()
+</pre></td></tr></tbody></table></code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p>2、yaml语法
+注意我这书写的格式OAS2的格式。别把OAS3的格式就往上写。相关的语法书写参考官方文档。
+<a href="https://swagger.io/docs/specification/describing-request-body/">官方文档</a></p>
+
+<p>搭建参考：<a href="https://zhuanlan.zhihu.com/p/26741562">必至</a></p>
 
                 
                 
@@ -516,19 +736,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/10/30/showData-cytoscape/" data-toggle="tooltip" data-placement="top" title="关系型数据的可视化解决">
-                        Previous<br>
-                        <span>关系型数据的可视化解决</span>
-                        </a>
-                    </li>
-                    
-                    
-                    <li class="next">
                         <a href="/2018/11/02/git/" data-toggle="tooltip" data-placement="top" title="git相关命令以及好的提交规范">
-                        Next<br>
+                        Previous<br>
                         <span>git相关命令以及好的提交规范</span>
                         </a>
                     </li>
+                    
                     
                 </ul>
                 <hr style="visibility: hidden;">

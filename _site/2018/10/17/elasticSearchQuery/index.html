@@ -11,15 +11,18 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="回顾ElasticSearch的使用(持续更新...) - 老王 | want">
+    <meta property="og:title" content="回顾ElasticSearch的使用(1108更新) - 老王 | want">
     
     <meta property="og:type" content="article">
     <meta property="og:description" content="前言
+写在最前面
+  官方文档
+  中文文档翻译
+  es更新速度很快，最好的学习方法就是跟着官方文档走！！！
 es背景故事
   多年前，一个叫做Shay Banon的刚结婚不久的失业开发者，由于妻子要去伦敦学习厨师，他便跟着也去了。
 在他找工作的过程中，为了给妻子构建一个食谱的搜索引擎，他开始构建一个早期版本的Lucene。
-直接基于Lucene工作会比较困难，所以Shay开始抽象Lucene代码以便Java程序员可以在应用中添加搜索功能。他发布了他的第一个开源项目，叫做“Compass”。
-...">
+直接基于Lucene工作会比较困难，所以Shay开始抽象Luce...">
     
     <meta property="article:published_time" content="2018-10-17T02:43:00Z">
     
@@ -38,7 +41,7 @@ es背景故事
     <meta property="og:url" content="http://localhost:4000/2018/10/17/elasticSearchQuery/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>回顾ElasticSearch的使用(持续更新...) - 老王 | want</title>
+    <title>回顾ElasticSearch的使用(1108更新) - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -409,7 +412,7 @@ es背景故事
                         <a class="tag" href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90" title="数据分析">数据分析</a>
                         
                     </div>
-                    <h1>回顾ElasticSearch的使用(持续更新...)</h1>
+                    <h1>回顾ElasticSearch的使用(1108更新)</h1>
                     
                     <h2 class="subheading"></h2>
                     <span class="meta">Posted by wantu on October 17, 2018</span>
@@ -439,6 +442,10 @@ es背景故事
                 
 
                 <h2 id="前言">前言</h2>
+<h4 id="写在最前面">写在最前面</h4>
+<p>  <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">官方文档</a><br />
+  <a href="https://scsundefined.gitbooks.io/elasticsearch-reference-cn/content/">中文文档翻译</a><br />
+  <strong>es更新速度很快，最好的学习方法就是跟着官方文档走！！！</strong></p>
 <h4 id="es背景故事">es背景故事</h4>
 <p>  多年前，一个叫做Shay Banon的刚结婚不久的失业开发者，由于妻子要去伦敦学习厨师，他便跟着也去了。
 在他找工作的过程中，为了给妻子构建一个食谱的搜索引擎，他开始构建一个早期版本的Lucene。
@@ -583,10 +590,11 @@ es背景故事
 <p>根据上面的对分布式搜索的认知我们知道使用from+size的这种方式进行分页操作，每个分片都要构造一个from+size长度的优先级队列，而协调节点则要对  分片数量*（from+size） 个document进行排序找size个document。这就是消耗CPU和内存的原因了。而且在实际工作中会出现from+size查询10000以后数据为空的情况（在网上还发现部分出现报错提示）。</p>
 
 <p><strong>解决</strong><br />
-1、通过修改index.max_result_window的值来继续使用from+size。但是…
-2、使用scroll做深度分页</p>
+1、通过修改index.max_result_window的值来继续使用from+size。但是对内存的占用很大。不推荐。
+2、使用scroll API做深度分页。
+3、使用search_after API。</p>
 
-<p><strong>scroll做深度分页</strong>
+<p><strong>scroll做深度分页</strong><br />
 直接上DSL：</p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -631,7 +639,7 @@ es背景故事
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。</p>
 
-<p><strong>code(xxx.iced)</strong></p>
+<p><strong>code(xxx.iced)</strong><br /></p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -735,9 +743,73 @@ es背景故事
       <span class="nx">objArr</span><span class="p">.</span><span class="nx">push</span> <span class="nx">obj</span>
     <span class="k">return</span> <span class="nx">objArr</span> 
 </pre></td></tr></tbody></table></code></pre></div></div>
+<p><strong>scroll API的不足</strong><br />
+  虽然es官方文档中也建议我们使用scroll API进行高效的深度滚动，但是使用scroll context的花费是很高的，建议不要将其用在用户实时请求上。那么实时请求的处理可以交给search_after。</p>
 
-<h2 id="后记">后记</h2>
-<h3 id="相关问题">相关问题</h3>
+<p><strong>search_after API做深度分页</strong><br />
+  search_after参数通过提供实时的游标来解决这个问题。它的策略是使用上一页的结果来帮助检索下一页。值得注意的是：分页的前提是对数据集进行排序，涉及排序需要将文档中的某一个字段作为排序依据。那个字段必须是能够标识某一个文档的，否则具有相同值的文档的顺序将无法确定。建议使用字段_id因为它是每一个文档的唯一值。search_after是实时的，它始终针对最新版本的搜索器进行解析。它也不是解决自由跳转的方案。因为是实时的所以排序顺序可能会在索引更新或者删除的时候发生变化。<br />
+先模拟查询一次：</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="nx">GET</span> <span class="nx">twitter</span><span class="o">/</span><span class="nx">_search</span>
+<span class="p">{</span>
+    <span class="s2">"size"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"match"</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"title"</span> <span class="p">:</span> <span class="s2">"elasticsearch"</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">"sort"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"date"</span><span class="p">:</span> <span class="s2">"asc"</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"_id"</span><span class="p">:</span> <span class="s2">"desc"</span><span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>模拟获取下一页数据：</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="nx">GET</span> <span class="nx">twitter</span><span class="o">/</span><span class="nx">_search</span>
+<span class="p">{</span>
+    <span class="s2">"size"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"match"</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"title"</span> <span class="p">:</span> <span class="s2">"elasticsearch"</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">"search_after"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1463538857</span><span class="p">,</span> <span class="s2">"654323"</span><span class="p">],</span>
+    <span class="s2">"sort"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"date"</span><span class="p">:</span> <span class="s2">"asc"</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"_id"</span><span class="p">:</span> <span class="s2">"desc"</span><span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+<span class="c1">//search_afetr就是根据你的sort排序规则，填写上一次获取的最后一个数据的值，我们第一次查的是按照date、_id排序，所以填写上次获取的最后一个数据的date和_id即可。</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="问题">问题</h2>
 <h4 id="为啥主分片的数量后期无法修改">为啥主分片的数量后期无法修改？</h4>
 <p>es通过以下公式计算文档对应的分片：</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -817,7 +889,7 @@ es背景故事
         </a>
         
         
-                <a data-sort="0008" 
+                <a data-sort="0009" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"
                     title="数据可视化"
                     rel="3">数据可视化
@@ -859,7 +931,7 @@ es背景故事
         anchors.options = {
           visible: 'always',
           placement: 'right',
-          icon: '#'
+          icon: ''
         };
         anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
     })
