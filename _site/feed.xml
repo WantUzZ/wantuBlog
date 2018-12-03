@@ -5,9 +5,197 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 08 Nov 2018 12:40:20 +0800</pubDate>
-    <lastBuildDate>Thu, 08 Nov 2018 12:40:20 +0800</lastBuildDate>
+    <pubDate>Mon, 03 Dec 2018 13:23:26 +0800</pubDate>
+    <lastBuildDate>Mon, 03 Dec 2018 13:23:26 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
+    
+      <item>
+        <title>Neo4j知识梳理</title>
+        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+&lt;p&gt;   图是一种常见的数据结构，其反映数据所对应元素之间的几何关系和拓扑关系。图数据库是一种非关系型数据库。它应用图形理论存储实体之间的关系信息。最常见例子就是社会网络中人与人之间的关系。关系型数据库用于存储“关系型”数据的效果并不好，其查询复杂、缓慢、超出预期，而图形数据库的独特设计恰恰弥补了这个缺陷。&lt;br /&gt;
+   Neo4j是一个高性能的,NOSQL图形数据库，它将结构化数据存储在网络上而不是表中。它是一个嵌入式的、基于磁盘的、具备完全的事务特性的Java持久化引擎，但是它将结构化数据存储在网络(从数学角度叫做图)上而不是表中。Neo4j也可以被看作是一个高性能的图引擎，该引擎具有成熟数据库的所有特性。程序员工作在一个面向对象的、灵活的网络结构下而不是严格、静态的表中——但是他们可以享受到具备完全的事务特性、企业级的数据库的所有好处。&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;正文&quot;&gt;正文&lt;/h2&gt;
+&lt;h4 id=&quot;crud&quot;&gt;CRUD&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;增&lt;/strong&gt;&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;节点：&lt;/code&gt;&lt;br /&gt;
+    create (n:xxx{att:value}) //单节点&lt;br /&gt;
+    create (n),(m);//多节点，注意创建多节点的时候自定义变量(前面的n、m是用于捕获结果)不能重复,即create (n),(n);是会报错的。&lt;br /&gt;
+    create (n:label1:lable2:label3) //带标签的节点。标签可以用来创建索引，从而有助于优化对节点的查询。标签的命名规则：数字、字母、下划线，首字母不能是数字。&lt;br /&gt;
+    create (n:xxx{att1:value1})//创建带属性的节点。&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;关系：&lt;/code&gt;&lt;br /&gt;
+    create：&lt;br /&gt;
+        create (n1:xx)-[r:xxx]-&amp;gt;(n2:x) //创建单关系&lt;br /&gt;
+        create (n1:xx)-[r:xxx]-&amp;gt;(n2:x),(n11:xx)-[r1:xxx]-&amp;gt;(n22:x)//创建多关系&lt;br /&gt;
+        create ()-[r:xx{att:value}]-()//创建带属性的关系&lt;br /&gt;
+        create k = (n1)-[r1:friend{location:’China’}]-&amp;gt;(n2) return k //创建具有节点和联系的全路径&lt;br /&gt;
+    create unique:&lt;br /&gt;
+        match (n)-[r]-(n1) &lt;br /&gt;
+        where n.id = xx&lt;br /&gt;
+        create unique (n)-[r1]-(n2:{name:’want’}) &lt;br /&gt;
+        return n,r,n1,n2 //创建唯一的节点和联系。create unique语句，这个语句放在match和create这里，对于match上的节点和关系会新建缺省元素。&lt;br /&gt;
+    merge:&lt;br /&gt;
+        megre (n:xxx{att:value}) Merge好似if-else语句，基本逻辑是先检测merge后面的条件，看看有没有匹配的返回值，如果有则执行on merge分支，如果没有则走on create。&lt;br /&gt;
+    create unique与merge区别：Create Unique部分匹配就可以，而Merge则只有整个模式都匹配才创建，否则什么也不做。&lt;br /&gt;
+&lt;strong&gt;改&lt;/strong&gt;&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;更新属性值:&lt;/code&gt;&amp;lt;br
+    match (n:xxx{att:value}) set n.att = newValue return n&lt;br /&gt;
+    除了create 和 delete 以外其他语句都必须要以return结尾&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;更新标签:&lt;/code&gt;&lt;br /&gt;
+    match (n:lable1:label2) set n:newLabel1:newLabel2 return n;&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;更改关系:&lt;/code&gt;&lt;br /&gt;
+    先删除旧的关系，再建立新的关系。&lt;br /&gt;
+&lt;strong&gt;删&lt;/strong&gt;&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;delete:&lt;/code&gt;&lt;br /&gt;
+    不建议使用match (n) delete n （强保护机制，必要要先删除关系再删除节点）&lt;br /&gt;
+    而是使用：match (n) detach delete n (弱保护机制)&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;remove:专门删除属性、标签&lt;/code&gt;&lt;br /&gt;
+    match (n:xxx{att:value}) remove n.att return n;//删除节点的某一个属性&lt;br /&gt;
+    match (n) where n.id = xxx set n.att = null;//将某个属性设置为null也是删除属性的一种方法。&lt;br /&gt;
+&lt;strong&gt;查&lt;/strong&gt;&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;match(查询)...where:&lt;/code&gt;&lt;br /&gt;
+    在match之前可以进行定位用以加快查询速度。&lt;br /&gt;
+    常见聚合操作：count、distinct、max、min…&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;标签限定&quot;&gt;标签限定&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;在version2开始引入对标签的限定。暂时只有unique能用。&amp;lt;br&amp;gt;
+create constraint on (n:MALE) assert n.name is unique;&amp;lt;br&amp;gt;
+可以确保name属性是唯一的。&amp;lt;br&amp;gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;模式与模式匹配&quot;&gt;模式与模式匹配&lt;/h4&gt;
+&lt;ol&gt;
+  &lt;li&gt;节点模式：&lt;br /&gt;
+ 使用括号进行描述&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;标签模式：&lt;br /&gt;
+ 增加标签限定，多个标签起到交集作用&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;关系模式&lt;br /&gt;
+ match (a:A)-[b:relations]-&amp;gt;(c:C) return a,b,c&lt;br /&gt;
+ 首先会搜寻两个标签节点，再去这些节点中寻找符合relations关系。&lt;br /&gt;
+ 双向就不要剪头:match (a:A)-[b:relations]-(c:C) return a,b,c&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;属性模式&lt;br /&gt;
+ 属性匹配使用的是花括号和键值对，其间使用逗号分隔。&lt;br /&gt;&lt;/li&gt;
+  &lt;li&gt;where：&lt;br /&gt;
+where不能单独使用，只能用在match、optionalmatch、start、with的后面，用以进一步过滤模式的数据。&lt;br /&gt;
+where从句中使用模式：
+5.1. 对于一个集合，如果是空集，那么代表false，非空代表true。可以使用in关键字来进一步限定。(这种做法在数据量大的时候会导致查询速度非常慢，在match之前进行定位可以解决)。=～ 不等于。点号和[]是相等，但是用法讲究。对于[]，其间必须是常量。&lt;br /&gt;
+5.2. 使用exists()函数进行属性校验。&lt;br /&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt; match (x)
+ where exists(x.age)
+ return x.name
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;5.3. 字符串匹配：starts with、ends with、contains&lt;br /&gt;&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt; match (x)
+ where x.name starts with &quot;B&quot;
+ return x.name
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;5.4. 其他从句：&lt;br /&gt;
+ 5.4.1. order排序(默认是升序，支持混排)&lt;br /&gt;
+ 5.4.2. limit限制返回数，skip跳过前多少个数据。&lt;br /&gt;&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt; match (n)
+ return n
+ order by n.age skip 3 limit 3
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;5.5. with从句：&lt;br /&gt;
+5.6. union、union all:&lt;br /&gt;
+union的用法与SQL一样，用于连接两个Match，返回结果中剔除了重复记录。但union all功能一样，但不剔除重复记录。&lt;br /&gt;&lt;/p&gt;
+    &lt;h4 id=&quot;查询优化&quot;&gt;查询优化&lt;/h4&gt;
+    &lt;p&gt;  Neo4J在version2引入索引策略，可以对标签进行限制和索引。Neo4J的索引和关系型数据库的定义相类似。主要用于提升节点寻找的性能。对于任何已有数据结构的更改操作，索引自动更新。如果出了错而导致索引处于无效状态，便需要差错并重新生成它们。Cypher查询会自动使用索引，Cypher有一个查询计划器和查询优化器，可以对查询进行评估并尝试尽全力依据选索引择最短执行时间。&lt;br /&gt;
+创建索引:&lt;br /&gt;
+ create index on :lable(attName)&lt;br /&gt;
+删除索引:&lt;br /&gt;
+ delete index on :label(attName)&lt;br /&gt;
+索引使用:&lt;br /&gt;
+ 默认是自动使用的。 一旦索引建立，随后但凡在where从句中出现具有索引的属性时，不论是简单的等值比较还是其他条件，索引的使用都是自动的。
+ 但是也可以显式的指定索引的使用方式–using从句,using从句中是可以在单一查询中提供多个索引项来给cypher查询优化器提供索引提示。&lt;br /&gt;&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;match (n:label)&amp;lt;br&amp;gt;
+using index n:label(attName)&amp;lt;br&amp;gt;
+where n.attName = attValue&amp;lt;br&amp;gt;
+return n&amp;lt;br&amp;gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;使用scan给Cypher Query Planner先扫描所有标签然后再执行后续的过滤，这种做法的结果意味着优秀的性能，毕竟使用标签本身可以不必考虑那些不必要的数据。这种做法的性能是较好的。&lt;br /&gt;&lt;/p&gt;
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;match (n:label)&amp;lt;br&amp;gt;
+using scan n:label&amp;lt;br&amp;gt;
+where n.attName = attValue&amp;lt;br&amp;gt;
+return n&amp;lt;br&amp;gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;理解查询计划:&lt;br /&gt;
+ Neo4j使用的都是基于成本的优化器（Cost Based Optimizer，CBO），用于制订精确的执行过程。可以采用如下两种不同的方式了解其内部的工作机制：&lt;br /&gt;
+ EXPLAIN：是解释机制，加入该关键字的Cypher语句可以预览执行的过程但并不实际执行，所以也不会产生任何结果。&lt;br /&gt;
+ PROFILE：则是画像机制，查询中使用该关键字，不仅能够看到执行计划的详细内容，也可以看到查询的执行结果。&lt;br /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;查询优化经历&quot;&gt;查询优化经历&lt;/h4&gt;
+&lt;p&gt;优化前的cql:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;explain
+MATCH (n) where n.id IN ['binbin287644658'] 
+WITH collect(n) as nodes
+UNWIND nodes as n
+UNWIND nodes as m
+WITH * WHERE id(n) &amp;lt; id(m)
+MATCH path = (n)--(m)
+RETURN path
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;查询速度非常慢，因为节点走了全部节点扫描。个人觉得是这个in的问题。因为在关系型数据库(mysql)即便in之前的字段是有索引的，但是in后面的值太多的话还是不会走索引的。&lt;br /&gt;
+&lt;img src=&quot;/img/neo4jno1.jpg&quot; alt=&quot;cql未优化前&quot; /&gt;
+优化后的cql，主要就是使用字符串拼接的方式将具体的节点进行定位。&lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;explain
+MATCH (n1:account {id:'wxid_hrm0cfv931j422'}),(n2:account {id:'binbin287644658'}),(n3:person {id:'320682198612083600'}),(n4:tel {id:'15258868649'}),(n5:device {id:'356996069532389'}),(n6:account {id:'a27563427'}),(n7:account {id:'wxid_q409jxhxvd0q12'}),(n8:account {id:'1004250324'}),(n9:tel {id:'666697734343'}),(n10:account {id:'wxid_xdbjmo94qzlm80'}),(n11:account {id:'lcg476634048'}),(n12:account {id:'ann_48'}),(n13:account {id:'liuxin601248'})WITH [n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13] as nodes
+UNWIND nodes as n
+UNWIND nodes as m
+WITH * WHERE id(n) &amp;lt; id(m)
+MATCH path = (n)--(m)
+RETURN path
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/neo4jno2.jpg&quot; alt=&quot;cql优化后&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 02 Dec 2018 02:43:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/12/02/Neo4J/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/12/02/Neo4J/</guid>
+        
+        <category>Neo4J</category>
+        
+        <category>图数据库</category>
+        
+        
+      </item>
     
       <item>
         <title>搭建基于Swagger的接口文档系统</title>
@@ -328,6 +516,35 @@ else
 抱着学习的态度。我把他的东西再次进行压缩。想必非常适合我们这种新入行的小学生了。&lt;br /&gt;
 &lt;a href=&quot;http://github.phodal.com/#git-%E6%8F%90%E4%BA%A4%E4%BF%A1%E6%81%AF%E5%8F%8A%E5%87%A0%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E8%A7%84%E8%8C%83&quot;&gt;完整版提交规范参上&lt;/a&gt; &lt;br /&gt;&lt;/p&gt;
 &lt;h4 id=&quot;常用命令&quot;&gt;常用命令&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;git help 帮助&lt;/li&gt;
+  &lt;li&gt;git init 现有目录初始化仓库，仅仅只是初始化，项目中的文件未被跟踪&lt;/li&gt;
+  &lt;li&gt;git clone 克隆代码&lt;/li&gt;
+  &lt;li&gt;git checkout 分支切换&lt;/li&gt;
+  &lt;li&gt;git checkout -b ‘xxx’ 切出分支xxx&lt;/li&gt;
+  &lt;li&gt;git branch 查看分支&lt;/li&gt;
+  &lt;li&gt;git status 检查当前文件状态 -s参数状态简览&lt;/li&gt;
+  &lt;li&gt;git diff 对比本地代码与上次的区别&lt;/li&gt;
+  &lt;li&gt;git add  跟踪新文件（记得和.gitignore一起食用效果更佳）&lt;/li&gt;
+  &lt;li&gt;git RESET HEAD 取消暂存的文件（有个git checkout –fileName命令用于撤销对文件的修改但是不推荐使用）&lt;/li&gt;
+  &lt;li&gt;git log 查看提交历史 1、-p 显示每次提交的差异，后续可跟-n eg:git log -p -2最近两次提交 的差异 2、–graph 显示 ASCII 图形表示的分支合并历史&lt;/li&gt;
+  &lt;li&gt;git commit 提交更新 -a：跳过使用暂存区域&lt;/li&gt;
+  &lt;li&gt;git commit –amend 撤消操作&lt;/li&gt;
+  &lt;li&gt;git push 提交代码&lt;/li&gt;
+  &lt;li&gt;git rm 移除文件&lt;/li&gt;
+  &lt;li&gt;git remote -v 查看远程仓库&lt;/li&gt;
+  &lt;li&gt;git remote show [remote-name] 查看远程仓库&lt;/li&gt;
+  &lt;li&gt;git remote add &lt;shortName&gt; &lt;url&gt; 添加远程仓库，同时指定一个简写名&lt;/url&gt;&lt;/shortName&gt;&lt;/li&gt;
+  &lt;li&gt;git remote rename [new-name] 远程仓库重新命名&lt;/li&gt;
+  &lt;li&gt;git remote rm [remote-name] 删除远程仓库&lt;/li&gt;
+  &lt;li&gt;git fetch [remote-name] 从远程仓库拉取本地还没有的数据。执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。&lt;/li&gt;
+  &lt;li&gt;git merge branch-name 合并分支（一般在其他分支合并自己的开发分支，因为一旦出现冲突处理起来比较方便）&lt;/li&gt;
+  &lt;li&gt;git tag 列出标签&lt;/li&gt;
+  &lt;li&gt;git tag -a &lt;tag-version&gt; -m &lt;remark-info&gt; 添加附注标签（推荐使用）&lt;/remark-info&gt;&lt;/tag-version&gt;&lt;/li&gt;
+  &lt;li&gt;git tag &lt;tag-version&gt; 添加轻量标签&lt;/tag-version&gt;&lt;/li&gt;
+  &lt;li&gt;git tag -a &lt;tag-version&gt; &lt;校验和或者部分校验和&gt; 后期打标签&lt;/校验和或者部分校验和&gt;&lt;/tag-version&gt;&lt;/li&gt;
+  &lt;li&gt;git config –global alias.ci commit   =&amp;gt;  git commit 可以用git ci替代 同理其他命令&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h4 id=&quot;提交规范&quot;&gt;提交规范&lt;/h4&gt;
 &lt;p&gt;  建议小步提交，防止一次修改过多文件，导致后期维护、撤销等困难。&lt;br /&gt;&lt;/p&gt;
@@ -2162,74 +2379,6 @@ series//展示设置
         <category>搜索</category>
         
         <category>数据分析</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>书摘</title>
-        <description>&lt;h2 id=&quot;书摘&quot;&gt;书摘&lt;/h2&gt;
-&lt;h4 id=&quot;知道&quot;&gt;知道&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;  善恶、好坏构成人。每种或多或少，圣人不是，恶魔也不是，是凡人。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;精进如何成为&quot;&gt;精进：如何成为…&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;  这个世界上多的是短平快、付出马上就有回报的立竿见影的事，也多的是需要长期投入、靠矢志不渝的坚持才有大成的事，只不过，对前一种人们常常趋之若鹜，对后一种人们却避之唯恐不及——而正因为如此，才更有去做后一种事的必要。&lt;/li&gt;
-  &lt;li&gt;  人生是持续而反复的构造，校正选择，作出建设性的改变。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;激荡四十年-中国企业1978-2018&quot;&gt;激荡四十年 中国企业1978-2018&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;   我们的国家就是一艘驶往未来的大船，途经无数险阻、渡口，很难有人可以至始至终随行到终点，
-每一代人离去之时，均心怀不甘和不舍，而下一代人则感念前辈却又注定反叛。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;关键对话如何高效沟通&quot;&gt;关键对话：如何高效沟通&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;  世事本无好坏，皆因思想使然。&lt;/li&gt;
-  &lt;li&gt;  当我深陷于受害者、大反派和无助者等错误想法时，当我出现错误动机时，一心只想证明自己正确时，往往会模糊自己的眼睛，看不到事情的真相。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;皮囊&quot;&gt;皮囊&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;  他们一方面到处打听那些勇敢迈进舞厅的人，打听那白白的大腿和金色的墙面，另一方面又马上摆出一种道貌岸然的神情。&lt;/li&gt;
-  &lt;li&gt;  我期许自己要活得更真实也更诚实，要更接受甚至喜欢自己身上起伏的每部分，才能更喜欢这世界。
-我希望自己懂得处理、欣赏各种欲求，各种人性的丑陋与美妙，找到和它们相处的最好方式。我也希望自己能把这一路看到的风景，最终能全部用审美的笔触表达出来。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;悟空传&quot;&gt;悟空传&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;  （阿月对天蓬说的话）我说你傻吧，其实我花这么多时间来做星辰银河，只有你一个人欣赏，我一粒一粒地摆它，只是因为你看了高兴……我心中真正在乎的是什么，你不懂么？&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;黄金时代&quot;&gt;黄金时代&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;  人生是一条寂寞的路，需要一本有趣的书来消磨旅途。&lt;/li&gt;
-  &lt;li&gt;  所谓破鞋者，乃是一个指称，大家都说你是破鞋，你就是破鞋，没什么道理可讲。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;边城&quot;&gt;边城&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;  像貌堂堂是女子倾心的原由，但一个过分美观的身材，却只作成了与女子相远的方便。谁不承认狮子是孤独兽物？狮子永远孤独，就只为了狮子全身的纹彩与众不同。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;仓央嘉措&quot;&gt;仓央嘉措&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;  其实，很多时候，我们世俗的人真的很想超越一切为爱会活一次，可是我们也真的害怕被时间和外力阻隔，因为，没有谁真的知道另一世界在哪里；也没有人知道，在那里我们是否就能无所顾忌的相爱，我们无法实现的情缘是否就能被成全。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;余华这个人&quot;&gt;余华这个人&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;  余华这个人肯定是一个逗比。您在朗读者上的那些对话把我逗的前后翻腾。可是你写的东西实在是太…..希望您老健康高寿。&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Wed, 17 Oct 2018 02:43:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/10/17/bookSummary/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/10/17/bookSummary/</guid>
-        
-        <category>小说</category>
         
         
       </item>

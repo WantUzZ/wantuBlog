@@ -20,7 +20,9 @@
 完整版提交规范参上 
 常用命令
 
-">
+  git help 帮助
+  git init 现有目录初始化仓库，仅仅只是初始化，项目中的文件未被跟踪
+  git ...">
     
     <meta property="article:published_time" content="2018-11-02T00:00:00Z">
     
@@ -436,6 +438,35 @@
 抱着学习的态度。我把他的东西再次进行压缩。想必非常适合我们这种新入行的小学生了。<br />
 <a href="http://github.phodal.com/#git-%E6%8F%90%E4%BA%A4%E4%BF%A1%E6%81%AF%E5%8F%8A%E5%87%A0%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E8%A7%84%E8%8C%83">完整版提交规范参上</a> <br /></p>
 <h4 id="常用命令">常用命令</h4>
+<ul>
+  <li>git help 帮助</li>
+  <li>git init 现有目录初始化仓库，仅仅只是初始化，项目中的文件未被跟踪</li>
+  <li>git clone 克隆代码</li>
+  <li>git checkout 分支切换</li>
+  <li>git checkout -b ‘xxx’ 切出分支xxx</li>
+  <li>git branch 查看分支</li>
+  <li>git status 检查当前文件状态 -s参数状态简览</li>
+  <li>git diff 对比本地代码与上次的区别</li>
+  <li>git add  跟踪新文件（记得和.gitignore一起食用效果更佳）</li>
+  <li>git RESET HEAD 取消暂存的文件（有个git checkout –fileName命令用于撤销对文件的修改但是不推荐使用）</li>
+  <li>git log 查看提交历史 1、-p 显示每次提交的差异，后续可跟-n eg:git log -p -2最近两次提交 的差异 2、–graph 显示 ASCII 图形表示的分支合并历史</li>
+  <li>git commit 提交更新 -a：跳过使用暂存区域</li>
+  <li>git commit –amend 撤消操作</li>
+  <li>git push 提交代码</li>
+  <li>git rm 移除文件</li>
+  <li>git remote -v 查看远程仓库</li>
+  <li>git remote show [remote-name] 查看远程仓库</li>
+  <li>git remote add <shortName> <url> 添加远程仓库，同时指定一个简写名</url></shortName></li>
+  <li>git remote rename [new-name] 远程仓库重新命名</li>
+  <li>git remote rm [remote-name] 删除远程仓库</li>
+  <li>git fetch [remote-name] 从远程仓库拉取本地还没有的数据。执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。</li>
+  <li>git merge branch-name 合并分支（一般在其他分支合并自己的开发分支，因为一旦出现冲突处理起来比较方便）</li>
+  <li>git tag 列出标签</li>
+  <li>git tag -a <tag-version> -m <remark-info> 添加附注标签（推荐使用）</remark-info></tag-version></li>
+  <li>git tag <tag-version> 添加轻量标签</tag-version></li>
+  <li>git tag -a <tag-version> <校验和或者部分校验和> 后期打标签</校验和或者部分校验和></tag-version></li>
+  <li>git config –global alias.ci commit   =&gt;  git commit 可以用git ci替代 同理其他命令</li>
+</ul>
 
 <h4 id="提交规范">提交规范</h4>
 <p>  建议小步提交，防止一次修改过多文件，导致后期维护、撤销等困难。<br /></p>
@@ -529,7 +560,7 @@
         </a>
         
         
-                <a data-sort="0009" 
+                <a data-sort="0010" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"
                     title="数据可视化"
                     rel="3">数据可视化

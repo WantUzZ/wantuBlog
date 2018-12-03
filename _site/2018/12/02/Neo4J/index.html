@@ -11,28 +11,29 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="数据可视化--Echarts - 老王 | want">
+    <meta property="og:title" content="Neo4j知识梳理 - 老王 | want">
     
     <meta property="og:type" content="article">
     <meta property="og:description" content="前言
-  Echarts是我真正意义上接触最早的一种数据可视化工具。它是由百度开源出来的，是一个纯 Javascript 的图表库，可以流畅的运行在 PC 和移动设备上，兼容当前绝大部分浏览器，底层依赖另一个也是该团队自主研发的轻量级的 Canvas 类库 ZRender，提供直观，生动，可交互，可高度个性化定制的数据可视化图表，它对许多图表提供了封装好的组件。用户可以很轻松的使用它们。但是...">
+   图是一种常见的数据结构，其反映数据所对应元素之间的几何关系和拓扑关系。图数据库是一种非关系型数据库。它应用图形理论存储实体之间的关系信息。最常见例子就是社会网络中人与人之间的关系。关系型数据库用于存储“关系型”数据的效果并不好，其查询复杂、缓慢、超出预期，而图形数据库的独特设计恰恰弥补了这个缺陷。
+   Neo4j是一个高性能的,NOSQL图形数据库，它将结构化数据存储在网络上而...">
     
-    <meta property="article:published_time" content="2018-10-30T02:43:00Z">
+    <meta property="article:published_time" content="2018-12-02T02:43:00Z">
     
     
     <meta property="article:author" content="wantu">
     
     
-    <meta property="article:tag" content="数据可视化">
+    <meta property="article:tag" content="Neo4J">
     
-    <meta property="article:tag" content="Echarts">
+    <meta property="article:tag" content="图数据库">
     
     
     <meta property="og:image" content="http://localhost:4000/img/wantu.jpg">
-    <meta property="og:url" content="http://localhost:4000/2018/10/30/showData-Echarts/">
+    <meta property="og:url" content="http://localhost:4000/2018/12/02/Neo4J/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>数据可视化--Echarts - 老王 | want</title>
+    <title>Neo4j知识梳理 - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -41,7 +42,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/10/30/showData-Echarts/">
+    <link rel="canonical" href="http://localhost:4000/2018/12/02/Neo4J/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -370,7 +371,7 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/charts.jpg" width="0" height="0"> -->
+<!-- <img src="/img/bg-neo4j.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -379,7 +380,7 @@
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/charts.jpg');
+        background-image: url('/img/bg-neo4j.jpg');
         background: ;
     }
 
@@ -396,15 +397,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96" title="数据可视化">数据可视化</a>
+                        <a class="tag" href="/archive/?tag=Neo4J" title="Neo4J">Neo4J</a>
                         
-                        <a class="tag" href="/archive/?tag=Echarts" title="Echarts">Echarts</a>
+                        <a class="tag" href="/archive/?tag=%E5%9B%BE%E6%95%B0%E6%8D%AE%E5%BA%93" title="图数据库">图数据库</a>
                         
                     </div>
-                    <h1>数据可视化--Echarts</h1>
+                    <h1>Neo4j知识梳理</h1>
                     
-                    <h2 class="subheading"></h2>
-                    <span class="meta">Posted by wantu on October 30, 2018</span>
+                    <h2 class="subheading"> </h2>
+                    <span class="meta">Posted by wantu on December 2, 2018</span>
                 </div>
             </div>
         </div>
@@ -431,253 +432,142 @@
                 
 
                 <h2 id="前言">前言</h2>
-<p>  Echarts是我真正意义上接触最早的一种数据可视化工具。它是由百度开源出来的，是一个纯 Javascript 的图表库，可以流畅的运行在 PC 和移动设备上，兼容当前绝大部分浏览器，底层依赖另一个也是该团队自主研发的轻量级的 Canvas 类库 ZRender，提供直观，生动，可交互，可高度个性化定制的数据可视化图表，它对许多图表提供了封装好的组件。用户可以很轻松的使用它们。但是正是由于它封装程度比较高，所以很多个性化的设置是很难做到的。如果你想要有一些自己的封装，那么请尝试使用D3.js，D3的API比较底层，学习成本比较高，望君留意。
-<a href="http://echarts.baidu.com/">ECharts</a> <br />
-<a href="https://d3js.org/">D3js</a> <br /></p>
+<p>   图是一种常见的数据结构，其反映数据所对应元素之间的几何关系和拓扑关系。图数据库是一种非关系型数据库。它应用图形理论存储实体之间的关系信息。最常见例子就是社会网络中人与人之间的关系。关系型数据库用于存储“关系型”数据的效果并不好，其查询复杂、缓慢、超出预期，而图形数据库的独特设计恰恰弥补了这个缺陷。<br />
+   Neo4j是一个高性能的,NOSQL图形数据库，它将结构化数据存储在网络上而不是表中。它是一个嵌入式的、基于磁盘的、具备完全的事务特性的Java持久化引擎，但是它将结构化数据存储在网络(从数学角度叫做图)上而不是表中。Neo4j也可以被看作是一个高性能的图引擎，该引擎具有成熟数据库的所有特性。程序员工作在一个面向对象的、灵活的网络结构下而不是严格、静态的表中——但是他们可以享受到具备完全的事务特性、企业级的数据库的所有好处。<br /></p>
 
 <h2 id="正文">正文</h2>
-<h4 id="我要怎么开始呢">我要怎么开始呢？</h4>
-<p>因为是国人开发的所以开发文档必须有中文格式的。这点对于英文差的小伙伴那是大大的好啊（本人英文很不好）。Echarts在其官网提供了大量的实例。新手可以通过实例很快的上手。那么<a href="http://echarts.baidu.com/examples/">传送门</a> <br /></p>
+<h4 id="crud">CRUD</h4>
+<p><strong>增</strong><br />
+<code class="highlighter-rouge">节点：</code><br />
+    create (n:xxx{att:value}) //单节点<br />
+    create (n),(m);//多节点，注意创建多节点的时候自定义变量(前面的n、m是用于捕获结果)不能重复,即create (n),(n);是会报错的。<br />
+    create (n:label1:lable2:label3) //带标签的节点。标签可以用来创建索引，从而有助于优化对节点的查询。标签的命名规则：数字、字母、下划线，首字母不能是数字。<br />
+    create (n:xxx{att1:value1})//创建带属性的节点。<br />
+<code class="highlighter-rouge">关系：</code><br />
+    create：<br />
+        create (n1:xx)-[r:xxx]-&gt;(n2:x) //创建单关系<br />
+        create (n1:xx)-[r:xxx]-&gt;(n2:x),(n11:xx)-[r1:xxx]-&gt;(n22:x)//创建多关系<br />
+        create ()-[r:xx{att:value}]-()//创建带属性的关系<br />
+        create k = (n1)-[r1:friend{location:’China’}]-&gt;(n2) return k //创建具有节点和联系的全路径<br />
+    create unique:<br />
+        match (n)-[r]-(n1) <br />
+        where n.id = xx<br />
+        create unique (n)-[r1]-(n2:{name:’want’}) <br />
+        return n,r,n1,n2 //创建唯一的节点和联系。create unique语句，这个语句放在match和create这里，对于match上的节点和关系会新建缺省元素。<br />
+    merge:<br />
+        megre (n:xxx{att:value}) Merge好似if-else语句，基本逻辑是先检测merge后面的条件，看看有没有匹配的返回值，如果有则执行on merge分支，如果没有则走on create。<br />
+    create unique与merge区别：Create Unique部分匹配就可以，而Merge则只有整个模式都匹配才创建，否则什么也不做。<br />
+<strong>改</strong><br />
+<code class="highlighter-rouge">更新属性值:</code>&lt;br
+    match (n:xxx{att:value}) set n.att = newValue return n<br />
+    除了create 和 delete 以外其他语句都必须要以return结尾<br />
+<code class="highlighter-rouge">更新标签:</code><br />
+    match (n:lable1:label2) set n:newLabel1:newLabel2 return n;<br />
+<code class="highlighter-rouge">更改关系:</code><br />
+    先删除旧的关系，再建立新的关系。<br />
+<strong>删</strong><br />
+<code class="highlighter-rouge">delete:</code><br />
+    不建议使用match (n) delete n （强保护机制，必要要先删除关系再删除节点）<br />
+    而是使用：match (n) detach delete n (弱保护机制)<br />
+<code class="highlighter-rouge">remove:专门删除属性、标签</code><br />
+    match (n:xxx{att:value}) remove n.att return n;//删除节点的某一个属性<br />
+    match (n) where n.id = xxx set n.att = null;//将某个属性设置为null也是删除属性的一种方法。<br />
+<strong>查</strong><br />
+<code class="highlighter-rouge">match(查询)...where:</code><br />
+    在match之前可以进行定位用以加快查询速度。<br />
+    常见聚合操作：count、distinct、max、min…<br /></p>
 
-<h4 id="使用">使用</h4>
-<p><strong>样例展示</strong>
-<img src="/img/echartsShow.jpg" alt="查询执行路径图" />
-<strong>引入相关的js文件</strong></p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre> <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">"/lib/echarts/echarts.min.js"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
-</span></pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>在前端页面上预留一个div用以展示相关的图表</strong></p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"chart"</span> <span class="nx">style</span><span class="o">=</span><span class="s2">"height: 400px;width: 100%;padding: 5px;"</span><span class="o">&gt;&lt;</span><span class="sr">/div</span><span class="err">&gt;
-</span></pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>初始化</strong></p>
+<h4 id="标签限定">标签限定</h4>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre></td><td class="rouge-code"><pre> var c1 = echarts.init(document.getElementById('chart1'));
- var c1_option;
+3
+</pre></td><td class="rouge-code"><pre>在version2开始引入对标签的限定。暂时只有unique能用。&lt;br&gt;
+create constraint on (n:MALE) assert n.name is unique;&lt;br&gt;
+可以确保name属性是唯一的。&lt;br&gt;
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>获取数据来源并设置option</strong>
-这一步数据获取是通过ajax来获取的。原则上后段要进行相关的数据的组装工作。前端拿到相关的series属性值直接放上去就能使用。</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+
+<h4 id="模式与模式匹配">模式与模式匹配</h4>
+<ol>
+  <li>节点模式：<br />
+ 使用括号进行描述<br /></li>
+  <li>标签模式：<br />
+ 增加标签限定，多个标签起到交集作用<br /></li>
+  <li>关系模式<br />
+ match (a:A)-[b:relations]-&gt;(c:C) return a,b,c<br />
+ 首先会搜寻两个标签节点，再去这些节点中寻找符合relations关系。<br />
+ 双向就不要剪头:match (a:A)-[b:relations]-(c:C) return a,b,c<br /></li>
+  <li>属性模式<br />
+ 属性匹配使用的是花括号和键值对，其间使用逗号分隔。<br /></li>
+  <li>where：<br />
+where不能单独使用，只能用在match、optionalmatch、start、with的后面，用以进一步过滤模式的数据。<br />
+where从句中使用模式：
+5.1. 对于一个集合，如果是空集，那么代表false，非空代表true。可以使用in关键字来进一步限定。(这种做法在数据量大的时候会导致查询速度非常慢，在match之前进行定位可以解决)。=～ 不等于。点号和[]是相等，但是用法讲究。对于[]，其间必须是常量。<br />
+5.2. 使用exists()函数进行属性校验。<br />
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre> match (x)
+ where exists(x.age)
+ return x.name
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+    <p>5.3. 字符串匹配：starts with、ends with、contains<br /></p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre> match (x)
+ where x.name starts with "B"
+ return x.name
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+    <p>5.4. 其他从句：<br />
+ 5.4.1. order排序(默认是升序，支持混排)<br />
+ 5.4.2. limit限制返回数，skip跳过前多少个数据。<br /></p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre> match (n)
+ return n
+ order by n.age skip 3 limit 3
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+    <p>5.5. with从句：<br />
+5.6. union、union all:<br />
+union的用法与SQL一样，用于连接两个Match，返回结果中剔除了重复记录。但union all功能一样，但不剔除重复记录。<br /></p>
+    <h4 id="查询优化">查询优化</h4>
+    <p>  Neo4J在version2引入索引策略，可以对标签进行限制和索引。Neo4J的索引和关系型数据库的定义相类似。主要用于提升节点寻找的性能。对于任何已有数据结构的更改操作，索引自动更新。如果出了错而导致索引处于无效状态，便需要差错并重新生成它们。Cypher查询会自动使用索引，Cypher有一个查询计划器和查询优化器，可以对查询进行评估并尝试尽全力依据选索引择最短执行时间。<br />
+创建索引:<br />
+ create index on :lable(attName)<br />
+删除索引:<br />
+ delete index on :label(attName)<br />
+索引使用:<br />
+ 默认是自动使用的。 一旦索引建立，随后但凡在where从句中出现具有索引的属性时，不论是简单的等值比较还是其他条件，索引的使用都是自动的。
+ 但是也可以显式的指定索引的使用方式–using从句,using从句中是可以在单一查询中提供多个索引项来给cypher查询优化器提供索引提示。<br /></p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-</pre></td><td class="rouge-code"><pre><span class="c1">//这是一个较全的例子</span>
-<span class="kd">var</span> <span class="nx">month_legend</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'上年同期'</span><span class="p">,</span><span class="s1">'上期数据'</span><span class="p">,</span><span class="s1">'当期数据'</span><span class="p">];</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-    <span class="na">url</span><span class="p">:</span> <span class="s2">"/xxxx"</span><span class="p">,</span>
-    <span class="na">type</span><span class="p">:</span> <span class="s2">"post"</span><span class="p">,</span>
-    <span class="na">data</span><span class="p">:</span> <span class="p">{</span>
-        <span class="c1">//请求参数</span>
-    <span class="p">},</span>
-    <span class="na">success</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">//初始化echarts</span>
-        <span class="kd">var</span> <span class="nx">c1</span> <span class="o">=</span> <span class="nx">echarts</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'chart1'</span><span class="p">));</span>
-        <span class="kd">var</span> <span class="nx">c1_option</span><span class="p">;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">tag</span> <span class="o">==</span> <span class="s1">'success'</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//渲染Echarts</span>
-            <span class="kd">function</span> <span class="nx">draw_echar1</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">//单个柱状图中间字体的设置</span>
-                <span class="kd">var</span> <span class="nx">seriesLabel</span> <span class="o">=</span> <span class="p">{</span>
-                        <span class="na">normal</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">show</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                            <span class="na">textBorderColor</span><span class="p">:</span> <span class="s1">'#33'</span><span class="p">,</span>
-                            <span class="na">textBorderWidth</span><span class="p">:</span> <span class="mi">2</span>
-                        <span class="p">}</span>
-                    <span class="p">}</span>
-                <span class="c1">//图表的设置</span>
-                <span class="nx">c1_option</span> <span class="o">=</span> <span class="p">{</span>
-                        <span class="na">title</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">text</span><span class="p">:</span> <span class="s1">'天气统计'</span>
-                        <span class="p">},</span>
-                        <span class="na">tooltip</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">trigger</span><span class="p">:</span> <span class="s1">'axis'</span><span class="p">,</span>
-                            <span class="na">axisPointer</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'shadow'</span>
-                            <span class="p">}</span>
-                        <span class="p">},</span>
-                        <span class="na">legend</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="s1">'北京'</span><span class="p">,</span> <span class="s1">'上海'</span><span class="p">,</span> <span class="s1">'深圳'</span><span class="p">]</span>
-                        <span class="p">},</span>
-                        <span class="na">grid</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">left</span><span class="p">:</span> <span class="mi">100</span>
-                        <span class="p">},</span>
-                        <span class="na">toolbox</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">show</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                            <span class="na">feature</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="na">saveAsImage</span><span class="p">:</span> <span class="p">{}</span>
-                            <span class="p">}</span>
-                        <span class="p">},</span>
-                        <span class="na">yAxis</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">type</span><span class="p">:</span> <span class="s1">'value'</span><span class="p">,</span>
-                            <span class="na">name</span><span class="p">:</span> <span class="s1">'天数'</span><span class="p">,</span>
-                            <span class="na">axisLabel</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="na">formatter</span><span class="p">:</span> <span class="s1">'{value}'</span>
-                            <span class="p">}</span>
-                        <span class="p">},</span>
-                        <span class="na">xAxis</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">type</span><span class="p">:</span> <span class="s1">'category'</span><span class="p">,</span>
-                            <span class="na">inverse</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="s1">'晴天'</span><span class="p">,</span> <span class="s1">'多云'</span><span class="p">,</span> <span class="s1">'下雨'</span><span class="p">]</span>
-                        <span class="p">},</span>
-                        <span class="c1">//一般来说series属性直接拿后台组装的数据前端不负责数据的组装</span>
-                        <span class="na">series</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="p">{</span>
-                                <span class="na">name</span><span class="p">:</span> <span class="s1">'北京'</span><span class="p">,</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
-                                <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">165</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
-                                <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span>
-                            <span class="p">},</span>
-                            <span class="p">{</span>
-                                <span class="na">name</span><span class="p">:</span> <span class="s1">'上海'</span><span class="p">,</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
-                                <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
-                                <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">110</span><span class="p">]</span>
-                            <span class="p">},</span>
-                            <span class="p">{</span>
-                                <span class="na">name</span><span class="p">:</span> <span class="s1">'深圳'</span><span class="p">,</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
-                                <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
-                                <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">220</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">63</span><span class="p">]</span>
-                            <span class="p">}</span>
-                        <span class="p">]</span>
-                <span class="p">};</span>
-                <span class="c1">//渲染Echarts</span>
-                <span class="nx">c1</span><span class="p">.</span><span class="nx">setOption</span><span class="p">(</span><span class="nx">c1_option</span><span class="p">);</span>
-<span class="p">}}}});</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p>后端数据格式</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>match (n:label)&lt;br&gt;
+using index n:label(attName)&lt;br&gt;
+where n.attName = attValue&lt;br&gt;
+return n&lt;br&gt;
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+    <p>使用scan给Cypher Query Planner先扫描所有标签然后再执行后续的过滤，这种做法的结果意味着优秀的性能，毕竟使用标签本身可以不必考虑那些不必要的数据。这种做法的性能是较好的。<br /></p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-</pre></td><td class="rouge-code"><pre><span class="p">[</span>
-    <span class="p">{</span>
-        <span class="na">name</span><span class="p">:</span> <span class="s1">'北京'</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
-        <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">165</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
-        <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span>
-    <span class="p">},</span>
-    <span class="p">{</span>
-        <span class="na">name</span><span class="p">:</span> <span class="s1">'上海'</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
-        <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
-        <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">110</span><span class="p">]</span>
-    <span class="p">},</span>
-    <span class="p">{</span>
-        <span class="na">name</span><span class="p">:</span> <span class="s1">'深圳'</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
-        <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
-        <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">220</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">63</span><span class="p">]</span>
-    <span class="p">}</span>
-<span class="p">]</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>渲染Echarts</strong></p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre><span class="nx">draw_echar1</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
+</pre></td><td class="rouge-code"><pre>match (n:label)&lt;br&gt;
+using scan n:label&lt;br&gt;
+where n.attName = attValue&lt;br&gt;
+return n&lt;br&gt;
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+    <p>理解查询计划:<br />
+ Neo4j使用的都是基于成本的优化器（Cost Based Optimizer，CBO），用于制订精确的执行过程。可以采用如下两种不同的方式了解其内部的工作机制：<br />
+ EXPLAIN：是解释机制，加入该关键字的Cypher语句可以预览执行的过程但并不实际执行，所以也不会产生任何结果。<br />
+ PROFILE：则是画像机制，查询中使用该关键字，不仅能够看到执行计划的详细内容，也可以看到查询的执行结果。<br /></p>
+  </li>
+</ol>
 
-<h2 id="小结">小结</h2>
-<p>1、echarts封装的很不错，所以很多设置可能只是一个属性的设置，请多在官方实例中进行尝试修改，并记住常用的属性设置。<br /></p>
-<h4 id="常用属性">常用属性</h4>
-<p><em>后续继续补充</em></p>
+<h4 id="查询优化经历">查询优化经历</h4>
+<p>优化前的cql:</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -686,36 +576,35 @@
 6
 7
 8
-9
-10
-11
-12
-13
-14
-15
-16
-</pre></td><td class="rouge-code"><pre>一些常用的属性设置：
-xAxis//x轴设置
-yAxis//y轴设置 
-    type:类型
-    min:最小值
-    axisLabel:对y轴的单位进行设置 (例子中将单位元设置为单位为万元)
-        eg:formatter: function (value) {
-                        return Math.round(value/10000)+'万';
-                    }
-toolbox//工具设置其中支持将展示的图表保存成图片
-title//图表标题
-legend//图表头部索引
-series//展示设置
-    type//图表类型 常见pie饼图bar柱状图
-    lable//图内显示设置
-    data//实际数据
+</pre></td><td class="rouge-code"><pre>explain
+MATCH (n) where n.id IN ['binbin287644658'] 
+WITH collect(n) as nodes
+UNWIND nodes as n
+UNWIND nodes as m
+WITH * WHERE id(n) &lt; id(m)
+MATCH path = (n)--(m)
+RETURN path
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>2、option中的设置就是对图表的一些属性的设置。请多关注option。<br />
-对这echats的实例多多练习几次你就会很快掌握它。<br />
-我个人觉得一些图标的数据组装过程还是比较复杂的。因为前端一般会让后端把series组装好。多看多练。如果条形图，饼图，柱状图都联系过了感觉很轻松。那么请尝试实现这个图表,可以考虑把x,y轴进行转一下。
-所有的数据要写活来哦。<br />
-<a href="http://echarts.baidu.com/examples/editor.html?c=bar-y-category-stack">demo</a> <br /></p>
+<p>查询速度非常慢，因为节点走了全部节点扫描。个人觉得是这个in的问题。因为在关系型数据库(mysql)即便in之前的字段是有索引的，但是in后面的值太多的话还是不会走索引的。<br />
+<img src="/img/neo4jno1.jpg" alt="cql未优化前" />
+优化后的cql，主要就是使用字符串拼接的方式将具体的节点进行定位。<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>explain
+MATCH (n1:account {id:'wxid_hrm0cfv931j422'}),(n2:account {id:'binbin287644658'}),(n3:person {id:'320682198612083600'}),(n4:tel {id:'15258868649'}),(n5:device {id:'356996069532389'}),(n6:account {id:'a27563427'}),(n7:account {id:'wxid_q409jxhxvd0q12'}),(n8:account {id:'1004250324'}),(n9:tel {id:'666697734343'}),(n10:account {id:'wxid_xdbjmo94qzlm80'}),(n11:account {id:'lcg476634048'}),(n12:account {id:'ann_48'}),(n13:account {id:'liuxin601248'})WITH [n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13] as nodes
+UNWIND nodes as n
+UNWIND nodes as m
+WITH * WHERE id(n) &lt; id(m)
+MATCH path = (n)--(m)
+RETURN path
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="/img/neo4jno2.jpg" alt="cql优化后" /></p>
 
                 
                 
@@ -723,19 +612,12 @@ series//展示设置
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/10/26/showData-datatables/" data-toggle="tooltip" data-placement="top" title="数据可视化--jQuery datatables">
+                        <a href="/2018/11/05/swagger4APIDocument/" data-toggle="tooltip" data-placement="top" title="搭建基于Swagger的接口文档系统">
                         Previous<br>
-                        <span>数据可视化--jQuery datatables</span>
+                        <span>搭建基于Swagger的接口文档系统</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2018/10/30/showData-cytoscape/" data-toggle="tooltip" data-placement="top" title="关系型数据的可视化解决">
-                        Next<br>
-                        <span>关系型数据的可视化解决</span>
-                        </a>
-                    </li>
                     
                 </ul>
                 <hr style="visibility: hidden;">
