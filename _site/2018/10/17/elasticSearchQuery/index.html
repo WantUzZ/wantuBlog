@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="回顾ElasticSearch的使用(1108更新) - 老王 | want">
+    <meta property="og:title" content="回顾ElasticSearch的使用(1207更新) - 老王 | want">
     
     <meta property="og:type" content="article">
     <meta property="og:description" content="前言
@@ -41,7 +41,7 @@ es背景故事
     <meta property="og:url" content="http://localhost:4000/2018/10/17/elasticSearchQuery/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>回顾ElasticSearch的使用(1108更新) - 老王 | want</title>
+    <title>回顾ElasticSearch的使用(1207更新) - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -412,7 +412,7 @@ es背景故事
                         <a class="tag" href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90" title="数据分析">数据分析</a>
                         
                     </div>
-                    <h1>回顾ElasticSearch的使用(1108更新)</h1>
+                    <h1>回顾ElasticSearch的使用(1207更新)</h1>
                     
                     <h2 class="subheading"></h2>
                     <span class="meta">Posted by wantu on October 17, 2018</span>
@@ -637,7 +637,20 @@ es背景故事
     <span class="s2">"size"</span><span class="p">:</span><span class="mi">10</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。</p>
+<p>scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。scrollId在失效时间内是存在的，但是es维护它是需要额外的开销的，好习惯：每次查询结束进行手动的清除scrollId.<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>DELETE /_search/scroll
+{
+    "scroll_id" : "DXF1ZXJ5QW5kRmV0Y2gBAAAAAAAAAD4WYm9laVYtZndUQlNsdDcwakFMNjU1QQ=="
+}
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>js:<a href="https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-scroll">API</a><br /></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nx">client</span><span class="p">.</span><span class="nx">clearScroll</span><span class="p">([</span><span class="nx">params</span><span class="p">,</span> <span class="p">[</span><span class="nx">callback</span><span class="p">]])</span><span class="c1">//Params中的scrollId属性的值可以是：String, String[], Boolean</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 <p><strong>code(xxx.iced)</strong><br /></p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1

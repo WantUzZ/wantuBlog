@@ -5,8 +5,8 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 03 Dec 2018 18:36:13 +0800</pubDate>
-    <lastBuildDate>Mon, 03 Dec 2018 18:36:13 +0800</lastBuildDate>
+    <pubDate>Fri, 07 Dec 2018 18:28:36 +0800</pubDate>
+    <lastBuildDate>Fri, 07 Dec 2018 18:28:36 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -53,6 +53,7 @@
     而是使用：match (n) detach delete n (弱保护机制)&lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;remove:专门删除属性、标签&lt;/code&gt;&lt;br /&gt;
     match (n:xxx{att:value}) remove n.att return n;//删除节点的某一个属性&lt;br /&gt;
+    match (n) remove n:label//删除某一个标签，注意如果标签有约束，需要先删除约束：DROP CONSTRAINT ON (p:lable) ASSERT p.id IS UNIQUE&lt;br /&gt;
     match (n) where n.id = xxx set n.att = null;//将某个属性设置为null也是删除属性的一种方法。&lt;br /&gt;
 &lt;strong&gt;查&lt;/strong&gt;&lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;match(查询)...where:&lt;/code&gt;&lt;br /&gt;
@@ -2018,7 +2019,7 @@ series//展示设置
       </item>
     
       <item>
-        <title>回顾ElasticSearch的使用(1108更新)</title>
+        <title>回顾ElasticSearch的使用(1207更新)</title>
         <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
 &lt;h4 id=&quot;写在最前面&quot;&gt;写在最前面&lt;/h4&gt;
 &lt;p&gt;  &lt;a href=&quot;https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html&quot;&gt;官方文档&lt;/a&gt;&lt;br /&gt;
@@ -2215,7 +2216,20 @@ series//展示设置
     &lt;span class=&quot;s2&quot;&gt;&quot;size&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。&lt;/p&gt;
+&lt;p&gt;scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。scrollId在失效时间内是存在的，但是es维护它是需要额外的开销的，好习惯：每次查询结束进行手动的清除scrollId.&lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;DELETE /_search/scroll
+{
+    &quot;scroll_id&quot; : &quot;DXF1ZXJ5QW5kRmV0Y2gBAAAAAAAAAD4WYm9laVYtZndUQlNsdDcwakFMNjU1QQ==&quot;
+}
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;js:&lt;a href=&quot;https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-scroll&quot;&gt;API&lt;/a&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nx&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;clearScroll&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;callback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]])&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//Params中的scrollId属性的值可以是：String, String[], Boolean&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;strong&gt;code(xxx.iced)&lt;/strong&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1

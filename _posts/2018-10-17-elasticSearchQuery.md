@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "回顾ElasticSearch的使用(1108更新)"
+title:      "回顾ElasticSearch的使用(1207更新)"
 subtitle:   ""
 date:       2018-10-16 18:43:00
 author:     "wantu"
@@ -145,7 +145,18 @@ GET: /index/_search?scroll = 10m
     "size":10
 }
 ```
-scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。
+scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。scrollId在失效时间内是存在的，但是es维护它是需要额外的开销的，好习惯：每次查询结束进行手动的清除scrollId.<br>
+```
+DELETE /_search/scroll
+{
+    "scroll_id" : "DXF1ZXJ5QW5kRmV0Y2gBAAAAAAAAAD4WYm9laVYtZndUQlNsdDcwakFMNjU1QQ=="
+}
+```
+js:[API](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-scroll)<br>
+```javascript
+client.clearScroll([params, [callback]])//Params中的scrollId属性的值可以是：String, String[], Boolean
+```
+
 
 **code(xxx.iced)**<br>
 ```javascript
