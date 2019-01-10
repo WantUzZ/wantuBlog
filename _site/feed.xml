@@ -5,8 +5,8 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 07 Dec 2018 18:28:36 +0800</pubDate>
-    <lastBuildDate>Fri, 07 Dec 2018 18:28:36 +0800</lastBuildDate>
+    <pubDate>Thu, 10 Jan 2019 14:08:48 +0800</pubDate>
+    <lastBuildDate>Thu, 10 Jan 2019 14:08:48 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -114,21 +114,32 @@ where从句中使用模式：
 5.6. union、union all:&lt;br /&gt;
 union的用法与SQL一样，用于连接两个Match，返回结果中剔除了重复记录。但union all功能一样，但不剔除重复记录。&lt;br /&gt;&lt;/p&gt;
     &lt;h4 id=&quot;apoc&quot;&gt;APOC&lt;/h4&gt;
-    &lt;p&gt;  APOC是Neo4j 3.3版本推出时正式推荐的一个Java存储过程包，里面包含丰富的函数和过程，作为对Cypher所不能提供的复杂图算法和数据操作功能的补充，APOC还具有使用灵活、高性能等优势。&lt;a href=&quot;https://neo4j-contrib.github.io/neo4j-apoc-procedures/&quot;&gt;传送门&lt;/a&gt;。
-其中有一个内置函数：apoc.meta.stats 它可以返回当前数据库的一些统计信息。&lt;/p&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;call apoc.meta.stats
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;p&gt;&lt;img src=&quot;/img/neo4j-apoc.jpg&quot; alt=&quot;cql未优化前&quot; /&gt;&lt;/p&gt;
-    &lt;h4 id=&quot;最短路径&quot;&gt;最短路径&lt;/h4&gt;
-    &lt;p&gt;  说到图就绕不开图算法中的寻路算法。其中最为常用的就是最短路算法。neo4J自身提供了一个最短路的函数–shortestPath。&lt;/p&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+    &lt;p&gt;  APOC是Neo4j 3.3版本推出时正式推荐的一个Java存储过程包，里面包含丰富的函数和过程，作为对Cypher所不能提供的复杂图算法和数据操作功能的补充，APOC还具有使用灵活、高性能等优势。&lt;a href=&quot;https://neo4j-contrib.github.io/neo4j-apoc-procedures/&quot;&gt;传送门&lt;/a&gt;。&lt;/p&gt;
+    &lt;ul&gt;
+      &lt;li&gt;内置函数
+ 包含 字符串处理、时间戳、统计、日期、科学计数法等。
+ &lt;strong&gt;call apoc.meta.stats&lt;/strong&gt;返回当前数据库的一些统计信息。
+ &lt;strong&gt;call apoc.meta.graph&lt;/strong&gt;返回当前数据库的一些统计信息。
+ &lt;em&gt;*call apoc.text.&lt;/em&gt; **&lt;/li&gt;
+      &lt;li&gt;图论算法&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;其中有一个内置函数：apoc.meta.stats 它可以返回当前数据库的一些统计信息。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/neo4j-apoc.jpg&quot; alt=&quot;cql未优化前&quot; /&gt;&lt;/p&gt;
+&lt;h4 id=&quot;最短路径&quot;&gt;最短路径&lt;/h4&gt;
+&lt;p&gt;  说到图就绕不开图算法中的寻路算法。其中最为常用的就是最短路算法。neo4J自身提供了一个最短路的函数–shortestPath。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
 3
 4
 5
 6
 7
+8
+9
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;MATCH (n:person) where n.id IN (某种条件)
 WITH collect(n) as nodes
 UNWIND nodes as n
@@ -136,22 +147,35 @@ UNWIND nodes as m
 WITH * WHERE id(n) &amp;lt; id(m)
 MATCH path = shortestPath( (n)-[*..%d]-(m) )
 RETURN path
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;p&gt;解释：&lt;br /&gt;
+附上：两个节点之间的最短路
+match (n:account{id:'wxid_zfgv7wjpdajk11'}),(m:account{id:'wxid_htl2hw3r0fbt12'}) match p=shortestPath((n)-[*]-(m)) return p
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;解释：&lt;br /&gt;
 1、match满足某种条件的节点。&lt;br /&gt;
 2、将所有满足条件的节点放到一个列表中命名为nodes。&lt;br /&gt;
 3、使用两个unwind再次将结点列表打散到行，两个unwind的结点是以笛卡尔积的方式返回的，所以这里是两两的任意组合，甚至两个结点相同的组合，实际上我们这里求最短路径1到2和2到1肯定是一样的，所以用id(source) &amp;lt; id(target)来去除一半。&lt;br /&gt;
 4、最后是shortestPath函数，里面的source,target就是前面的组合。&lt;br /&gt;&lt;/p&gt;
-    &lt;h4 id=&quot;查询优化&quot;&gt;查询优化&lt;/h4&gt;
-    &lt;p&gt;  Neo4J在version2引入索引策略，可以对标签进行限制和索引。Neo4J的索引和关系型数据库的定义相类似。主要用于提升节点寻找的性能。对于任何已有数据结构的更改操作，索引自动更新。如果出了错而导致索引处于无效状态，便需要差错并重新生成它们。Cypher查询会自动使用索引，Cypher有一个查询计划器和查询优化器，可以对查询进行评估并尝试尽全力依据选索引择最短执行时间。&lt;br /&gt;
+&lt;h4 id=&quot;查询优化&quot;&gt;查询优化&lt;/h4&gt;
+&lt;p&gt;  Neo4J在version2引入索引策略，可以对标签进行限制和索引。Neo4J的索引和关系型数据库的定义相类似。主要用于提升节点寻找的性能。对于任何已有数据结构的更改操作，索引自动更新。如果出了错而导致索引处于无效状态，便需要差错并重新生成它们。Cypher查询会自动使用索引，Cypher有一个查询计划器和查询优化器，可以对查询进行评估并尝试尽全力依据选索引择最短执行时间。&lt;br /&gt;
+查看索引:&lt;br /&gt;
+    1、：schema（查看索引和约束）&lt;br /&gt;
+    2、CALL db.indexes YIELD description, label, properties;&lt;br /&gt;
 创建索引:&lt;br /&gt;
- create index on :lable(attName)&lt;br /&gt;
+    create index on :lable(attName)&lt;br /&gt;
 删除索引:&lt;br /&gt;
- delete index on :label(attName)&lt;br /&gt;
+    delete index on :label(attName)&lt;br /&gt;
 索引使用:&lt;br /&gt;
- 默认是自动使用的。 一旦索引建立，随后但凡在where从句中出现具有索引的属性时，不论是简单的等值比较还是其他条件，索引的使用都是自动的。
- 但是也可以显式的指定索引的使用方式–using从句,using从句中是可以在单一查询中提供多个索引项来给cypher查询优化器提供索引提示。&lt;br /&gt;&lt;/p&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+    默认是自动使用的。 一旦索引建立，随后但凡在where从句中出现具有索引的属性时，不论是简单的等值比较还是其他条件，索引的使用都是自动的。
+    但是也可以显式的指定索引的使用方式–using从句,using从句中是可以在单一查询中提供多个索引项来给cypher查询优化器提供索引提示。&lt;br /&gt;
+附：约束&lt;br /&gt;
+    查看约束情况：&lt;br /&gt;
+    CALL db.constraints&lt;br /&gt;
+    建约束&lt;br /&gt;
+    CREATE CONSTRAINT ON (movie:Movie) ASSERT movie.title IS UNIQUE&lt;br /&gt;
+    注意：Adding the unique constraint will implicitly add an index on that property. If the constraint is dropped, but the index is still needed, the index will have to be created explicitly.–截取至官方文档。唯一约束会自动创建索引。删除约束后需手动创建该索引。&lt;br /&gt;
+    删约束：&lt;br /&gt;
+    DROP CONSTRAINT ON (book:Book) ASSERT book.isbn IS UNIQUE&lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
 3
 4
@@ -159,9 +183,9 @@ RETURN path
 using index n:label(attName)&amp;lt;br&amp;gt;
 where n.attName = attValue&amp;lt;br&amp;gt;
 return n&amp;lt;br&amp;gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;p&gt;使用scan给Cypher Query Planner先扫描所有标签然后再执行后续的过滤，这种做法的结果意味着优秀的性能，毕竟使用标签本身可以不必考虑那些不必要的数据。这种做法的性能是较好的。&lt;br /&gt;&lt;/p&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;使用scan给Cypher Query Planner先扫描所有标签然后再执行后续的过滤，这种做法的结果意味着优秀的性能，毕竟使用标签本身可以不必考虑那些不必要的数据。这种做法的性能是较好的。&lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
 3
 4
@@ -169,13 +193,11 @@ return n&amp;lt;br&amp;gt;
 using scan n:label&amp;lt;br&amp;gt;
 where n.attName = attValue&amp;lt;br&amp;gt;
 return n&amp;lt;br&amp;gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;p&gt;理解查询计划:&lt;br /&gt;
- Neo4j使用的都是基于成本的优化器（Cost Based Optimizer，CBO），用于制订精确的执行过程。可以采用如下两种不同的方式了解其内部的工作机制：&lt;br /&gt;
- EXPLAIN：是解释机制，加入该关键字的Cypher语句可以预览执行的过程但并不实际执行，所以也不会产生任何结果。&lt;br /&gt;
- PROFILE：则是画像机制，查询中使用该关键字，不仅能够看到执行计划的详细内容，也可以看到查询的执行结果。&lt;br /&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;理解查询计划:&lt;br /&gt;
+    Neo4j使用的都是基于成本的优化器（Cost Based Optimizer，CBO），用于制订精确的执行过程。可以采用如下两种不同的方式了解其内部的工作机制：&lt;br /&gt;
+    EXPLAIN：是解释机制，加入该关键字的Cypher语句可以预览执行的过程但并不实际执行，所以也不会产生任何结果。&lt;br /&gt;
+    PROFILE：则是画像机制，查询中使用该关键字，不仅能够看到执行计划的详细内容，也可以看到查询的执行结果。&lt;br /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;优化举例&quot;&gt;优化举例&lt;/h4&gt;
 &lt;p&gt;优化前的cql:&lt;/p&gt;
