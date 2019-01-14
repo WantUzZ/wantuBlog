@@ -5,8 +5,8 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 10 Jan 2019 14:08:48 +0800</pubDate>
-    <lastBuildDate>Thu, 10 Jan 2019 14:08:48 +0800</lastBuildDate>
+    <pubDate>Mon, 14 Jan 2019 12:50:00 +0800</pubDate>
+    <lastBuildDate>Mon, 14 Jan 2019 12:50:00 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -2114,6 +2114,28 @@ series//展示设置
 同理在es中更详细的过滤条件应该被更早的去执行以便更早的排除更多的文档。&lt;br /&gt;
 &lt;strong&gt;控制缓存&lt;/strong&gt;&lt;br /&gt;
 缓存的过滤器非常快，所以它们需要被放在不能缓存的过滤器之前执行。&lt;/p&gt;
+
+&lt;h4 id=&quot;es的index是近实时的refreshflush&quot;&gt;es的index是近实时的！refresh、flush。&lt;/h4&gt;
+&lt;p&gt;之前负责一个数据转换模块的编码工作，在业务逻辑理的非常清楚之后，数据转换的结果还是不尽如人意。&lt;br /&gt;
+业务大致：O–&amp;gt;A–&amp;gt;B&lt;br /&gt;
+数据源是O,每处理一个O的元数据会将相关的数据录入到ES中A的index,同时会发送一个消息给B系统。B从A录入到ES的index检索数据，经过一系列操作之后将产生的数据录入到ES中B的index。&lt;br /&gt;
+在B录入数据的过程中发现同样一个dsl不同时间查询的数据量是不一样的。&lt;br /&gt;
+经好友提醒和自己在上网看资料、翻文档有以下总结：&lt;br /&gt;
+搜索系统的Index一般都是NRT（Near Real Time），近实时的，比如Elasticsearch中，Index的实时性是由refresh控制的，默认是1s，最快可到100ms，那么也就意味着Index doc成功后，需要等待一秒钟后才可以被搜索到。&lt;br /&gt;
+什么是refresh？&lt;br /&gt;
+先将index-buffer中文档解析完成的segment写入到filesystem cache之中，这样避免了比较损耗性能io操作，又可以使document可以被搜索。这个从index-buffer中取数据到filesystem cache中的过程叫作refresh。&lt;br /&gt;
+&lt;a href=&quot;https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-indices-refresh&quot;&gt;REFRESH-API&lt;/a&gt; &lt;br /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;POST /twitter/_refresh  指定刷新Twitter
+POST /kimchy,elasticsearch/_refresh 刷新多个
+POST /_refresh 全部刷新
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;flush:&lt;br /&gt;
+如果数据在filesystem cache之中是很有可能因为意外的故障导致丢失。此时需要一种机制，可以将对es的操作记录下来，来确保当出现故障的时候，保留在filesystem的数据不会丢失，并在重启的时候恢复过来。es为每一个shard提供来translog来记录这些操作。&lt;br /&gt;
+当向es发送创建document索引请求的时候，document数据先会进入到index buffer，与此同时会被记录到translog中，当发生refresh时（数据从index buffer流到filesystem cache的过程）translog中的操作记录不会消失，而是当数据从filesystem cache中被写入到磁盘之后才会被translog中清空。而filesystem cache写入到磁盘的过程就是flush。
+&lt;img src=&quot;/img/es-refresh.png&quot; alt=&quot;cql优化后&quot; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;索引别名的实用性&quot;&gt;索引别名的实用性&lt;/h4&gt;
 &lt;p&gt;  最近分析系统的数据源和采集系统数据源数据结构不一致问题牵出了这个问题。周知索引一旦建立就不能修改其mapping，但是如果需求方确实要进行相关的mapping修改那怎么办？只得重建索引然后再把数据进行导入。这个过程很可能造成服务的中断。别名就能大大缓解这个问题。&lt;br /&gt;
