@@ -27,13 +27,17 @@ tags:
 &nbsp;&#8195;Shay的妻子依旧等待着她的食谱搜索……
 #### 基础知识：
 1、es本质上是一个分布式文档(document)数据库，允许多台机器协同工作，每台机器可以运行多个es实例。单个es实例称之为节点。一组节点构成一个集群。<br>
-2、index:type = 1:n type:document = 1:n 但是6.x版本只允许每个index包含一个Type。<br>
-3、因为单节点（硬件限制）不可能存储太大的数据量，es提供了将index（一组document的集合）划分为分片的功能。分片数据只是整个index数据的一部分。<br>
-4、index 分片 复制分片关系：index划分为多个分片每个分片占整个数据的1/n，index一旦复制就会有复制分片。<br>
+2、索引(index)就是一批有着相似文档特征的文档的集合,集群对索引的个数没有限制。<br>
+3、类型(type)在一个索引中，我们可以定义一个或者多个类型，类型是索引的一个逻辑分割。<br>
+4、文档(document)是被索引的数据信息的一个基本单元。<br>
+5、index:type = 1:n type:document = 1:n 但是6.x版本只允许每个index包含一个Type。<br>
+6、因为单节点（硬件限制）不可能存储太大的数据量，es提供了将index（一组document的集合）划分为分片的功能。分片数据只是整个index数据的一部分，每个分片在自身内部都是一个有着完整功能并且独立的“索引”，可以被托管到集群中的任意一个节点中,而一个分片(shard)又包含多个segments，而每一个segment是一个倒排索引，每针对一个shard的查询操作都将被归于对该shard中的segment的查询。<br>
+7、index 分片 复制分片关系：index划分为多个分片每个分片占整个数据的1/n，index一旦复制就会有复制分片。<br>
 主分片的数量只能在创建的时候指定后期不能修改，复制分片的数量是支持后期修改的<br>
-5、默认情况下es会为每一个index分配5个主分片和一个副本（5个复制分片）。同一份shard是不会在一个节点中保存的(容灾、提高查询性能考量)。<br>
+8、默认情况下es会为每一个index分配5个主分片和一个副本（5个复制分片）,但是最好是根据实际数据量手动进行设置。同一份shard是不会在一个节点中保存的(容灾、提高查询性能考量)。<br>
+9、NRT近实时。从我们对一个文档进行创建索引开始到这个文档变得可以被搜索之间可能有一个潜在的传输延迟时间（默认是1秒）。<br>
 
-## 正文
+## tips
 #### 结构化查询or结构化过滤？
 &nbsp;&#8195;最近负责的项目开始的时候并不觉得这两者有何不同，所以在项目的开始阶段无论需求是啥，一律采用结构化
 查询方式去进行相关的数据的检索。但是后来回顾的时候发现这样的行为是不符合规范的。两者的侧重点不一样查询语句做全
@@ -68,15 +72,16 @@ GET /_search
 **控制缓存**<br>
 缓存的过滤器非常快，所以它们需要被放在不能缓存的过滤器之前执行。
 
-#### es的index是近实时的！refresh、flush。
+#### NRT！refresh、flush操作。
 之前负责一个数据转换模块的编码工作，在业务逻辑理的非常清楚之后，数据转换的结果还是不尽如人意。<br>
 业务大致：O-->A-->B<br>
 数据源是O,每处理一个O的元数据会将相关的数据录入到ES中A的index,同时会发送一个消息给B系统。B从A录入到ES的index检索数据，经过一系列操作之后将产生的数据录入到ES中B的index。<br>
 在B录入数据的过程中发现同样一个dsl不同时间查询的数据量是不一样的。<br>
-经好友提醒和自己在上网看资料、翻文档有以下总结：<br>
+原因是：<br>
 搜索系统的Index一般都是NRT（Near Real Time），近实时的，比如Elasticsearch中，Index的实时性是由refresh控制的，默认是1s，最快可到100ms，那么也就意味着Index doc成功后，需要等待一秒钟后才可以被搜索到。<br>
 什么是refresh？<br>
 先将index-buffer中文档解析完成的segment写入到filesystem cache之中，这样避免了比较损耗性能io操作，又可以使document可以被搜索。这个从index-buffer中取数据到filesystem cache中的过程叫作refresh。<br>
+index-buffer:缓存新数据的地方。当其满了或者refresh/flush interval到了，就会以segment file的形式写入到filesystem cache并最终写入到磁盘。默认是 10%heap size。<br>
 [REFRESH-API](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-indices-refresh) <br>
 ```
 POST /twitter/_refresh  指定刷新Twitter
