@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="回顾ElasticSearch的使用(1207更新) - 老王 | want">
+    <meta property="og:title" content="回顾ElasticSearch的使用(0115更新) - 老王 | want">
     
     <meta property="og:type" content="article">
     <meta property="og:description" content="前言
@@ -41,7 +41,7 @@ es背景故事
     <meta property="og:url" content="http://localhost:4000/2018/10/17/elasticSearchQuery/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>回顾ElasticSearch的使用(1207更新) - 老王 | want</title>
+    <title>回顾ElasticSearch的使用(0115更新) - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -412,7 +412,7 @@ es背景故事
                         <a class="tag" href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90" title="数据分析">数据分析</a>
                         
                     </div>
-                    <h1>回顾ElasticSearch的使用(1207更新)</h1>
+                    <h1>回顾ElasticSearch的使用(0115更新)</h1>
                     
                     <h2 class="subheading"></h2>
                     <span class="meta">Posted by wantu on October 17, 2018</span>
@@ -457,13 +457,17 @@ es背景故事
   Shay的妻子依旧等待着她的食谱搜索……</p>
 <h4 id="基础知识">基础知识：</h4>
 <p>1、es本质上是一个分布式文档(document)数据库，允许多台机器协同工作，每台机器可以运行多个es实例。单个es实例称之为节点。一组节点构成一个集群。<br />
-2、index:type = 1:n type:document = 1:n 但是6.x版本只允许每个index包含一个Type。<br />
-3、因为单节点（硬件限制）不可能存储太大的数据量，es提供了将index（一组document的集合）划分为分片的功能。分片数据只是整个index数据的一部分。<br />
-4、index 分片 复制分片关系：index划分为多个分片每个分片占整个数据的1/n，index一旦复制就会有复制分片。<br />
+2、索引(index)就是一批有着相似文档特征的文档的集合,集群对索引的个数没有限制。<br />
+3、类型(type)在一个索引中，我们可以定义一个或者多个类型，类型是索引的一个逻辑分割。<br />
+4、文档(document)是被索引的数据信息的一个基本单元。<br />
+5、index:type = 1:n type:document = 1:n 但是6.x版本只允许每个index包含一个Type。<br />
+6、因为单节点（硬件限制）不可能存储太大的数据量，es提供了将index（一组document的集合）划分为分片的功能。分片数据只是整个index数据的一部分，每个分片在自身内部都是一个有着完整功能并且独立的“索引”，可以被托管到集群中的任意一个节点中,而一个分片(shard)又包含多个segments，而每一个segment是一个倒排索引，每针对一个shard的查询操作都将被归于对该shard中的segment的查询。<br />
+7、index 分片 复制分片关系：index划分为多个分片每个分片占整个数据的1/n，index一旦复制就会有复制分片。<br />
 主分片的数量只能在创建的时候指定后期不能修改，复制分片的数量是支持后期修改的<br />
-5、默认情况下es会为每一个index分配5个主分片和一个副本（5个复制分片）。同一份shard是不会在一个节点中保存的(容灾、提高查询性能考量)。<br /></p>
+8、默认情况下es会为每一个index分配5个主分片和一个副本（5个复制分片）,但是最好是根据实际数据量手动进行设置。同一份shard是不会在一个节点中保存的(容灾、提高查询性能考量)。<br />
+9、NRT近实时。从我们对一个文档进行创建索引开始到这个文档变得可以被搜索之间可能有一个潜在的传输延迟时间（默认是1秒）。<br /></p>
 
-<h2 id="正文">正文</h2>
+<h2 id="tips">tips</h2>
 <h4 id="结构化查询or结构化过滤">结构化查询or结构化过滤？</h4>
 <p>  最近负责的项目开始的时候并不觉得这两者有何不同，所以在项目的开始阶段无论需求是啥，一律采用结构化
 查询方式去进行相关的数据的检索。但是后来回顾的时候发现这样的行为是不符合规范的。两者的侧重点不一样查询语句做全
@@ -514,15 +518,16 @@ es背景故事
 <strong>控制缓存</strong><br />
 缓存的过滤器非常快，所以它们需要被放在不能缓存的过滤器之前执行。</p>
 
-<h4 id="es的index是近实时的refreshflush">es的index是近实时的！refresh、flush。</h4>
+<h4 id="nrtrefreshflush操作">NRT！refresh、flush操作。</h4>
 <p>之前负责一个数据转换模块的编码工作，在业务逻辑理的非常清楚之后，数据转换的结果还是不尽如人意。<br />
 业务大致：O–&gt;A–&gt;B<br />
 数据源是O,每处理一个O的元数据会将相关的数据录入到ES中A的index,同时会发送一个消息给B系统。B从A录入到ES的index检索数据，经过一系列操作之后将产生的数据录入到ES中B的index。<br />
 在B录入数据的过程中发现同样一个dsl不同时间查询的数据量是不一样的。<br />
-经好友提醒和自己在上网看资料、翻文档有以下总结：<br />
+原因是：<br />
 搜索系统的Index一般都是NRT（Near Real Time），近实时的，比如Elasticsearch中，Index的实时性是由refresh控制的，默认是1s，最快可到100ms，那么也就意味着Index doc成功后，需要等待一秒钟后才可以被搜索到。<br />
 什么是refresh？<br />
 先将index-buffer中文档解析完成的segment写入到filesystem cache之中，这样避免了比较损耗性能io操作，又可以使document可以被搜索。这个从index-buffer中取数据到filesystem cache中的过程叫作refresh。<br />
+index-buffer:缓存新数据的地方。当其满了或者refresh/flush interval到了，就会以segment file的形式写入到filesystem cache并最终写入到磁盘。默认是 10%heap size。<br />
 <a href="https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-indices-refresh">REFRESH-API</a> <br /></p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -617,7 +622,7 @@ POST /_refresh 全部刷新
 3、使用search_after API。</p>
 
 <p><strong>scroll做深度分页</strong><br />
-直接上DSL：</p>
+直接上DSL</p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -638,7 +643,7 @@ POST /_refresh 全部刷新
 18
 19
 20
-</pre></td><td class="rouge-code"><pre><span class="nx">POST</span> <span class="p">(</span><span class="err">这个供参考</span><span class="p">)</span>
+</pre></td><td class="rouge-code"><pre><span class="p">(</span><span class="err">通过</span><span class="nx">API</span><span class="err">调用</span><span class="nx">search</span><span class="err">方法</span><span class="p">)</span><span class="err">：</span>
 <span class="p">{</span>
 	<span class="s2">"index"</span><span class="p">:</span> <span class="s2">"chat"</span><span class="p">,</span>
 	<span class="s2">"from"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -651,12 +656,12 @@ POST /_refresh 全部刷新
 		<span class="p">}</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-<span class="p">(</span><span class="err">下面这个好想是比较普遍的写法</span><span class="p">)</span>
+<span class="p">(</span><span class="nx">elasticsearch</span><span class="o">-</span><span class="nx">head</span><span class="err">中使用</span><span class="p">)</span>
 <span class="nx">GET</span><span class="p">:</span> <span class="o">/</span><span class="nx">index</span><span class="o">/</span><span class="nx">_search</span><span class="p">?</span><span class="nx">scroll</span> <span class="o">=</span> <span class="mi">10</span><span class="nx">m</span>
 <span class="p">{</span>
-    <span class="s2">"query"</span><span class="p">:{},</span>
-    <span class="s2">"from"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
-    <span class="s2">"size"</span><span class="p">:</span><span class="mi">10</span>
+    <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"match_all"</span><span class="p">:</span> <span class="p">{}},</span>
+    <span class="s2">"sort"</span> <span class="p">:</span> <span class="p">[</span><span class="s2">"_doc"</span><span class="p">],</span> 
+    <span class="s2">"size"</span><span class="p">:</span>  <span class="mi">1000</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。scrollId在失效时间内是存在的，但是es维护它是需要额外的开销的，好习惯：每次查询结束进行手动的清除scrollId.<br /></p>
@@ -720,12 +725,6 @@ POST /_refresh 全部刷新
 43
 44
 45
-46
-47
-48
-49
-50
-51
 </pre></td><td class="rouge-code"><pre><span class="c1">// 刚开始的一次scroll查询</span>
   <span class="nx">searchRBN</span><span class="p">:</span> <span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span><span class="o">-&gt;</span>
     <span class="nx">dsl</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">cloneDeep</span> <span class="nx">DSL</span><span class="p">.</span><span class="nx">COMMUNICATION_RECORD_BETWEEN_NODES</span>
@@ -740,18 +739,12 @@ POST /_refresh 全部刷新
     <span class="nx">dsl</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">bool</span><span class="p">.</span><span class="nx">should</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">bool</span><span class="p">.</span><span class="nx">must</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">term</span><span class="p">.</span><span class="nx">target</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">source</span>
 
     <span class="nx">console</span><span class="p">.</span><span class="nx">info</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span> <span class="nx">dsl</span>
-    <span class="nx">allHits</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="nx">scrollData</span> <span class="o">=</span> <span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">allHits</span><span class="p">)</span><span class="o">-&gt;</span> 
-      <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">-&gt;</span> 
-        <span class="nx">response</span><span class="p">.</span><span class="nx">hits</span><span class="p">.</span><span class="nx">hits</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">hit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nx">allHits</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">hit</span><span class="p">))</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">allHits</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
-        <span class="nx">objArr</span> <span class="o">=</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">buildRBNSData</span> <span class="nx">allHits</span>
-        <span class="nx">resolve</span><span class="p">({</span><span class="na">scrollId</span><span class="p">:</span><span class="nx">response</span><span class="p">.</span><span class="nx">_scroll_id</span><span class="p">,</span><span class="na">scroll</span><span class="p">:</span><span class="nx">dsl</span><span class="p">.</span><span class="nx">scroll</span><span class="p">,</span><span class="na">data</span><span class="p">:</span><span class="nx">objArr</span><span class="p">})</span>
-      <span class="p">)</span>
-    
+    <span class="nx">allHits</span> <span class="o">=</span> <span class="p">[]</span>    
     <span class="nx">esClient</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">dsl</span><span class="p">)</span>
       <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">response</span><span class="p">)</span><span class="o">-&gt;</span> 
-        <span class="nx">scrollData</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">allHits</span><span class="p">)</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">hits</span><span class="p">.</span><span class="nx">hits</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">hit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nx">allHits</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">hit</span><span class="p">))</span>
+        <span class="nx">objArr</span> <span class="o">=</span> <span class="nx">buildRBNSData</span> <span class="nx">allHits</span>
+        <span class="k">return</span> <span class="nx">objArr</span>
       <span class="p">)</span>
       <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">result</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span><span class="o">-&gt;</span>
         <span class="nx">cb</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">result</span>
@@ -760,12 +753,12 @@ POST /_refresh 全部刷新
   <span class="nx">searchRBNScrollData</span><span class="p">:(</span><span class="nx">query</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="o">-&gt;</span>
     <span class="nx">sq</span> <span class="o">=</span> <span class="p">{</span><span class="na">scroll_id</span><span class="p">:</span> <span class="nx">query</span><span class="p">.</span><span class="nx">scrollId</span><span class="p">,</span> <span class="na">scroll</span><span class="p">:</span> <span class="nx">query</span><span class="p">.</span><span class="nx">scroll</span><span class="p">}</span> 
     <span class="nx">esClient</span><span class="p">.</span><span class="nx">scroll</span><span class="p">(</span><span class="nx">sq</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">response</span><span class="p">)</span> <span class="o">-&gt;</span> 
-      <span class="nx">callback</span> <span class="kc">null</span><span class="p">,</span><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">buildRBNSData</span> <span class="nx">response</span><span class="p">.</span><span class="nx">hits</span><span class="p">.</span><span class="nx">hits</span>
+      <span class="nx">callback</span> <span class="kc">null</span><span class="p">,</span><span class="nx">buildRBNSData</span> <span class="nx">response</span><span class="p">.</span><span class="nx">hits</span><span class="p">.</span><span class="nx">hits</span>
     <span class="p">).</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">-&gt;</span> 
       <span class="nx">callback</span> <span class="nx">error</span>
     <span class="p">)</span>
   <span class="c1">//组装数据</span>
-  <span class="nx">buildRBNSData</span> <span class="p">:</span> <span class="p">(</span><span class="nx">dataArr</span><span class="p">)</span><span class="o">-&gt;</span>
+  <span class="nx">buildRBNSData</span> <span class="o">=</span> <span class="p">(</span><span class="nx">dataArr</span><span class="p">)</span><span class="o">-&gt;</span>
     <span class="nx">objArr</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="nx">item</span> <span class="k">in</span> <span class="nx">dataArr</span>
       <span class="nx">obj</span> <span class="o">=</span> <span class="p">{}</span>
@@ -924,7 +917,7 @@ POST /_refresh 全部刷新
         </a>
         
         
-                <a data-sort="0010" 
+                <a data-sort="0012" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"
                     title="数据可视化"
                     rel="3">数据可视化

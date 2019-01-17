@@ -11,29 +11,31 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="Hello world - 老王 | want">
+    <meta property="og:title" content="RabbitMQ的整理 - 老王 | want">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="
-  “10000km”
+    <meta property="og:description" content="前言
+   正如中文文档开篇所言：消息系统允许软件、应用相互连接和扩展．这些应用可以相互链接起来组成一个更大的应用，或者将用户设备和数据进行连接．消息系统通过将消息的发送和接收分离来实现应用程序的异步和解偶。这就是rabbitMQ能为我们做的工作。
+优势：
 
-
-">
+  可靠性 RabbitMQ提供了多种技术可以让你在性能和可靠性之间进行权衡。这些技术包括持久性机制、投递确认、发布者证实和高可用性机...">
     
-    <meta property="article:published_time" content="2018-10-11T02:43:00Z">
+    <meta property="article:published_time" content="2019-01-16T02:06:00Z">
     
     
     <meta property="article:author" content="wantu">
     
     
-    <meta property="article:tag" content="jekyll+github page">
+    <meta property="article:tag" content="RabbitMQ">
+    
+    <meta property="article:tag" content="消息队列">
     
     
     <meta property="og:image" content="http://localhost:4000/img/wantu.jpg">
-    <meta property="og:url" content="http://localhost:4000/2018/10/11/hello-world/">
+    <meta property="og:url" content="http://localhost:4000/2019/01/16/RabbitMQ/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>Hello world - 老王 | want</title>
+    <title>RabbitMQ的整理 - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -42,7 +44,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/10/11/hello-world/">
+    <link rel="canonical" href="http://localhost:4000/2019/01/16/RabbitMQ/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -371,7 +373,7 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/post-bg-2015.jpg" width="0" height="0"> -->
+<!-- <img src="/img/sea.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -380,7 +382,7 @@
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/post-bg-2015.jpg');
+        background-image: url('/img/sea.jpg');
         background: ;
     }
 
@@ -397,13 +399,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=jekyll%2Bgithub+page" title="jekyll+github page">jekyll+github page</a>
+                        <a class="tag" href="/archive/?tag=RabbitMQ" title="RabbitMQ">RabbitMQ</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97" title="消息队列">消息队列</a>
                         
                     </div>
-                    <h1>Hello world</h1>
+                    <h1>RabbitMQ的整理</h1>
                     
-                    <h2 class="subheading"> "Hello World, Hello Blog"</h2>
-                    <span class="meta">Posted by wantu on October 11, 2018</span>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by wantu on January 16, 2019</span>
                 </div>
             </div>
         </div>
@@ -429,103 +433,41 @@
                 <!-- Multi-Lingual -->
                 
 
-                <blockquote>
-  <p>“10000km”</p>
-</blockquote>
-
-<h2 id="前言">前言</h2>
-
-<p>want 的 Blog 就这么开通了。</p>
-
-<p><a href="#build">跳过废话，直接看技术实现 </a> 
-这个博客网站是基于Jekyll+GitHub Pages搭建而成的。
-主要是为了记录自己的生活、工作、学习的事情。之前一直使用为之笔记进行总结。
-加法要做减法也要做，笔记中的一些有趣的知识希望在博客中进行分享。</p>
-
-<p id="build"></p>
-<hr />
-
-<h2 id="正文">正文</h2>
-
-<p>接下来说说搭建这个博客的步骤。（OSX）</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-</pre></td><td class="rouge-code"><pre>1、安装ruby环境
-    brew install ruby
-
-2、安装一些其他的软件
-    gem install jekyll
-
-    gem install bundler
-
-    gem install jekyll-paginate
-
-    gem install jekyll-gist
-
-3、从GitHub找一个模板项目并进行启动
-    git clone https://github.com/Huxpro/huxpro.github.io.git
-    检出来之后启动cd到项目目录中
-    jekyll server
-
-4、调整项目布局（个人行为）
-
-5、购买域名，并将域名解析到自己的userName.github.io上
-
-6、github page同样也要绑定到自己购买的域名上
-
-</pre></td></tr></tbody></table></code></pre></div></div>
-
-<p>优点：</p>
-
+                <h2 id="前言">前言</h2>
+<p>   正如中文文档开篇所言：消息系统允许软件、应用相互连接和扩展．这些应用可以相互链接起来组成一个更大的应用，或者将用户设备和数据进行连接．消息系统通过将消息的发送和接收分离来实现应用程序的异步和解偶。这就是rabbitMQ能为我们做的工作。<br />
+优势：<br /></p>
 <ul>
-  <li><strong>Markdown</strong> 带来的优雅写作体验</li>
-  <li>非常熟悉的 Git workflow ，<strong>Git Commit 即 Blog Post</strong></li>
-  <li>利用 GitHub Pages 的域名和免费无限空间，不用自己折腾主机
-    <ul>
-      <li>如果需要自定义域名，也只需要简单改改 DNS 加个 CNAME 就好了</li>
-    </ul>
-  </li>
-  <li>Jekyll 的自定制非常容易，基本就是个模版引擎</li>
+  <li>可靠性 RabbitMQ提供了多种技术可以让你在性能和可靠性之间进行权衡。这些技术包括持久性机制、投递确认、发布者证实和高可用性机制。<br /></li>
+  <li>灵活的路由 消息在到达队列前是通过交换机进行路由的。RabbitMQ为典型的路由逻辑提供了多种内置交换机类型。<br /></li>
+  <li>可视化管理工具 RabbitMQ附带了一个易于使用的可视化管理工具，它可以帮助你监控消息代理的每一个环节。<br />
+…<br />
+  <a href="http://rabbitmq.mr-ping.com/description.html">英文文档</a>。<br />
+  <a href="http://rabbitmq.mr-ping.com/description.html">中文文档</a>。<br /></li>
 </ul>
 
-<h2 id="后记">后记</h2>
+<h2 id="正文">正文</h2>
+<h4 id="安装">安装</h4>
 
-<p>具体搭建过程请参照<a href="https://my.oschina.net/u/1027043/blog/1794382">教程</a></p>
+<h4 id="客户端简单的说明">客户端简单的说明</h4>
 
+<h4 id="队列交换机">队列、交换机</h4>
+
+<h4 id="延时队列">延时队列</h4>
+
+<h2 id="总结">总结</h2>
 
                 
                 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     
-                    
-                    <li class="next">
-                        <a href="/2018/10/13/myql/" data-toggle="tooltip" data-placement="top" title="个人已知的一些mysql查询性能优化">
-                        Next<br>
-                        <span>个人已知的一些mysql查询性能优化</span>
+                    <li class="previous">
+                        <a href="/2019/01/16/Docker/" data-toggle="tooltip" data-placement="top" title="Docker的整理">
+                        Previous<br>
+                        <span>Docker的整理</span>
                         </a>
                     </li>
+                    
                     
                 </ul>
                 <hr style="visibility: hidden;">
