@@ -146,8 +146,9 @@ POST /_aliases
 3、使用search_after API。
 
 **scroll做深度分页**<br>
-直接上DSL(通过API调用search方法)：
+直接上DSL
 ```javascript
+(通过API调用search方法)：
 {
 	"index": "chat",
 	"from": 0,
@@ -163,9 +164,9 @@ POST /_aliases
 (elasticsearch-head中使用)
 GET: /index/_search?scroll = 10m
 {
-    "query":{},
-    "from":0,
-    "size":10
+    "query": { "match_all": {}},
+    "sort" : ["_doc"], 
+    "size":  1000
 }
 ```
 scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。scrollId在失效时间内是存在的，但是es维护它是需要额外的开销的，好习惯：每次查询结束进行手动的清除scrollId.<br>
@@ -211,12 +212,12 @@ client.clearScroll([params, [callback]])//Params中的scrollId属性的值可以
   searchRBNScrollData:(query,callback) ->
     sq = {scroll_id: query.scrollId, scroll: query.scroll} 
     esClient.scroll(sq).then((response) -> 
-      callback null,module.exports.buildRBNSData response.hits.hits
+      callback null,buildRBNSData response.hits.hits
     ).catch((error) -> 
       callback error
     )
   //组装数据
-  buildRBNSData : (dataArr)->
+  buildRBNSData = (dataArr)->
     objArr = []
     for item in dataArr
       obj = {}
