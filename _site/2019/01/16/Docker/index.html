@@ -456,19 +456,19 @@ CE社区版、EE企业版量体裁衣咯。前者免费,后者收费，但是更
 根据自己操作系统的不同自己选择安装方式。
 <img src="/img/docker安装.jpg" alt="看这里" /></p>
 <h4 id="镜像加速">镜像加速</h4>
-
+<p>dockerhub在墙外面，下镜像很慢。所以…<br /></p>
 <h4 id="docker常用命令">docker常用命令</h4>
-<p>版本:</p>
+<p><strong>版本:</strong></p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre>docker --versioin 版本信息
 docker info docker安装细节,为避免权限错误最好加sudo运行
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>帮助:</p>
+<p><strong>帮助:</strong></p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>docker --help
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>镜像:</p>
+<p><strong>镜像:</strong></p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -482,7 +482,7 @@ docker image prune 删除dangling image
 docker image ls imageName 根据仓库名列出镜像
 docker image rm imageName/imageId 删除本地镜像
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>容器:</p>
+<p><strong>容器:</strong></p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -514,14 +514,126 @@ docker kill containerName/containerId 强制退出某个容器
 docker rm containerName/containerId 删除某个容器
 docker rm 'docker ps -a -q' 列出所有容器，-q列出所有的容器的ID，然后传递给rm一次删除
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>构建:</p>
+<p><strong>构建:</strong></p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre>docker build -t xxxx . 创建镜像使用当前目录下的Dockerfile
+</pre></td><td class="rouge-code"><pre>docker build . 创建镜像使用当前目录作为上下文。大多数情况下最好从空目录(项目目录)开始作为上下文。
 </pre></td></tr></tbody></table></code></pre></div></div>
 <h4 id="镜像构建">镜像构建</h4>
+<p><strong>命令：</strong>
+docker build .
+-f:指定文件系统中一个Dockerfile的位置
+-t:构建成功指定repository和tag</p>
 
-<h4 id="镜像分发">镜像分发</h4>
+<p>Dockerfile是一个描述组装镜像步骤的文档。一般而言Dockerfile是存于项目目录下的。特别注意不要将根目录作为PATH路径，因为会导致这次构建操作将磁盘驱动器的全部内容传输到Docker守护进程(daemon)中。也可以通过添加.dockerignore文件来排除某些文件和目录。<br />
+<strong>格式：</strong></p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c1"># Comment
+</span><span class="n">INSTRUCTION</span> <span class="n">arguments</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
+<p><strong>官方样例：</strong></p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="rouge-code"><pre><span class="c1"># Use an official Python runtime as a parent image
+</span><span class="n">FROM</span> <span class="n">python</span><span class="p">:</span><span class="mf">2.7</span><span class="o">-</span><span class="n">slim</span>
+
+<span class="c1"># Set the working directory to /app
+</span><span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span>
+
+<span class="c1"># Copy the current directory contents into the container at /app
+</span><span class="n">COPY</span> <span class="o">.</span> <span class="o">/</span><span class="n">app</span>
+
+<span class="c1"># Install any needed packages specified in requirements.txt
+</span><span class="n">RUN</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">trusted</span><span class="o">-</span><span class="n">host</span> <span class="n">pypi</span><span class="o">.</span><span class="n">python</span><span class="o">.</span><span class="n">org</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+
+<span class="c1"># Make port 80 available to the world outside this container
+</span><span class="n">EXPOSE</span> <span class="mi">80</span>
+
+<span class="c1"># Define environment variable
+</span><span class="n">ENV</span> <span class="n">NAME</span> <span class="n">World</span>
+
+<span class="c1"># Run app.py when the container launches
+</span><span class="n">CMD</span> <span class="p">[</span><span class="s">"python"</span><span class="p">,</span> <span class="s">"app.py"</span><span class="p">]</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><strong>Dockerfile指令解释：</strong></p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="rouge-code"><pre><span class="s">FROM:Dockerfile第一条语句，其指定了构建镜像的基础镜像。一个合法的Dockerfile必须以FROM开始。</span>
+    <span class="s">FROM &lt;image&gt; [AS &lt;name&gt;]</span>
+    <span class="s">FROM &lt;image&gt;[:&lt;tag&gt;] [AS &lt;name&gt;]</span>
+    <span class="s">FROM &lt;image&gt;[@&lt;digest&gt;] [AS &lt;name&gt;]</span>
+<span class="s">RUN:RUN指令将在当前镜像上的新的layer执行任何命令并提交结果。生成的已提交镜像用于Dockerfile的下一步。</span>
+    <span class="s">RUN &lt;command&gt;</span>
+    <span class="s">RUN ["executable","param1","param2"]</span>
+<span class="s">CMD:为执行容器提供默认值。</span>
+    <span class="s">CMD ["executable","param1","param2"] (首选形式)</span>
+    <span class="s">CMD ["param1","param2"] (as default parameters to ENTRYPOINT)</span>
+    <span class="s">CMD command param1 param2 (shell form)</span>
+<span class="s">LABEL:给镜像添加备注信息。</span>
+    <span class="s">LABEL &lt;key&gt;=&lt;value&gt; &lt;key&gt;=&lt;value&gt; &lt;key&gt;=&lt;value&gt;</span> 
+<span class="s">MAINTAINER:指定镜像作者。</span>
+    <span class="s">MAINTAINER &lt;name&gt;</span>
+<span class="s">EXPOSE:通知Docker容器在运行时侦听执行的网络端口。</span>
+    <span class="s">EXPOSE &lt;port&gt; [&lt;port&gt;/&lt;protocol&gt;...]</span>
+<span class="s">ENV:设置环境变量。</span>
+    <span class="s">ENV &lt;key&gt; &lt;value&gt;</span>
+    <span class="s">ENV &lt;key&gt;=&lt;value&gt;</span>
+<span class="s">ADD:从src处复制新文件、目录、远程URL，并将它们添加到dest的镜像文件系统中。</span>
+    <span class="s">ADD [--chown=&lt;user&gt;:&lt;group&gt;] &lt;src&gt;... &lt;dest&gt;</span>
+    <span class="s">ADD [--chown=&lt;user&gt;:&lt;group&gt;] ["&lt;src&gt;",... "&lt;dest&gt;"] (this form is required for paths containing whitespace)</span>
+<span class="s">COPY:从src处复制新文件、目录、远程URL，并将它们添加到dest的镜像文件系统中。</span>
+<span class="s">ENTRYPOINT:允许您配置将作为可执行文件运行的容器</span>
+<span class="na">VOLUME</span><span class="pi">:</span>
+<span class="na">USER</span><span class="pi">:</span>
+<span class="s">WORKDIR:为Dockerfile中的RUN、CMD、ENTRYPOINT、COPY和ADD指令设置工作目录。如果目录不存在则创建。</span>
+<span class="na">ONBUILD</span><span class="pi">:</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
 <h2 id="总结">总结</h2>
 
                 
