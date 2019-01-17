@@ -12,11 +12,11 @@ tags:
 ---
 ## 前言
 &nbsp;&#8195;基于express框架搭建一个项目的壳子是一直想去做但是没有去做的一件事。之前在店达做的多的是模块的编码，也没有自己去搭建过项目。但是毕竟写的代码多了对整个框架也比较熟悉而且本人有定期整理的习惯，所以说express框架还是比较了解的。<br>
-&nbsp;&#8195;光说express框架我觉得不是很好，如果有一个横向的对比，可能对理解express框架有更多的帮助。基于暂时除了Node.Js本人之前的学习方向一直是J2EE方向。所以我决定用J2EE很流行的SSM框架与Express框架进行对比。（当然现在Spring Boot和 Spring Cloud很火）
+&nbsp;&#8195;光说express框架我觉得不是很好，如果有一个横向的对比，可能对理解express框架有更多的帮助。基于暂时除了Node.Js本人之前的学习方向一直是J2EE方向。所以我决定用J2EE很流行的SSM框架与Express框架进行对比。
 
 ## 正文
 #### 背景知识
-**什么是Express框架？如何用？为什么要用它？3W：who how why**<br>
+**什么是Express框架？如何用？为什么要用它？**<br>
 &nbsp;&#8195;什么是express框架?在其主页中写到express是一种保持低层度规模的灵活Node.js Web应用程序框架，为Web和移动应用程序提供一组强大的功能。<br>
 &nbsp;&#8195;如何使用？我觉得官方文档肯定是写的比我详细的，我也不做搬运工了，君自取。<br>
 [入门教程传送门](https://expressjs.com/zh-cn/starter/installing.html) <br>

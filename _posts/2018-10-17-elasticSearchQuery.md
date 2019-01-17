@@ -146,9 +146,8 @@ POST /_aliases
 3、使用search_after API。
 
 **scroll做深度分页**<br>
-直接上DSL：
+直接上DSL(通过API调用search方法)：
 ```javascript
-POST (这个供参考)
 {
 	"index": "chat",
 	"from": 0,
@@ -161,7 +160,7 @@ POST (这个供参考)
 		}
 	}
 }
-(下面这个好想是比较普遍的写法)
+(elasticsearch-head中使用)
 GET: /index/_search?scroll = 10m
 {
     "query":{},
@@ -198,18 +197,12 @@ client.clearScroll([params, [callback]])//Params中的scrollId属性的值可以
     dsl.body.query.bool.should[1].bool.must[1].term.target = query.source
 
     console.info JSON.stringify dsl
-    allHits = []
-    scrollData = (response, allHits)-> 
-      return new Promise((resolve, reject) -> 
-        response.hits.hits.forEach((hit) -> allHits.push(hit))
-        console.info(allHits.length)
-        objArr = module.exports.buildRBNSData allHits
-        resolve({scrollId:response._scroll_id,scroll:dsl.scroll,data:objArr})
-      )
-    
+    allHits = []    
     esClient.search(dsl)
       .then((response)-> 
-        scrollData(response, allHits)
+        response.hits.hits.forEach((hit) -> allHits.push(hit))
+        objArr = buildRBNSData allHits
+        return objArr
       )
       .then((result, err)->
         cb err, result
