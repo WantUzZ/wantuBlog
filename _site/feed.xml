@@ -5,8 +5,8 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 31 Jan 2019 16:10:42 +0800</pubDate>
-    <lastBuildDate>Thu, 31 Jan 2019 16:10:42 +0800</lastBuildDate>
+    <pubDate>Thu, 31 Jan 2019 16:44:58 +0800</pubDate>
+    <lastBuildDate>Thu, 31 Jan 2019 16:44:58 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
@@ -18,15 +18,15 @@
 
 &lt;h4 id=&quot;生活&quot;&gt;生活&lt;/h4&gt;
 &lt;p&gt;  生活怕是从浦东来到浦西。从2号线转到9号线。从唐镇到佘山。从一个人到和大斌（大学同学）一起合租。生活大体满意。每周周末我最爱烧菜了，可是不喜欢洗碗。谢谢大斌每次辛勤的完成洗碗工作。无论吹牛逼还是倒苦水也终究有一个同学可以非常自然不带任何杂质的批评或者开导我下。当然实际上不止大斌，有很多朋友总在恰到好处的时候给予力量。再次感谢。&lt;br /&gt;
-  不好的地方可能是：烟还是会抽，脸上的痘痘依旧会冒，体重也处在一个较为高的位置了。&lt;/p&gt;
+  不好的地方可能是：烟还是会抽，体重也处在一个较为高的位置了，身体素质变差了不少。&lt;/p&gt;
 &lt;h4 id=&quot;学习&quot;&gt;学习&lt;/h4&gt;
-&lt;p&gt;  今年看的书不多加起来应该有15-20本左右。没仔细去数。技术书涉及的还是比较少。不过加大了对一些技术官方文档的阅读。这一点我觉得是有改变的。从之前的博客学者亦或是书籍学者转为官方文档阅读者。我觉得这个方向是没有问题的。这得益于好朋友–彭元的帮助。谢谢。&lt;br /&gt;
-  &lt;code class=&quot;highlighter-rouge&quot;&gt;多翻旧书&lt;/code&gt;。而且从今年年后的一些点串起来以往的一些事情。我深深的意识到之前的学习方式存在巨大的问题。以往学东西还是求快了，好些基础的知识点还是有所欠缺。当然这个欠缺不是说自己没看，而是自己的记忆力很差，很多细微之处就会忘记。但是完备知识体系又是做技术必须要求的基本条件。这一块我觉得还是得经常翻翻之前的看过的一些书，没事再多翻翻，不能因为熟悉而去忘记，也不能因为熟悉而不去重视。&lt;br /&gt;
-  &lt;code class=&quot;highlighter-rouge&quot;&gt;多看官方文档&lt;/code&gt;。那么什么是一个较为好的学习路线。我也不知道。不过我觉得以下可能有一些参考与借鉴的地方。学一门技术，最先接触的应该是官方文档，而且最好是英文的官方文档。周知IT技术还是国外比较厉害。很多技术都是国外先搞起来的后面慢慢引入到国内。所以英文的官方文档是大部分技术文档的父亲。官方文档有这很详细的说明以及使用的注意点。而且官方文档能够确保我们接收知识的准确度。不像博客以及论坛。很多知识可能或多或少由于这或那的因素已经出现问题了。它能够确保你学的是对的（当下时间节点）！&lt;br /&gt;
-  &lt;code class=&quot;highlighter-rouge&quot;&gt;注重逻辑的严密性&lt;/code&gt;。个人有一个问题就是口头表述有的时候会出现问题。其根本原因在于对所想要描述的东西的掌握程度还不是非常熟悉，在心里没有一个大体的轮廓，这个造成了语言组织的不完整和不严密。其二逻辑的严密性在于程序的健壮性，对整个编码没有自己的一个完备一套。这个造成了代码的质量的不稳定。这个一套没有标准也不固定，根据实际的业务场景自己整理出来，那么以后再遇到编码只要跟着这个套路走基本代码质量是可以得到保障的。
+&lt;p&gt;今年看的书不多加起来应该有15-20本左右。没仔细去数。技术书涉及的还是比较少。不过加大了对一些技术官方文档的阅读。这一点我觉得是有改变的。从之前的博客学者亦或是书籍学者转为官方文档阅读者。我觉得这个方向是没有问题的。这得益于好朋友–彭元的帮助。谢谢。&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;多翻旧书&lt;/code&gt;。而且从今年年后的一些点串起来以往的一些事情。我深深的意识到之前的学习方式存在巨大的问题。以往学东西还是求快了，好些基础的知识点还是有所欠缺。当然这个欠缺不是说自己没看，而是自己的记忆力很差，很多细微之处就会忘记。但是完备知识体系又是做技术必须要求的基本条件。这一块我觉得还是得经常翻翻之前的看过的一些书，没事再多翻翻，不能因为熟悉而去忘记，也不能因为熟悉而不去重视。&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;多看官方文档&lt;/code&gt;。那么什么是一个较为好的学习路线。我也不知道。不过我觉得以下可能有一些参考与借鉴的地方。学一门技术，最先接触的应该是官方文档，而且最好是英文的官方文档。周知IT技术还是国外比较厉害。很多技术都是国外先搞起来的后面慢慢引入到国内。所以英文的官方文档是大部分技术文档的父亲。官方文档有这很详细的说明以及使用的注意点。而且官方文档能够确保我们接收知识的准确度。不像博客以及论坛。很多知识可能或多或少由于这或那的因素已经出现问题了。它能够确保你学的是对的（当下时间节点）！&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;注重逻辑的严密性&lt;/code&gt;。个人有一个问题就是口头表述有的时候会出现问题。其根本原因在于对所想要描述的东西的掌握程度还不是非常熟悉，在心里没有一个大体的轮廓，这个造成了语言组织的不完整和不严密。其二逻辑的严密性在于程序的健壮性，对整个编码没有自己的一个完备一套。这个造成了代码的质量的不稳定。这个一套没有标准也不固定，根据实际的业务场景自己整理出来，那么以后再遇到编码只要跟着这个套路走基本代码质量是可以得到保障的。
 从年底我已经开始用思维导图来帮助自己加快这方面的成长，希望有所进步。&lt;br /&gt;
-  &lt;code class=&quot;highlighter-rouge&quot;&gt;抗击打能力&lt;/code&gt;。这个击打不止物质上的还有心理上的。质疑声或者拳头都不应该把我们击倒。即便一时击倒，也必须卧薪尝胆。更可况更多的时候确实是自己有问题呢？&lt;br /&gt;
-  &lt;code class=&quot;highlighter-rouge&quot;&gt;保持适度的自信&lt;/code&gt;。不盲目自信更不要丢失信心。20多岁的人干就完事。&lt;br /&gt;&lt;/p&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;抗击打能力&lt;/code&gt;。这个击打不止物质上的还有心理上的。&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;保持适度的自信&lt;/code&gt;。不盲目自信更不要丢失信心。20多岁的人干就完事。&lt;br /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;其他&quot;&gt;其他&lt;/h4&gt;
 &lt;p&gt;  waiting…&lt;/p&gt;
@@ -53,12 +53,12 @@
   撸起袖子加油干！&lt;/p&gt;
 </description>
         <pubDate>Thu, 31 Jan 2019 20:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/01/31/2018thisYearEnd/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/01/31/2018thisYearEnd/</guid>
+        <link>http://localhost:4000/2019/01/31/thisYearEnd/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/01/31/thisYearEnd/</guid>
         
         <category>2018</category>
         
-        <category>总结、反思</category>
+        <category>反思</category>
         
         
       </item>
