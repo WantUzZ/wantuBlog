@@ -5,9 +5,9 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 31 Jan 2019 16:44:58 +0800</pubDate>
-    <lastBuildDate>Thu, 31 Jan 2019 16:44:58 +0800</lastBuildDate>
-    <generator>Jekyll v3.8.4</generator>
+    <pubDate>Sat, 16 Feb 2019 10:42:08 +0800</pubDate>
+    <lastBuildDate>Sat, 16 Feb 2019 10:42:08 +0800</lastBuildDate>
+    <generator>Jekyll v3.8.5</generator>
     
       <item>
         <title>18年的反思</title>
@@ -1023,6 +1023,7 @@ else
   &lt;li&gt;三十年前的一次长跑比赛&lt;/li&gt;
   &lt;li&gt;俯仰关中&lt;/li&gt;
   &lt;li&gt;河西走廊&lt;/li&gt;
+  &lt;li&gt;我的奋斗&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h4 id=&quot;非技术未完结&quot;&gt;非技术未完结&lt;/h4&gt;
@@ -1032,7 +1033,6 @@ else
   &lt;li&gt;拿破仑传&lt;/li&gt;
   &lt;li&gt;智囊&lt;/li&gt;
   &lt;li&gt;杨澜访谈录&lt;/li&gt;
-  &lt;li&gt;我的奋斗&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         <pubDate>Tue, 30 Oct 2018 06:34:00 +0800</pubDate>
