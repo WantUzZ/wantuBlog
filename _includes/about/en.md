@@ -1,12 +1,20 @@
 
 
-> Yet another man.
+> Let’s go far away
 
-Hi,i am want, a software engineer.
+Hello, my name is want and I am a software developer. Nice to meet you. A thousand miles begins with a single step.
 
 
 
-##### Talks
+##### Technology stack
+* Java/NodeJs/Javascript
+* MySQL/Oracle/MongoDB/Neo4J/ElasticSearch
+* Express/Spring/SpringMVC/MyBatis
+* RabbitMQ
+* Docker
+* Git/Svn
+* Echarts JQuery 
+
 
 <!-- - [Upgrading to Progressive Web Apps][9] · [JSConf China Shanghai 2017](http://2017.jsconf.cn/)
 - Building Progressive Web Apps · [CSDI Guangzhou 2017](http://www.csdisummit.com/)
