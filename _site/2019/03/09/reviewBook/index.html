@@ -11,16 +11,30 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="老王 | want">
+    <meta property="og:title" content="book review - 老王 | want">
     
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="想象力、坚持、耐心、讲故事">
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="开这个的原因
+  温故而知新。内容控制在原先读过的技术书目上。
+
+">
+    
+    <meta property="article:published_time" content="2019-03-09T17:57:00Z">
+    
+    
+    <meta property="article:author" content="wantu">
+    
+    
+    <meta property="article:tag" content="书">
+    
+    <meta property="article:tag" content="回顾基础">
+    
     
     <meta property="og:image" content="http://localhost:4000/img/wantu.jpg">
-    <meta property="og:url" content="http://localhost:4000/page2/">
+    <meta property="og:url" content="http://localhost:4000/2019/03/09/reviewBook/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>老王 | want</title>
+    <title>book review - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -29,7 +43,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/page2/">
+    <link rel="canonical" href="http://localhost:4000/2019/03/09/reviewBook/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -356,258 +370,193 @@
 </script>
 
 
-    <!-- Page Header -->
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/post-bg-rwd.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
 
 
 
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/post-bg-rwd.jpg');
+        background: ;
+    }
 
+    
+</style>
 
+<header class="intro-header" >
 
-
-<header class="intro-header" style="background-image: url('/img/thisHome.jpg')">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        
-        <div class="site-heading">
-        
-          <h1>want</h1>
-          <span class="subheading">想象力、坚持、耐心、讲故事</span>
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=%E4%B9%A6" title="书">书</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E5%9B%9E%E9%A1%BE%E5%9F%BA%E7%A1%80" title="回顾基础">回顾基础</a>
+                        
+                    </div>
+                    <h1>book review</h1>
+                    
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by wantu on March 9, 2019</span>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </header>
 
 
-<!-- Main Content -->
-<div class="container">
-	<div class="row">
-        
 
-<!-- USE SIDEBAR -->
-    <!-- PostList Container -->
-    		<div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                postlist-container
-            ">
-    			
-<div class="post-preview">
-    <a href="/2018/10/26/algorithm/">
-        <h2 class="post-title">
-            常用算法实现
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                相关代码已经托管到github上，欢迎指正bug.戳我
-排序
-冒泡
-  冒泡排序，就跟它的名字一样，你可以想象一条🐟现在在一个湖底。鱼肚子里面是我们将要排序的数据。这个鱼每隔一段时间会打个嗝（吐个泡泡），而这个泡泡中的数总是鱼肚子里面的最大值或者最小值。然后一个小朋友在岸上拿了一个泡泡收集器，把它吐出的泡泡一个一个按顺序放进机器里面。最后整个泡泡收集器中的数据都是有序的了。
-1
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+                <h2 id="开这个的原因">开这个的原因</h2>
+<p>  温故而知新。内容控制在原先读过的技术书目上。</p>
+
+<h4 id="js高级程序设计">JS高级程序设计</h4>
+<p>变量：<br />
+5中基本类型：Null、Undefined、String、Number、Boolean。注意是类型（首字母大写）<br />
+其中注意：typeof操作符 对 null的结果：[typeof null ==object] [typeof 函数== function] [typeof NaN ==&gt; NaN]<br /></p>
+
+<p>对变量进行声明原则是不需要进行初始化的，因为该变量会自动的被赋予undefined。但是显式的初始化仍然是明智的。
+因为它有助于我们辨别一个变量到底是没初始化还是没有声明。<br /></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
-...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on October 26, 2018
-    </p>
-</div>
-<hr>
+5
+</pre></td><td class="rouge-code"><pre><span class="c1">//比如a是一个没有声明的变量</span>
+<span class="c1">//那么typeof a ==&gt;undefined</span>
+<span class="c1">//如果a是有声明的而且也进行了显式的初始化</span>
+<span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">typeof</span> <span class="nx">a</span> <span class="o">===</span> <span class="s1">'number'</span> <span class="c1">//true</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>逻辑上讲：null值表示空对象指针。这也是typeof null == object的原因。
+如果一个变量将来打算用来保存对象的，那么务必将其初始化为null。</p>
 
-<div class="post-preview">
-    <a href="/2018/10/24/buildExpressProject/">
-        <h2 class="post-title">
-            回顾搭建一个基于express的web项目遇到的问题
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                前言
-  基于express框架搭建一个项目的壳子是一直想去做但是没有去做的一件事。之前在店达做的多的是模块的编码，也没有自己去搭建过项目。但是毕竟写的代码多了对整个框架也比较熟悉而且本人有定期整理的习惯，所以说express框架还是比较了解的。
-  光说express框架我觉得不是很好，如果有一个横向的对比，可能对理解express框架有更多的帮助。基于暂时除了Node.Js本人之前的学习...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on October 24, 2018
-    </p>
-</div>
-<hr>
+<p><strong>Boolean</strong> <br />
+5个false的情况：null,undefined,”“,0,false</p>
 
-<div class="post-preview">
-    <a href="/2018/10/17/elasticSearchQuery/">
-        <h2 class="post-title">
-            回顾ElasticSearch的使用(0115更新)
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                前言
-写在最前面
-  官方文档
-  中文文档翻译
-  es更新速度很快，最好的学习方法就是跟着官方文档走！！！
-es背景故事
-  多年前，一个叫做Shay Banon的刚结婚不久的失业开发者，由于妻子要去伦敦学习厨师，他便跟着也去了。
-在他找工作的过程中，为了给妻子构建一个食谱的搜索引擎，他开始构建一个早期版本的Lucene。
-直接基于Lucene工作会比较困难，所以Shay开始抽象Luce...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on October 17, 2018
-    </p>
-</div>
-<hr>
+<p><strong>Number</strong> <br />
+浮点数值进行计算精度丢失问题。0.1+0.2==&gt;0.300000000000001<br />
+.1（有效，等同0.1）<br />
+较大较小值可以使用科学计数法进行表示。1.22e5 === 122000<br /></p>
 
-<div class="post-preview">
-    <a href="/2018/10/17/bookSummary/">
-        <h2 class="post-title">
-            书摘
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                书摘
-精进：如何成为…
+<p>数值范围：Number.MIN_VALUE~Number.MAX_VALUE 大多数浏览器的具体范围是：5e-324~1.797e308.超过范围数值将变成Infinity和-Infinity。可使用isFinite()函数判断数值是否在范围内。false为不在范围内。
+一旦为数值变成无穷值那么将不在参与下一次的计算。<br />
+NaN（Not a Number）非数值。用来表示本来要返回数值的操作数未返回数值的情况。任何数/0 ==&gt;NaN<br />
+2个特点：任何涉及NaN的操作都将返回NaN.其次NaN跟任何数值都不相等，包括NaN自己。<br /></p>
 
-    这个世界上多的是短平快、付出马上就有回报的立竿见影的事，也多的是需要长期投入、靠矢志不渝的坚持才有大成的事，只不过，对前一种人们常常趋之若鹜，对后一种人们却避之唯恐不及——而正因为如此，才更有去做后一种事的必要。
-    人生是持续而反复的构造，校正选择，作出建设性的改变。
+<p>3个数值转换函数：Number(),parseInt(),parseFloat().<br />
+注意：Number(undefined) === NaN Number(‘’) ===0,Number(null)===0，或者转换字符串不满足数值格式转换结果也是NaN。<br />
+如果是转换的是一个对象，则调用对象的valueOf方法,然后依照规则进行转换，如果转换的结果是NaN，则调用toString()方法。然后再依照那个规则进行转换。不建议使用Number()进行字符串的转换。[先是调用valueOf()不假但是toString()好像有问题]<br />
+使用parseInt()。转换规则：1、忽略前面的空格2、第一个字符，第一个字符不是数字返回NaN.如果是继续查找直至全部字符查找完毕或者遇到非数字字符，返回刚刚检索过的数字字符，并以数值的形式返回。<br />
+parseInt(‘’) ==&gt;NaN parseInt(‘123.4’) ==&gt; 123<br />
+如果第一个字符是数字字符，parseInt()也能识别出各种整数的格式。（8进制【es5之后丧失】、16进制数）<br />
+parseInt(010) ==&gt; 10 (es5之后parseInt方法不在具有解析8进制数的能力，前导0会无效) parseInt(0x1) ==&gt; 16(16进制数)
+困惑为了消除parseInt()函数上的困惑，该函数提供了第二个参数：转换时使用的基数(多少进制)。<br />
+parseFloat()函数跟parseInt()函数类似。2点区别：1、parseFloat会始终忽略前导0。2、解析遇到第一个小数点有效遇到第二个小数点无效<br /></p>
 
+<p><strong>String:</strong><br />
+字符串不可变。要改变某个字符串就得删除原先得字符串。<br />
+转换为字符串：1、toString()方法。null和undefined没有此方法。<br />
+数值的toString()可以传递一个基数，用以转换成不同格式。null和undefined没有toString()方法，强项调用该方法会返回这两个值的字面量。<br /></p>
 
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on October 17, 2018
-    </p>
-</div>
-<hr>
+<p><strong>操作符</strong><br />
+比较操作符：<br />
+数值和数值 比大小<br />
+数值和 数值型字符比较，将数值型字符转为数值 再比较两者的大小<br />
+数值型字符和 数值型字符比较，比较字符编码大小。“23” &lt; “5” 因为：2–&gt;字符编码为50 3–&gt;字符编码为51<br />
+字符和字符 比较 也是比较字符编码大小<br />
+NaN和任何操作数比较都返回false<br /></p>
 
-<div class="post-preview">
-    <a href="/2018/10/13/myql/">
-        <h2 class="post-title">
-            个人已知的一些mysql查询性能优化
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                前言
-直奔正文 
+<p>相等操操作符：<br />
+== 和 !=  两个操作符都会强制转换操作数，然后比较他们的相等性。<br />
+如果操作数中有一个是布尔类型，那么将其转为数值，true转为1false转为0，而后进行比较<br />
+如果有一个操作数是对象，另外一个不是那么调用这个对象的valueOf方法得到基本的数值类型再根据之前的比较规则进行比较。<br />
+null和undefined是相等的<br />
+如果有一个操作数是NaN那么相等操作符都将返回false.<br />
+两个对象是一个对象相等操作符才返回true<br />
+===全相等和!==不全等，不会对操作数进行转换其余同相等和不等<br /></p>
 
-  到店达之后一开始接到了大量的导数的数据需求。还记得当时有一个需求是从数据库中拉每周的周报数据（财务）。那个SQL写的非常的大而且开始的时候执行的速度很慢，差点就逼近了赤狐系统的临界执行时长。
-因为一开始没想去用程序处理，也只是想把需求先搞出来。后面数据慢慢稳定。于是想把整个查询进行一些优化。
+<p>逗号操作符：<br />
+用于声明：一条语句可以执行多个声明。let a = 3,b = 2,c = 4;<br />
+用于赋值：let a = (1,2,3,4,5);a === 5。因为5是最后一项。此用法不常见。<br /></p>
 
-  以下就是对于mysql查询性能优化的一些心得（无查询缓存情况下）。
-
-...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on October 13, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/10/11/hello-world/">
-        <h2 class="post-title">
-            Hello world
-        </h2>
-        
-        <h3 class="post-subtitle">
-             "Hello World, Hello Blog"
-        </h3>
-        
-        <div class="post-content-preview">
-            
                 
-  “10000km”
+                
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/01/16/RabbitMQ/" data-toggle="tooltip" data-placement="top" title="RabbitMQ的整理">
+                        Previous<br>
+                        <span>RabbitMQ的整理</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <hr style="visibility: hidden;">
 
+                
 
-前言
+                
+            </div>  
 
-want 的 Blog 就这么开通了。
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
 
-跳过废话，直接看技术实现  
-这个博客网站是基于Jekyll+GitHub Pages搭建而成的。
-主要是为了记录自己的生活、工作、学习的事情。之前一直使用为之笔记进行总结。
-加法要做减法也要做，笔记中的一些有趣的知识希望在博客中进行分享。
-
-
-
-
-正文
-
-接下来说说搭建这个博客的步骤。（OSX）
-1
-2
-3
-4...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on October 11, 2018
-    </p>
-</div>
-<hr>
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-    <li class="previous">
-        <a href="/">&larr; Newer Posts</a>
-    </li>
-    
-    
-</ul>
-
-
-    		</div>
     <!-- Sidebar Container -->
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
                 <!-- Featured Tags -->
                 
 
 
 <section>
+    
+        <hr class="hidden-sm hidden-xs">
     
     <h5><a href="/archive/">FEATURED TAGS</a></h5>
     <div class="tags">
@@ -630,50 +579,57 @@ want 的 Blog 就这么开通了。
 </section>
 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-  <hr>
-  <h5><a href="/about/">ABOUT ME</a></h5>
-  <div class="short-about">
-    
-    <img src="/img/wantu.jpg" />
-    
-    
-    <p>我愿竭我所能</p>
-    
-    <!-- SNS Link -->
-    
-
-
-<ul class="list-inline">
-
-
-  
-  
-  
-  
-  
-  
-  <li>
-    <a target="_blank" href="https://github.com/WantUzZ">
-      <span class="fa-stack fa-lg">
-        <i class="fa fa-circle fa-stack-2x"></i>
-        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-      </span>
-    </a>
-  </li>
-  
-  
-</ul>
-  </div>
-</section>
-
                 <!-- Friends Blog -->
                 
-    		</div>
-        
-	</div>
-</div>
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: ''
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
 
@@ -813,6 +769,64 @@ want 的 Blog 就这么开通了。
 
 
 <!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
 
 
 
