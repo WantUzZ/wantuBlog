@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "book review"
+title:      "回顾"
 subtitle:   ""
 date:       2019-03-09 09:57:00
 author:     "wantu"
@@ -79,3 +79,42 @@ null和undefined是相等的<br>
 逗号操作符：<br>
 用于声明：一条语句可以执行多个声明。let a = 3,b = 2,c = 4;<br>
 用于赋值：let a = (1,2,3,4,5);a === 5。因为5是最后一项。此用法不常见。<br>
+
+break和continue中的一种：<br>
+outermost标签表示外部的for循环。<br>
+内部循环中 的 break 语句带了一个参数:要返回到的标签。添加这个标签的结果将导致 break 语句不仅会退出内 部的 for 语句(即使用变量 j 的循环)，而且也会退出外部的 for 语句(即使用变量 i 的循环)。<br>
+```javascript
+var num = 0;
+outermost:
+for (var i=0; i < 10; i++) {
+     for (var j=0; j < 10; j++) {
+        if (i == 5 && j == 5) {
+            break outermost;
+        }
+	num++; 
+     }
+}
+alert(num);    //55
+```
+continue同样也可以和标签一起连用。<br>
+这种情况下，continue 语句会强制继续执行循环——退出内部循环，执行外部循环。当 j 是 5 时，continue 语句执行，而这也就意味着内部循环少执行了 5 次，因此 num 的结果是 95。<br>
+```javascript
+var num = 0;
+outermost:
+for (var i=0; i < 10; i++) {
+        for (var j=0; j < 10; j++) { 
+            if (i == 5 && j == 5) {
+                continue outermost;
+        }
+	num++; 
+    }
+}
+alert(num);    //95
+```
+使用label标签语句，一定要使用描述性的标签，同时不要使用过多的标签。<br>
+
+函数：<br>
+return语句也可以不带任何的返回值。函数在停止执行时将返回undefined值。<br>
+js没有重载。同名函数函数名只属于后面那个函数。<br>
+
+基本类型按值访问、引用类型按引用访问。<br>
