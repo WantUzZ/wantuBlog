@@ -5,63 +5,9 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 16 Feb 2019 10:42:08 +0800</pubDate>
-    <lastBuildDate>Sat, 16 Feb 2019 10:42:08 +0800</lastBuildDate>
+    <pubDate>Sat, 09 Mar 2019 09:50:02 +0800</pubDate>
+    <lastBuildDate>Sat, 09 Mar 2019 09:50:02 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
-    
-      <item>
-        <title>18年的反思</title>
-        <description>&lt;h2 id=&quot;回顾2018&quot;&gt;回顾2018&lt;/h2&gt;
-&lt;p&gt;  又要到新年了。无论得失，一期一会。在这个农历2018年的最后一天班的下午，我希望自己认真的记录下自己过往一年的一些得和失。正视问题，以求改进。&lt;/p&gt;
-&lt;h4 id=&quot;工作&quot;&gt;工作&lt;/h4&gt;
-&lt;p&gt;  今年从店达来到了弘连。一句话：从幸运到幸运，从不幸到不幸。凡事不总是让人满意的。个中滋味，难以忘怀。店达和那一群小伙伴、卓哥、龙哥的记忆依旧是心中最温情的地方。每当回想心中总有些开心、怀念以及愧疚。弘连也是一家非常优秀的公司。同事也很优秀。自己也在这里完成了自己很多不足的补充，讲真这也是一个收获之地。&lt;/p&gt;
-
-&lt;h4 id=&quot;生活&quot;&gt;生活&lt;/h4&gt;
-&lt;p&gt;  生活怕是从浦东来到浦西。从2号线转到9号线。从唐镇到佘山。从一个人到和大斌（大学同学）一起合租。生活大体满意。每周周末我最爱烧菜了，可是不喜欢洗碗。谢谢大斌每次辛勤的完成洗碗工作。无论吹牛逼还是倒苦水也终究有一个同学可以非常自然不带任何杂质的批评或者开导我下。当然实际上不止大斌，有很多朋友总在恰到好处的时候给予力量。再次感谢。&lt;br /&gt;
-  不好的地方可能是：烟还是会抽，体重也处在一个较为高的位置了，身体素质变差了不少。&lt;/p&gt;
-&lt;h4 id=&quot;学习&quot;&gt;学习&lt;/h4&gt;
-&lt;p&gt;今年看的书不多加起来应该有15-20本左右。没仔细去数。技术书涉及的还是比较少。不过加大了对一些技术官方文档的阅读。这一点我觉得是有改变的。从之前的博客学者亦或是书籍学者转为官方文档阅读者。我觉得这个方向是没有问题的。这得益于好朋友–彭元的帮助。谢谢。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;多翻旧书&lt;/code&gt;。而且从今年年后的一些点串起来以往的一些事情。我深深的意识到之前的学习方式存在巨大的问题。以往学东西还是求快了，好些基础的知识点还是有所欠缺。当然这个欠缺不是说自己没看，而是自己的记忆力很差，很多细微之处就会忘记。但是完备知识体系又是做技术必须要求的基本条件。这一块我觉得还是得经常翻翻之前的看过的一些书，没事再多翻翻，不能因为熟悉而去忘记，也不能因为熟悉而不去重视。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;多看官方文档&lt;/code&gt;。那么什么是一个较为好的学习路线。我也不知道。不过我觉得以下可能有一些参考与借鉴的地方。学一门技术，最先接触的应该是官方文档，而且最好是英文的官方文档。周知IT技术还是国外比较厉害。很多技术都是国外先搞起来的后面慢慢引入到国内。所以英文的官方文档是大部分技术文档的父亲。官方文档有这很详细的说明以及使用的注意点。而且官方文档能够确保我们接收知识的准确度。不像博客以及论坛。很多知识可能或多或少由于这或那的因素已经出现问题了。它能够确保你学的是对的（当下时间节点）！&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;注重逻辑的严密性&lt;/code&gt;。个人有一个问题就是口头表述有的时候会出现问题。其根本原因在于对所想要描述的东西的掌握程度还不是非常熟悉，在心里没有一个大体的轮廓，这个造成了语言组织的不完整和不严密。其二逻辑的严密性在于程序的健壮性，对整个编码没有自己的一个完备一套。这个造成了代码的质量的不稳定。这个一套没有标准也不固定，根据实际的业务场景自己整理出来，那么以后再遇到编码只要跟着这个套路走基本代码质量是可以得到保障的。
-从年底我已经开始用思维导图来帮助自己加快这方面的成长，希望有所进步。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;抗击打能力&lt;/code&gt;。这个击打不止物质上的还有心理上的。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;保持适度的自信&lt;/code&gt;。不盲目自信更不要丢失信心。20多岁的人干就完事。&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;其他&quot;&gt;其他&lt;/h4&gt;
-&lt;p&gt;  waiting…&lt;/p&gt;
-
-&lt;h2 id=&quot;展望2019&quot;&gt;展望2019&lt;/h2&gt;
-&lt;p&gt;  在完成工作的前提下&lt;br /&gt;&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;15本技术书、15本非技术书&lt;/li&gt;
-  &lt;li&gt;爬黄山。&lt;/li&gt;
-  &lt;li&gt;减肥15近，体重控制到135-140之间&lt;/li&gt;
-  &lt;li&gt;过完年把爷爷的二胡拿过来练练&lt;/li&gt;
-  &lt;li&gt;博客开设烹饪专栏，要向一个厨师转变。23333
-    &lt;h4 id=&quot;想的美&quot;&gt;想的美&lt;/h4&gt;
-  &lt;/li&gt;
-  &lt;li&gt;想上天和太阳肩并肩&lt;/li&gt;
-  &lt;li&gt;想暴富&lt;/li&gt;
-  &lt;li&gt;想迎娶白富美走上🐶身巅峰&lt;/li&gt;
-  &lt;li&gt;想永生不死，又想立刻狗带。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;总结&quot;&gt;总结&lt;/h2&gt;
-&lt;p&gt;  喜、怒、哀、惧、爱、恶、乐。&lt;br /&gt;
-  眼、耳、鼻、舌、身、意。&lt;br /&gt;
-  撸起袖子加油干！&lt;/p&gt;
-</description>
-        <pubDate>Thu, 31 Jan 2019 20:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/01/31/thisYearEnd/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/01/31/thisYearEnd/</guid>
-        
-        <category>2018</category>
-        
-        <category>反思</category>
-        
-        
-      </item>
     
       <item>
         <title>RabbitMQ的整理</title>
@@ -320,6 +266,7 @@ docker build .
 &lt;span class=&quot;s&quot;&gt;WORKDIR:为Dockerfile中的RUN、CMD、ENTRYPOINT、COPY和ADD指令设置工作目录。如果目录不存在则创建。&lt;/span&gt;
 &lt;span class=&quot;na&quot;&gt;ONBUILD&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;h2 id=&quot;总结&quot;&gt;总结&lt;/h2&gt;
 </description>
         <pubDate>Wed, 16 Jan 2019 02:06:00 +0800</pubDate>
@@ -2043,6 +1990,173 @@ series//展示设置
         <category>数据可视化</category>
         
         <category>jQuery Datatables</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>常用算法实现</title>
+        <description>&lt;p&gt;&lt;strong&gt;相关代码已经托管到github上，欢迎指正bug.&lt;a href=&quot;https://github.com/WantUzZ/Algorithm-implementation&quot;&gt;戳我&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;排序&quot;&gt;排序&lt;/h2&gt;
+&lt;h4 id=&quot;冒泡&quot;&gt;冒泡&lt;/h4&gt;
+&lt;p&gt;  冒泡排序，就跟它的名字一样，你可以想象一条🐟现在在一个湖底。鱼肚子里面是我们将要排序的数据。这个鱼每隔一段时间会打个嗝（吐个泡泡），而这个泡泡中的数总是鱼肚子里面的最大值或者最小值。然后一个小朋友在岸上拿了一个泡泡收集器，把它吐出的泡泡一个一个按顺序放进机器里面。最后整个泡泡收集器中的数据都是有序的了。&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;待排序数组&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;的长度&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;待排序数组&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;的长度&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;第一层for循环就是把鱼肚子里面的最大数吐出去。&lt;br /&gt;
+第二层循环就是一个泡泡上升（不断交换）的过程。&lt;br /&gt;
+时间复杂度：O(n*n)&lt;/p&gt;
+
+&lt;h4 id=&quot;二分插入排序&quot;&gt;（二分）插入排序&lt;/h4&gt;
+&lt;p&gt;  插入排序有一个前提：就是已经存在了一个已经排好顺序的数组了，这个时候我们在不断的将新的数插入到这个数组的过程。
+二分策略（二分查找也是基于这种策略）：小时候玩的游戏–猜价格。一件商品让你猜价格。100？高了。这个时候再猜50？低了，再猜75…整个策略就是下一次取值总是取区间的中间位的数值。
+查找的时间复杂度：O（nLog2^n）以2为底n的对数
+平均时间复杂度：O(n*n)&lt;/p&gt;
+
+&lt;h4 id=&quot;希尔排序&quot;&gt;希尔排序&lt;/h4&gt;
+&lt;p&gt;  希尔排序是一种分治思想的体现。&lt;br /&gt;
+&lt;strong&gt;关于分治：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;将原问题分成若干个较小的子问题，在递归的解决这些子问题，最后将自问题的解合并成原问题的解。主要分为三个步骤：
+分解：将原问题分解成为一些列的子问题。
+解决：递归的解决各个子问题，若子问题足够小，就直接解决。
+合并：将子问题的解合并成原问题的解。
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;基本思想&lt;/strong&gt;&lt;br /&gt;
+  先将整个集合，根据不同的步长分成若干个子集和，然后对各个子集和分别
+进行直接插入排序，不断缩小步长直至1，最后一次步长为1的数组其实就是直接插入排序。但是因为之前步长每次减少的时候进行插入排序导致最后一次排序时数组元素基本有序。所以希尔排序的时间复杂的会比O(n*n)好一些。&lt;br /&gt;
+&lt;strong&gt;核心代码&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;doSort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;//stepSize 步长 其实就是不断的将一个数组划分为步长为stepSize的若干个子数组&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;stepSize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stepSize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stepSize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;stepSize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//第一次步长为5 ，那么划分后的子数组为：0-5 1-6 2-7 3-8 4-9  5个子数组&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//第二次步长为2，那么划分后的子数组为：0-2-4-6-8 和1-3-5-7-9 2个子数组&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//第三次步长为1，那么划分后的子数组为：0-1-2-3-4-5-6-7-8-9   1个子数组&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;stepSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//对每个子数组进行排序&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//这个地方要理解一个东西，比如说现在i是5,stepSize = 2,&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//那么a[j](a[3])要是大于a[j](a[3+2]),两者交换，交换完之后j-= 2,所以a[3]是会和a[1]也会进行比较的。&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;//最好自己模拟一下加深一下印象&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;stepSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stepSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stepSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stepSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stepSize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;堆排序&quot;&gt;堆排序&lt;/h4&gt;
+&lt;p&gt;  基于堆这中数据结构弄的一个排序。
+堆：有点像一个完全二叉树。一般分为小根堆大根堆。小根堆就是根节点放整个堆的最小值咯。同理大根堆你懂得。
+堆的几个操作：&lt;br /&gt;
+&lt;strong&gt;上浮&lt;/strong&gt; &lt;br /&gt;
+  如果当前节点和它的父节点进行比较，如果这是一颗小根堆。如果存在当前节点比它的父节点小的情况，交换它们的位置。&lt;br /&gt;
+&lt;strong&gt;下沉&lt;/strong&gt; &lt;br /&gt;
+  如果小根堆中的父节点（如果有子节点）由于某种原因（经历过上浮操作被换到父节点这个位置或者是经历过…）大于它左右两个子节点，那么请交换它和左右两个子节点中最小的那个节点。&lt;br /&gt;
+&lt;strong&gt;插入&lt;/strong&gt; &lt;br /&gt;
+  每次把新添加的元素添加到最后一个节点位置，再让它进行上浮操作。&lt;br /&gt;
+&lt;strong&gt;弹出&lt;/strong&gt; &lt;br /&gt;
+  思想：将堆最上层（1号节点）的节点同最后一号位的节点进行交换，然后对1号节点进行下沉操作。&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&quot;快速排序&quot;&gt;快速排序&lt;/h4&gt;
+&lt;p&gt;  思想：&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;先设置一个基准位（一般来以数组0号位置）。&lt;/li&gt;
+  &lt;li&gt;从需排序数组的右边扫描一个小于基准点位元素值的值A，后暂时停止从右往左的扫描。&lt;/li&gt;
+  &lt;li&gt;从需排序数组的左边开始扫描一个小于基准位元素值的值B，后暂时停止从左往右扫描。&lt;/li&gt;
+  &lt;li&gt;在A的下标小于B的下标的前提下，交换A，B两个元素。&lt;/li&gt;
+  &lt;li&gt;继续从右往左的扫描活动，并找到值C&lt;/li&gt;
+  &lt;li&gt;继续从左往右的扫描活动，并找到值D&lt;/li&gt;
+  &lt;li&gt;…&lt;/li&gt;
+  &lt;li&gt;当最后从右往左扫描与从左往右扫描暂时停下的位置时，停止所有的扫描活动，并且在这个时候交换基准位元素值和两侧扫描停止位置的元素值。确定第一个基准数。&lt;/li&gt;
+  &lt;li&gt;基准数确定后，数组将被基准数一分为二个数组。分别对左右两个数组进行递归的调用同样的查找基准数策略即可。&lt;br /&gt;
+时间复杂度：n * log n
+    &lt;h4 id=&quot;桶排序&quot;&gt;桶排序&lt;/h4&gt;
+    &lt;p&gt;思想：借助一个一维数组进行维护相关排序值和出现的频次。数组索引位对应排序值，数组索元素的值对应相关的出现频次。最后遍历整个数组输出元素不为0的索引位。&lt;br /&gt;
+缺点：空间占用比较大，尤其是排序值中有一个数值很大的数。&lt;br /&gt;
+优点：稳定、快。&lt;br /&gt;&lt;/p&gt;
+    &lt;h2 id=&quot;堆&quot;&gt;堆&lt;/h2&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;栈&quot;&gt;栈&lt;/h2&gt;
+
+&lt;h2 id=&quot;图&quot;&gt;图&lt;/h2&gt;
+&lt;h4 id=&quot;dfs&quot;&gt;DFS&lt;/h4&gt;
+
+&lt;h4 id=&quot;bfs&quot;&gt;BFS&lt;/h4&gt;
+
+&lt;h4 id=&quot;dijkstra&quot;&gt;Dijkstra&lt;/h4&gt;
+
+&lt;h4 id=&quot;floyd&quot;&gt;Floyd&lt;/h4&gt;
+
+&lt;h2 id=&quot;树&quot;&gt;树&lt;/h2&gt;
+&lt;h4 id=&quot;线段树&quot;&gt;线段树&lt;/h4&gt;
+
+&lt;h2 id=&quot;贪心&quot;&gt;贪心&lt;/h2&gt;
+&lt;h4 id=&quot;并查集&quot;&gt;并查集&lt;/h4&gt;
+&lt;h4 id=&quot;克鲁斯卡尔&quot;&gt;克鲁斯卡尔&lt;/h4&gt;
+
+&lt;h2 id=&quot;dp&quot;&gt;DP&lt;/h2&gt;
+&lt;h4 id=&quot;背包问题&quot;&gt;背包问题&lt;/h4&gt;
+&lt;h4 id=&quot;树形dp&quot;&gt;树形DP&lt;/h4&gt;
+
+</description>
+        <pubDate>Fri, 26 Oct 2018 03:43:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/10/26/algorithm/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/10/26/algorithm/</guid>
+        
+        <category>algorithm</category>
+        
+        <category>排序</category>
+        
+        <category>数据结构</category>
+        
+        <category>最短路算法</category>
+        
+        <category>树</category>
         
         
       </item>
