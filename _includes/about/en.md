@@ -2,8 +2,12 @@
 
 > Let’s go far away
 
-Hello, my name is want and I am a software developer. Nice to meet you. A thousand miles begins with a single step.
+Hello, my name is want and I am a software developer. Nice to meet you. A thousand miles begins with a single step.<br>
 
+Contact information：<br>
+* wechat:gf_wt_tobeNo1
+* QQ:596434244
+* mail:want112358@gmail.com
 
 
 ##### Technology stack

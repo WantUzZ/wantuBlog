@@ -4,7 +4,7 @@
 老王（大学同窗外号），华东交通大学14级软件工程专业。多多交流，一起进步。<br>
 * wechat:gf_wt_tobeNo1
 * QQ:596434244
-* mail:beursuperman@163.com
+* mail:want112358@gmail.com
 
 **技术栈**
 * 语言部分：Java,Node.js,JavaScript,略懂一些Python、jQuery.<br>
