@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "数据可视化--Echarts"
+title:      "Echarts"
 subtitle:   ""
 date:       2018-10-29 18:43:00
 author:     "wantu"

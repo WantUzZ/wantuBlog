@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "数据可视化--jQuery datatables"
+title:      "jQuery datatables"
 subtitle:   ""
 date:       2018-10-25 19:43:00
 author:     "wantu"
