@@ -11,32 +11,35 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="Docker的整理 - 老王 | want">
+    <meta property="og:title" content="To Do List - 老王 | want">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="前言
-docker是开发人员和系统管理员使用容器开发、部署和运行应用程序的平台。使用Linux容器部署应用程序称为容器化。容器不是新的，但是它们用于轻松部署应用程序。
-容器化的优势：
-1、灵活，再复杂的应用也可以集装箱化。
-2、轻量级，容器利用并共享主机内核。
-3、可互换，支持即时部署更新和升级。
-4、便携性，我们可以本地构建，部署到云，并在任何地方运行。
-5、可扩展，我们可以增加并自动分发...">
+    <meta property="og:description" content="
+  To Do
+  1
+2
+3
+1、git 内容完善
+2、rabbit 内容完善
+3、基于rbac模型的权限系统设计以及实现简诉
+  
+
+">
     
-    <meta property="article:published_time" content="2019-01-16T02:06:00Z">
+    <meta property="article:published_time" content="2019-03-21T20:17:00Z">
     
     
     <meta property="article:author" content="wantu">
     
     
-    <meta property="article:tag" content="Docker">
+    <meta property="article:tag" content="To Do">
     
     
     <meta property="og:image" content="http://localhost:4000/img/wantu.jpg">
-    <meta property="og:url" content="http://localhost:4000/2019/01/16/Docker/">
+    <meta property="og:url" content="http://localhost:4000/2019/03/21/toDo2019/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>Docker的整理 - 老王 | want</title>
+    <title>To Do List - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -45,7 +48,7 @@ docker是开发人员和系统管理员使用容器开发、部署和运行应�
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2019/01/16/Docker/">
+    <link rel="canonical" href="http://localhost:4000/2019/03/21/toDo2019/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -374,7 +377,7 @@ docker是开发人员和系统管理员使用容器开发、部署和运行应�
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/no1.jpg" width="0" height="0"> -->
+<!-- <img src="/img/post-bg-rwd.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -383,7 +386,7 @@ docker是开发人员和系统管理员使用容器开发、部署和运行应�
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/no1.jpg');
+        background-image: url('/img/post-bg-rwd.jpg');
         background: ;
     }
 
@@ -400,13 +403,13 @@ docker是开发人员和系统管理员使用容器开发、部署和运行应�
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=Docker" title="Docker">Docker</a>
+                        <a class="tag" href="/archive/?tag=To+Do" title="To Do">To Do</a>
                         
                     </div>
-                    <h1>Docker的整理</h1>
+                    <h1>To Do List</h1>
                     
                     <h2 class="subheading"></h2>
-                    <span class="meta">Posted by wantu on January 16, 2019</span>
+                    <span class="meta">Posted by wantu on March 21, 2019</span>
                 </div>
             </div>
         </div>
@@ -432,209 +435,16 @@ docker是开发人员和系统管理员使用容器开发、部署和运行应�
                 <!-- Multi-Lingual -->
                 
 
-                <h2 id="前言">前言</h2>
-<p>docker是开发人员和系统管理员使用容器开发、部署和运行应用程序的平台。使用Linux容器部署应用程序称为容器化。容器不是新的，但是它们用于轻松部署应用程序。<br />
-容器化的优势：<br />
-1、灵活，再复杂的应用也可以集装箱化。<br />
-2、轻量级，容器利用并共享主机内核。<br />
-3、可互换，支持即时部署更新和升级。<br />
-4、便携性，我们可以本地构建，部署到云，并在任何地方运行。<br />
-5、可扩展，我们可以增加并自动分发容器副本。<br />
-6、可堆叠，我们可以垂直和即时堆叠服务。<br />
-<a href="https://docs.docker.com/get-started/">官方文档</a></p>
-<h2 id="正文">正文</h2>
-<h4 id="概念">概念</h4>
-<p>镜像：通过运行镜像启动容器，镜像是一个可执行的包，它包含运行应用的所有的内容，包含代码、环境、配置文件等。<br />
-容器：容器是镜像的运行时的实例。可以使用docker ps 查看正在运行的容器列表。<br />
-容器和虚拟机的对比：<br />
-容器在Linux上运行，并于其他容器共享主机内核。它运行一个独立的进程，不占用任何其他的可执行文件的内存，这使得它十分的轻量。
-相比之下,虚拟机运行一个完整的“客户”操作系统，通过虚拟机管理程序对主机资源进行虚拟访问。通常，虚拟机提供的环境比大多数应用程序需要的资源多。<br />
-CE社区版、EE企业版量体裁衣咯。前者免费,后者收费，但是更安全，官网有详细叙述。<br /></p>
-
-<h4 id="安装docker">安装docker</h4>
-<p><a href="https://docs.docker.com/install/">TP</a> 
-根据自己操作系统的不同自己选择安装方式。
-<img src="/img/docker安装.jpg" alt="看这里" /></p>
-<h4 id="镜像加速">镜像加速</h4>
-<p>dockerhub在墙外面，下镜像很慢。所以…<br /></p>
-<h4 id="docker常用命令">docker常用命令</h4>
-<p><strong>版本:</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-</pre></td><td class="rouge-code"><pre>docker --versioin 版本信息
-docker info docker安装细节,为避免权限错误最好加sudo运行
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>帮助:</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre>docker --help
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>镜像:</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+                <blockquote>
+  <p>To Do</p>
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
-4
-5
-6
-</pre></td><td class="rouge-code"><pre>docker pull 拉取镜像，不指定Docker Registry默认Docker Hub
-docker image ls/docker iamges  列出所有的镜像
-docker system df 镜像体积
-docker image prune 删除dangling image
-docker image ls imageName 根据仓库名列出镜像
-docker image rm imageName/imageId 删除本地镜像
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>容器:</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-</pre></td><td class="rouge-code"><pre>docker ps -l 列出最新创建的x个容器
-docker ps -n=2 列出最后n个容器
-docker container ls 列出正在运行的容器
-docker container ls -a/--all 列出所有的容器
-docker container ls -aq 列出所有的容器(q安静模式：只返回容器ID)
-docker container run 镜像id 从镜像文件生成一个正在运行的容器
-docker start containerId 启动某个（containerId）容器
-docekr run --restart containerId 重启某个容器
-docker run --restart=always containerId 
-docker run -it -v /xxx/xx/x:/xx/x -p 4000:80 imageName 
-    -it 交互式进入容器 -v磁盘映射(避免频繁地在两个系统中拷贝文件) -p端口映射(把本机4000端口映射到容器的80端口)
-docker stop containerName/containerId 退出某个容器（容器名称好像不行）
-docker kill containerName/containerId 强制退出某个容器
-docker rm containerName/containerId 删除某个容器
-docker rm 'docker ps -a -q' 列出所有容器，-q列出所有的容器的ID，然后传递给rm一次删除
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>构建:</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre>docker build . 创建镜像使用当前目录作为上下文。大多数情况下最好从空目录(项目目录)开始作为上下文。
-</pre></td></tr></tbody></table></code></pre></div></div>
-<h4 id="镜像构建">镜像构建</h4>
-<p><strong>命令：</strong>
-docker build .
--f:指定文件系统中一个Dockerfile的位置
--t:构建成功指定repository和tag</p>
-
-<p>Dockerfile是一个描述组装镜像步骤的文档。一般而言Dockerfile是存于项目目录下的。特别注意不要将根目录作为PATH路径，因为会导致这次构建操作将磁盘驱动器的全部内容传输到Docker守护进程(daemon)中。也可以通过添加.dockerignore文件来排除某些文件和目录。<br />
-<strong>格式：</strong></p>
-<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-</pre></td><td class="rouge-code"><pre><span class="c1"># Comment
-</span><span class="n">INSTRUCTION</span> <span class="n">arguments</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-
-<p><strong>官方样例：</strong></p>
-<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-</pre></td><td class="rouge-code"><pre><span class="c1"># Use an official Python runtime as a parent image
-</span><span class="n">FROM</span> <span class="n">python</span><span class="p">:</span><span class="mf">2.7</span><span class="o">-</span><span class="n">slim</span>
-
-<span class="c1"># Set the working directory to /app
-</span><span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span>
-
-<span class="c1"># Copy the current directory contents into the container at /app
-</span><span class="n">COPY</span> <span class="o">.</span> <span class="o">/</span><span class="n">app</span>
-
-<span class="c1"># Install any needed packages specified in requirements.txt
-</span><span class="n">RUN</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">trusted</span><span class="o">-</span><span class="n">host</span> <span class="n">pypi</span><span class="o">.</span><span class="n">python</span><span class="o">.</span><span class="n">org</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
-
-<span class="c1"># Make port 80 available to the world outside this container
-</span><span class="n">EXPOSE</span> <span class="mi">80</span>
-
-<span class="c1"># Define environment variable
-</span><span class="n">ENV</span> <span class="n">NAME</span> <span class="n">World</span>
-
-<span class="c1"># Run app.py when the container launches
-</span><span class="n">CMD</span> <span class="p">[</span><span class="s">"python"</span><span class="p">,</span> <span class="s">"app.py"</span><span class="p">]</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<p><strong>Dockerfile指令解释：</strong></p>
-<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-</pre></td><td class="rouge-code"><pre><span class="s">FROM:Dockerfile第一条语句，其指定了构建镜像的基础镜像。一个合法的Dockerfile必须以FROM开始。</span>
-    <span class="s">FROM &lt;image&gt; [AS &lt;name&gt;]</span>
-    <span class="s">FROM &lt;image&gt;[:&lt;tag&gt;] [AS &lt;name&gt;]</span>
-    <span class="s">FROM &lt;image&gt;[@&lt;digest&gt;] [AS &lt;name&gt;]</span>
-<span class="s">RUN:RUN指令将在当前镜像上的新的layer执行任何命令并提交结果。生成的已提交镜像用于Dockerfile的下一步。</span>
-    <span class="s">RUN &lt;command&gt;</span>
-    <span class="s">RUN ["executable","param1","param2"]</span>
-<span class="s">CMD:为执行容器提供默认值。</span>
-    <span class="s">CMD ["executable","param1","param2"] (首选形式)</span>
-    <span class="s">CMD ["param1","param2"] (as default parameters to ENTRYPOINT)</span>
-    <span class="s">CMD command param1 param2 (shell form)</span>
-<span class="s">LABEL:给镜像添加备注信息。</span>
-    <span class="s">LABEL &lt;key&gt;=&lt;value&gt; &lt;key&gt;=&lt;value&gt; &lt;key&gt;=&lt;value&gt;</span> 
-<span class="s">MAINTAINER:指定镜像作者。</span>
-    <span class="s">MAINTAINER &lt;name&gt;</span>
-<span class="s">EXPOSE:通知Docker容器在运行时侦听执行的网络端口。</span>
-    <span class="s">EXPOSE &lt;port&gt; [&lt;port&gt;/&lt;protocol&gt;...]</span>
-<span class="s">ENV:设置环境变量。</span>
-    <span class="s">ENV &lt;key&gt; &lt;value&gt;</span>
-    <span class="s">ENV &lt;key&gt;=&lt;value&gt;</span>
-<span class="s">ADD:从src处复制新文件、目录、远程URL，并将它们添加到dest的镜像文件系统中。</span>
-    <span class="s">ADD [--chown=&lt;user&gt;:&lt;group&gt;] &lt;src&gt;... &lt;dest&gt;</span>
-    <span class="s">ADD [--chown=&lt;user&gt;:&lt;group&gt;] ["&lt;src&gt;",... "&lt;dest&gt;"] (this form is required for paths containing whitespace)</span>
-<span class="s">COPY:从src处复制新文件、目录、远程URL，并将它们添加到dest的镜像文件系统中。</span>
-<span class="s">ENTRYPOINT:允许您配置将作为可执行文件运行的容器</span>
-<span class="na">VOLUME</span><span class="pi">:</span>
-<span class="na">USER</span><span class="pi">:</span>
-<span class="s">WORKDIR:为Dockerfile中的RUN、CMD、ENTRYPOINT、COPY和ADD指令设置工作目录。如果目录不存在则创建。</span>
-<span class="na">ONBUILD</span><span class="pi">:</span>
-</pre></td></tr></tbody></table></code></pre></div></div>
-<h2 id="总结">总结</h2>
+</pre></td><td class="rouge-code"><pre>1、git 内容完善
+2、rabbit 内容完善
+3、基于rbac模型的权限系统设计以及实现简诉
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+</blockquote>
 
                 
                 
@@ -642,19 +452,12 @@ docker build .
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/12/02/Neo4J/" data-toggle="tooltip" data-placement="top" title="Neo4j知识梳理">
+                        <a href="/2019/03/09/reviewBook/" data-toggle="tooltip" data-placement="top" title="回顾">
                         Previous<br>
-                        <span>Neo4j知识梳理</span>
+                        <span>回顾</span>
                         </a>
                     </li>
                     
-                    
-                    <li class="next">
-                        <a href="/2019/01/16/RabbitMQ/" data-toggle="tooltip" data-placement="top" title="RabbitMQ的整理">
-                        Next<br>
-                        <span>RabbitMQ的整理</span>
-                        </a>
-                    </li>
                     
                 </ul>
                 <hr style="visibility: hidden;">
