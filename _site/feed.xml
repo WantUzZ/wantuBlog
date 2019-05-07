@@ -5,9 +5,9 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 06 May 2019 20:52:30 +0800</pubDate>
-    <lastBuildDate>Mon, 06 May 2019 20:52:30 +0800</lastBuildDate>
-    <generator>Jekyll v3.8.5</generator>
+    <pubDate>Tue, 07 May 2019 19:10:16 +0800</pubDate>
+    <lastBuildDate>Tue, 07 May 2019 19:10:16 +0800</lastBuildDate>
+    <generator>Jekyll v3.8.4</generator>
     
       <item>
         <title>To Do List</title>
@@ -1241,13 +1241,23 @@ else
         <title>git相关命令以及好的提交规范</title>
         <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
 &lt;p&gt;  主要想针对官方文档的知识点做一些整理与记录。后面是一些好的提交规范。&lt;/p&gt;
-&lt;h4 id=&quot;git-基础以及相关原理思想&quot;&gt;Git 基础以及相关原理、思想&lt;/h4&gt;
+&lt;h4 id=&quot;git-基础优势以及相关原理思想&quot;&gt;Git 基础、优势以及相关原理、思想。&lt;/h4&gt;
 &lt;p&gt;Git较之其他版本控制最主要的差别就是它对待数据的方式。其他大部分系统以文件列表变更方式存储信息，而Git更像是把数据看作是对小型文件系统的一组快照。本质来说Git是一个内容寻址文件系统。&lt;br /&gt;&lt;/p&gt;
 
 &lt;p&gt;Git优势：&lt;br /&gt;
 1、近乎所有操作都是本地执行&lt;br /&gt;
 2、Git 保证完整性&lt;br /&gt;
 3、Git 一般只添加数据&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;工作目录下的所有文件不外乎两种状态：已跟踪或未跟踪。&lt;br /&gt;
+已跟踪文件又分三种状态：已提交（committed），已修改（modified）和已暂存（staged）。&lt;br /&gt;
+&lt;img src=&quot;/img/git文件状态变化周期.jpg&quot; alt=&quot;x&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;基本的 Git 工作流：&lt;br /&gt;
+1、在工作目录中修改某些文件。&lt;br /&gt;
+2、对修改后的文件进行快照，然后保存到暂存区域。&lt;br /&gt;
+3、提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。&lt;br /&gt;
+&lt;img src=&quot;/img/git本地操作流.jpg&quot; alt=&quot;x&quot; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;常用命令&quot;&gt;常用命令&lt;/h4&gt;
 
@@ -1349,6 +1359,7 @@ git commit -m ‘xx’操作: Git 会先计算每一个子目录（本例中只�
   &lt;li&gt;JavaScript高级程序设计&lt;/li&gt;
   &lt;li&gt;深入浅出NodeJs&lt;/li&gt;
   &lt;li&gt;Effective Javascript&lt;/li&gt;
+  &lt;li&gt;——-2019分割线——&lt;/li&gt;
   &lt;li&gt;编写可读代码的艺术&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -1409,7 +1420,9 @@ git commit -m ‘xx’操作: Git 会先计算每一个子目录（本例中只�
   &lt;li&gt;河西走廊&lt;/li&gt;
   &lt;li&gt;我的奋斗&lt;/li&gt;
   &lt;li&gt;高效工作&lt;/li&gt;
+  &lt;li&gt;——-2019分割线——&lt;/li&gt;
   &lt;li&gt;日本行脚&lt;/li&gt;
+  &lt;li&gt;反脆弱&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h4 id=&quot;非技术未完结&quot;&gt;非技术未完结&lt;/h4&gt;
