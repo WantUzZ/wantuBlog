@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="git相关命令以及好的提交规范 - 老王 | want">
+    <meta property="og:title" content="Git/提交规范 - 老王 | want">
     
     <meta property="og:type" content="article">
     <meta property="og:description" content="前言
@@ -34,7 +34,7 @@ Git较之其他版本控制最主要的差别就是它对待数据的方式。�
     <meta property="og:url" content="http://localhost:4000/2018/11/02/git/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>git相关命令以及好的提交规范 - 老王 | want</title>
+    <title>Git/提交规范 - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -401,7 +401,7 @@ Git较之其他版本控制最主要的差别就是它对待数据的方式。�
                         <a class="tag" href="/archive/?tag=git" title="git">git</a>
                         
                     </div>
-                    <h1>git相关命令以及好的提交规范</h1>
+                    <h1>Git/提交规范</h1>
                     
                     <h2 class="subheading"></h2>
                     <span class="meta">Posted by wantu on November 2, 2018</span>
@@ -437,8 +437,8 @@ Git较之其他版本控制最主要的差别就是它对待数据的方式。�
 
 <p>Git优势：<br />
 1、近乎所有操作都是本地执行<br />
-2、Git 保证完整性<br />
-3、Git 一般只添加数据<br /></p>
+2、Git保证完整性<br />
+3、Git一般只添加数据<br /></p>
 
 <p>工作目录下的所有文件不外乎两种状态：已跟踪或未跟踪。<br />
 已跟踪文件又分三种状态：已提交（committed），已修改（modified）和已暂存（staged）。<br />
@@ -450,59 +450,34 @@ Git较之其他版本控制最主要的差别就是它对待数据的方式。�
 3、提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。<br />
 <img src="/img/git本地操作流.jpg" alt="x" /></p>
 
-<h4 id="常用命令">常用命令</h4>
-
-<ul>
-  <li>git help 帮助</li>
-  <li>git init 现有目录初始化仓库，仅仅只是初始化，项目中的文件未被跟踪</li>
-  <li>git clone 克隆代码 ,克隆操作会自动使用默认的master和origin名字</li>
-  <li>git checkout 分支切换</li>
-  <li>
-    <p>git checkout -b ‘xxx’ 切出分支xxx</p>
-  </li>
-  <li>git branch 查看分支 -b(new branch新建一个分支)</li>
-  <li>git status 检查当前文件状态 -s参数状态简览</li>
-  <li>git diff 对比本地代码与上次的区别 1、–cache查看已经暂存起来的变化</li>
-  <li>git add  跟踪新文件（记得和.gitignore一起食用效果更佳）</li>
-  <li>git RESET HEAD 取消暂存的文件（有个git checkout –fileName命令用于撤销对文件的修改但是不推荐使用）</li>
-  <li>git log 查看提交历史 1、-p 显示每次提交的差异，后续可跟-n eg:git log -p -2最近两次提交 的差异 2、–graph 显示 ASCII 图形表示的分支合并历史 3、–oneline 4、–reverse</li>
-  <li>git commit 提交更新 -a：跳过使用暂存区域【对改动特别自信，又嫌git add .麻烦的，否则还是一步一步来吧】</li>
-  <li>git commit –amend 撤消操作</li>
-  <li>git push 提交代码</li>
-  <li>
-    <p>git rm 移除文件 1、-f 删除文件之前已经对文件进行改动并且已经放到暂存区，需用-f进行强制删除。2、–cached 仅从跟踪清单中删除，当前工作目录仍会保留相关文件。</p>
-  </li>
-  <li>git remote -v 查看远程仓库</li>
-  <li>git remote show [remote-name] 查看远程仓库</li>
-  <li>git remote add <shortName> <url> 添加远程仓库，同时指定一个简写名 eg:git add want git://github.com/xxx/xx 以后就可以用want代替对应的仓库地址了</url></shortName></li>
-  <li>git remote rename [new-name] 远程仓库重新命名(修改某个远程仓库在本地的简称) git remote rename want wantu</li>
-  <li>git remote rm [remote-name] 删除远程仓库</li>
-  <li>git fetch [remote-name] 从远程仓库拉取本地还没有的数据。执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。</li>
-  <li>
-    <p>git merge branch-name 合并分支（一般在其他分支合并自己的开发分支，因为一旦出现冲突处理起来比较方便）</p>
-  </li>
-  <li>git tag 列出标签</li>
-  <li>git tag -a <tag-version> -m <remark-info> 添加附注标签（推荐使用）-a(annotated：注释)</remark-info></tag-version></li>
-  <li>git tag <tag-version> 添加轻量标签</tag-version></li>
-  <li>git tag -a <tag-version> <校验和或者部分校验和> 后期打标签</校验和或者部分校验和></tag-version></li>
-  <li>git tag push origin [tagname] 显式的将标签推送到远程服务器</li>
-  <li>git tag push origin –tags 一次推送所有本地新增的标签上去</li>
-  <li>git config –global alias.ci commit   =&gt;  git commit 可以用git ci替代 同理其他命令</li>
-</ul>
-
 <h4 id="分支">分支</h4>
-<p>先看一下进行git add . 、git commit -m ‘xxx’ git在做什么事情。<br />
-git add . 操作:git会为每一个文件计算校验和（SHA-1哈希算法）然后会把当前版本的文件快照保存到git仓库（Git使用blob对象来保存他们），最终将校验和加入到暂存区等待提交。<br />
-git commit -m ‘xx’操作: Git 会先计算每一个子目录（本例中只有项目根目录）的校验和，然后在 Git 仓库中这些校验和保存为树对象。 随后，Git 便会创建一个提交对象，它除了包含上面提到的那些信息外，还包含指向这个树对象（项目根目录）的指针。如此一来，Git 就可以在需要的时候重现此次保存的快照。<br /></p>
+<p>  先看一下进行git add . 、git commit -m ‘xxx’ git在做什么事情。<br />
+  git add . 操作:git会为每一个文件计算校验和（SHA-1哈希算法）然后会把当前版本的文件快照保存到git仓库（Git使用blob对象来保存他们），最终将校验和加入到暂存区等待提交。<br />
+  git commit -m ‘xx’操作: Git 会先计算每一个子目录（本例中只有项目根目录）的校验和，然后在 Git 仓库中这些校验和保存为树对象。 随后，Git 便会创建一个提交对象，它除了包含上面提到的那些信息外，还包含指向这个树对象（项目根目录）的指针。如此一来，Git 就可以在需要的时候重现此次保存的快照。<br /></p>
 
-<p>此时Git仓库中有n+2个对象：n个 blob 对象（保存着文件快照）、一个树对象（记录着目录结构和 blob 对象索引）以及一个提交对象（包含着指向前述树对象的指针和所有提交信息）。<br />
+<p>  此时Git仓库中有n+2个对象：n个 blob 对象（保存着文件快照）、一个树对象（记录着目录结构和 blob 对象索引）以及一个提交对象（包含着指向前述树对象的指针和所有提交信息）。<br />
 <img src="/img/git分支.png" alt="x" />
-第一次提交的提交对象较之之后的提交对象缺少一个指向上次提交对象（父对象）的指针。<br /></p>
-
-<p>分支的创建也只是创建了一个可以移动的新指针，通过HEAD这个特殊的指针Git知晓当前是处于那个分支上面。<br />
+第一次提交的提交对象较之之后的提交对象缺少一个指向上次提交对象（父对象）的指针。<br />
+分支的创建也只是创建了一个可以移动的新指针，通过HEAD这个特殊的指针Git知晓当前是处于那个分支上面。<br />
 关于HEAD指针的解释：在 Git 中，它是一个指针，指向当前所在的本地分支（译注：将 HEAD 想象为当前分支的别名）。<br />
 分支切换就是将HEAD指针的指向切换一下。但是git checkout branch-1 这个命令做了两件事。 一是使 HEAD 指回 master 分支，二是将工作目录恢复成 master 分支所指向的快照内容。<br /></p>
 
+<h4 id="远程分支">远程分支</h4>
+<p>  远程分支（remote branch）是对远程仓库中的分支的索引。它们是一些无法移动的本地分支；只有在 Git 进行网络交互时才会更新。远程分支就像是书签，提醒着你上次连接远程仓库时上面各分支的位置。<br />
+  一次Git克隆会建立你自己的本地分支master和远程分支origin/master，并且他们都执行origin上的master分支（Git服务器上的master分支）。<br />
+  如果本地master分支有所改动，那么本地的master分支会往前推进，如果服务器上的master分支也发生变动（他人推送了更新），那么服务器上的master分支也会往前推进。但是origin/master指针仍旧保持原位不会移动。可以通过使用git fetch origin来同步远程服务器上的数据到本地。该命令首先找到 origin 是哪个服务器（本例为 git.ourcompany.com），从上面获取你尚未拥有的数据，更新你本地的数据库，然后把 origin/master 的指针移到它最新的位置上<br /></p>
+
+<p><strong>推送本地分支</strong><br />
+  想要分享某个本地分支，需要手动的将它推送到一个我们拥有写权限的远程仓库。本地分支不会因为我们的写入操作而被自动同步到你引入的远程服务上，需要明确的执行推送分支的操作。<br />
+git push (远程仓库名) (分支名)。值得注意的是，在fetch操作下载好远程分支之后，仍旧无法编辑远程仓库中的分支，我们需要将该远程分支合并到当前分支。如果想要一份自己的分支来开发，可以在远程分支的基础上分化出一个新的分支来。<br /></p>
+
+<p><strong>跟踪远程分支</strong><br />
+  从远程分支 checkout 出来的本地分支，称为 跟踪分支 (tracking branch)。跟踪分支是一种和某个远程分支有直接联系的本地分支。在跟踪分支里输入 git push，Git 会自行推断应该向哪个服务器的哪个分支推送数据。同样，在这些分支里运行 git pull 会获取所有远程索引，并把它们的数据都合并到本地分支中来。在克隆仓库时，Git 通常会自动创建一个名为 master 的分支来跟踪 origin/master。这正是 git push 和 git pull 一开始就能正常工作的原因。<br />
+<strong>分支的变基</strong><br />
+  把一个分支中的修改整合到另一个分支的办法有两种：merge 和 rebase。<br />
+最容易的整合分支的方法是 merge 命令，它会把两个分支最新的快照（C3 和 C4）以及二者最新的共同祖先（C2）进行三方合并，合并的结果是产生一个新的提交对象（C5）。<br />
+<img src="/img/Gitmerge操作.jpg" alt="x" />
+还有另外一个选择：你可以把在 C3 里产生的变化补丁在 C4 的基础上重新打一遍。在 Git 里，这种操作叫做变基（rebase）。它的原理是回到两个分支最近的共同祖先，根据当前分支（也就是要进行变基的分支 experiment）后续的历次提交对象（这里只有一个 C3），生成一系列文件补丁，然后以基底分支（也就是主干分支 master）最后一个提交对象（C4）为新的出发点，逐个应用之前准备好的补丁文件，最后会生成一个新的合并提交对象（C3’），从而改写 experiment 的提交历史，使它成为 master 分支的直接下游。变基能产生一次更为完整的提交历史。如果视察一个变基过的分支的历史记录，看起来会更清楚：仿佛所有修改都是在一根线上先后进行的，尽管实际上它们原本是同时并行发生的。<br /></p>
 <h4 id="提交规范">提交规范</h4>
 <p>  建议小步提交，防止一次修改过多文件，导致后期维护、撤销等困难。<br /></p>
 
@@ -526,6 +501,46 @@ git commit -m ‘xx’操作: Git 会先计算每一个子目录（本例中只�
 3、bug修复
 4、文档补充
 </pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="常用命令">常用命令</h4>
+
+<ul>
+  <li>git help 帮助</li>
+  <li>git init 现有目录初始化仓库，仅仅只是初始化，项目中的文件未被跟踪</li>
+  <li>git clone 克隆代码 ,克隆操作会自动使用默认的master和origin名字</li>
+  <li>git checkout 分支切换</li>
+  <li>
+    <p>git checkout -b ‘xxx’ 切出分支xxx</p>
+  </li>
+  <li>git branch 不加任何参数这个命令会列出所有分支的清单 1、-b(new branch新建一个分支) 2、-d 删除分支 3、-v 查看各个分支最后一个提交对象的信息 4、-D 强制删除分支 5、–merged 和 –no-merged 筛选出你已经（或尚未）与当前分支合并的分支</li>
+  <li>git status 检查当前文件状态 -s参数状态简览</li>
+  <li>git diff 对比本地代码与上次的区别 1、–cache查看已经暂存起来的变化</li>
+  <li>git add  跟踪新文件（记得和.gitignore一起食用效果更佳）</li>
+  <li>git RESET HEAD 取消暂存的文件（有个git checkout –fileName命令用于撤销对文件的修改但是不推荐使用）</li>
+  <li>git log 查看提交历史 1、-p 显示每次提交的差异，后续可跟-n eg:git log -p -2最近两次提交 的差异 2、–graph 显示 ASCII 图形表示的分支合并历史 3、–oneline 4、–reverse</li>
+  <li>git commit 提交更新 -a：跳过使用暂存区域【对改动特别自信，又嫌git add .麻烦的，否则还是一步一步来吧】</li>
+  <li>git commit –amend 撤消操作</li>
+  <li>git push 提交代码</li>
+  <li>
+    <p>git rm 移除文件 1、-f 删除文件之前已经对文件进行改动并且已经放到暂存区，需用-f进行强制删除。2、–cached 仅从跟踪清单中删除，当前工作目录仍会保留相关文件。</p>
+  </li>
+  <li>git remote -v 查看远程仓库</li>
+  <li>git remote show [remote-name] 查看远程仓库</li>
+  <li>git remote add <shortName> <url> 添加远程仓库，同时指定一个简写名 eg:git add want git://github.com/xxx/xx 以后就可以用want代替对应的仓库地址了</url></shortName></li>
+  <li>git remote rename [new-name] 远程仓库重新命名(修改某个远程仓库在本地的简称) git remote rename want wantu</li>
+  <li>git remote rm [remote-name] 删除远程仓库</li>
+  <li>git fetch [remote-name] 从远程仓库拉取本地还没有的数据。执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。</li>
+  <li>
+    <p>git merge branch-name 合并分支（一般在其他分支合并自己的开发分支，因为一旦出现冲突处理起来比较方便）如果顺着一个分支走下去可以到达另一个分支的话，那么 Git 在合并两者时，只会简单地把指针右移，因为这种单线的历史分支不存在任何需要解决的分歧，所以这种合并过程可以称为快进（Fast forward）。</p>
+  </li>
+  <li>git tag 列出标签</li>
+  <li>git tag -a <tag-version> -m <remark-info> 添加附注标签（推荐使用）-a(annotated：注释)</remark-info></tag-version></li>
+  <li>git tag <tag-version> 添加轻量标签</tag-version></li>
+  <li>git tag -a <tag-version> <校验和或者部分校验和> 后期打标签</校验和或者部分校验和></tag-version></li>
+  <li>git tag push origin [tagname] 显式的将标签推送到远程服务器</li>
+  <li>git tag push origin –tags 一次推送所有本地新增的标签上去</li>
+  <li>git config –global alias.ci commit   =&gt;  git commit 可以用git ci替代 同理其他命令</li>
+</ul>
 
 
                 
