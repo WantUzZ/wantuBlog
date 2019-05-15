@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "回顾ElasticSearch的使用(0115更新)"
+title:      "回顾ElasticSearch的使用"
 subtitle:   ""
 date:       2018-10-16 18:43:00
 author:     "wantu"

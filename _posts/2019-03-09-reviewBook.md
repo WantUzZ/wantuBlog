@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "回顾"
+title:      "技术书目笔记"
 subtitle:   ""
 date:       2019-03-09 09:57:00
 author:     "wantu"

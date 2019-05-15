@@ -5,12 +5,12 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 14 May 2019 19:39:09 +0800</pubDate>
-    <lastBuildDate>Tue, 14 May 2019 19:39:09 +0800</lastBuildDate>
+    <pubDate>Wed, 15 May 2019 19:04:32 +0800</pubDate>
+    <lastBuildDate>Wed, 15 May 2019 19:04:32 +0800</lastBuildDate>
     <generator>Jekyll v3.8.4</generator>
     
       <item>
-        <title>To Do List</title>
+        <title>ToDo</title>
         <description>&lt;blockquote&gt;
   &lt;p&gt;To Do&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -33,7 +33,7 @@
       </item>
     
       <item>
-        <title>回顾</title>
+        <title>技术书目笔记</title>
         <description>&lt;h2 id=&quot;开这个的原因&quot;&gt;开这个的原因&lt;/h2&gt;
 &lt;p&gt;  温故而知新。内容控制在原先读过的技术书目上。&lt;/p&gt;
 
@@ -1240,7 +1240,7 @@ else
       <item>
         <title>Git/提交规范</title>
         <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
-&lt;p&gt;  主要想针对官方文档的知识点做一些整理与记录。后面是一些好的提交规范。&lt;/p&gt;
+&lt;p&gt;  主要想针对官方文档的知识点做一些整理与记录。&lt;/p&gt;
 &lt;h4 id=&quot;git-基础优势以及相关原理思想&quot;&gt;Git 基础、优势以及相关原理、思想。&lt;/h4&gt;
 &lt;p&gt;Git较之其他版本控制最主要的差别就是它对待数据的方式。其他大部分系统以文件列表变更方式存储信息，而Git更像是把数据看作是对小型文件系统的一组快照。本质来说Git是一个内容寻址文件系统。&lt;br /&gt;&lt;/p&gt;
 
@@ -1286,7 +1286,16 @@ git push (远程仓库名) (分支名)。值得注意的是，在fetch操作下�
   把一个分支中的修改整合到另一个分支的办法有两种：merge 和 rebase。&lt;br /&gt;
 最容易的整合分支的方法是 merge 命令，它会把两个分支最新的快照（C3 和 C4）以及二者最新的共同祖先（C2）进行三方合并，合并的结果是产生一个新的提交对象（C5）。&lt;br /&gt;
 &lt;img src=&quot;/img/Gitmerge操作.jpg&quot; alt=&quot;x&quot; /&gt;
-还有另外一个选择：你可以把在 C3 里产生的变化补丁在 C4 的基础上重新打一遍。在 Git 里，这种操作叫做变基（rebase）。它的原理是回到两个分支最近的共同祖先，根据当前分支（也就是要进行变基的分支 experiment）后续的历次提交对象（这里只有一个 C3），生成一系列文件补丁，然后以基底分支（也就是主干分支 master）最后一个提交对象（C4）为新的出发点，逐个应用之前准备好的补丁文件，最后会生成一个新的合并提交对象（C3’），从而改写 experiment 的提交历史，使它成为 master 分支的直接下游。变基能产生一次更为完整的提交历史。如果视察一个变基过的分支的历史记录，看起来会更清楚：仿佛所有修改都是在一根线上先后进行的，尽管实际上它们原本是同时并行发生的。&lt;br /&gt;&lt;/p&gt;
+还有另外一个选择：你可以把在 C3 里产生的变化补丁在 C4 的基础上重新打一遍。在 Git 里，这种操作叫做变基（rebase）。它的原理是回到两个分支最近的共同祖先，根据当前分支（也就是要进行变基的分支 experiment）后续的历次提交对象（这里只有一个 C3），生成一系列文件补丁，然后以基底分支（也就是主干分支 master）最后一个提交对象（C4）为新的出发点，逐个应用之前准备好的补丁文件，最后会生成一个新的合并提交对象（C3’），从而改写 experiment 的提交历史，使它成为 master 分支的直接下游。变基能产生一次更为完整的提交历史。如果视察一个变基过的分支的历史记录，看起来会更清楚：仿佛所有修改都是在一根线上先后进行的，尽管实际上它们原本是同时并行发生的。&lt;br /&gt;
+  一般我们使用变基的目的，是想要得到一个能在远程分支上干净应用的补丁 — 比如某些项目你不是维护者，但想帮点忙的话，最好用变基：先在自己的一个分支里进行开发，当准备向主项目提交补丁的时候，根据最新的 origin/master 进行一次变基操作然后再提交，这样维护者就不需要做任何整合工作（译注：实际上是把解决分支补丁同最新主干代码之间冲突的责任，化转为由提交补丁的人来解决。），只需根据你提供的仓库地址作一次快进合并，或者直接采纳你提交的补丁。[只需根据你提供的仓库地址作一次快进合并，或者直接采纳你提交的补丁。]&lt;br /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;要用它得遵守一条准则：一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行变基操作。&lt;br /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;服务器上的git&quot;&gt;服务器上的Git&lt;/h4&gt;
+&lt;p&gt;  远程仓库通常只是一个裸仓库（bare repository） — 即一个没有当前工作目录的仓库。因为该仓库只是一个合作媒介，所以不需要从硬盘上取出最新版本的快照；仓库里存放的仅仅是 Git 的数据。简单地说，裸仓库就是你工作目录中 .git 子目录内的内容。&lt;br /&gt;&lt;/p&gt;
+
 &lt;h4 id=&quot;提交规范&quot;&gt;提交规范&lt;/h4&gt;
 &lt;p&gt;  建议小步提交，防止一次修改过多文件，导致后期维护、撤销等困难。&lt;br /&gt;&lt;/p&gt;
 
@@ -1362,7 +1371,7 @@ git push (远程仓库名) (分支名)。值得注意的是，在fetch操作下�
       </item>
     
       <item>
-        <title>那些年读过的书</title>
+        <title>书</title>
         <description>&lt;h2 id=&quot;记录&quot;&gt;记录&lt;/h2&gt;
 &lt;h4 id=&quot;技术读完&quot;&gt;技术读完&lt;/h4&gt;
 &lt;ul&gt;
