@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1392f22-46f5-4afb-b3b1-1ec83e85d460" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/_posts/2018-10-29-tbook.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-10-29-tbook.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/2018-11-02-git.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-11-02-git.md" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -17,10 +18,12 @@
     <session id="1254032639">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.3" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -123,11 +126,13 @@
       <updated>1548912335052</updated>
       <workItem from="1548912336913" duration="44000" />
       <workItem from="1555313323780" duration="16000" />
+      <workItem from="1558062322193" duration="4000" />
+      <workItem from="1558062329516" duration="1000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="60000" />
+    <option name="totallyTimeSpent" value="65000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
