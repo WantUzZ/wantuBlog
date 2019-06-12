@@ -7,8 +7,8 @@ author:     "wantu"
 header-img: "img/star1.jpg"
 catalog: true
 tags:
-    - 数据可视化
-    - jQuery Datatables
+    - jQuery
+    - Datatables
 ---
 ## 前言
 数据可视化就是借助图形化手段将原本冷冰冰的数据生动的传达给用户。用户能够轻松的获取有价值的数据并及时的做出相应的决策支撑。<br>

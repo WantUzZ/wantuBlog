@@ -7,7 +7,6 @@ author:     "wantu"
 header-img: "img/charts.jpg"
 catalog: true
 tags:
-    - 数据可视化
     - Echarts
 ---
 

@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="个人已知的一些mysql查询性能优化 - 老王 | want">
+    <meta property="og:title" content="个人已知的一些MySQL查询性能优化 - 老王 | want">
     
     <meta property="og:type" content="article">
     <meta property="og:description" content="前言
@@ -20,7 +20,7 @@
   到店达之后一开始接到了大量的导数的数据需求。还记得当时有一个需求是从数据库中拉每周的周报数据（财务）。那个SQL写的非常的大而且开始的时候执行的速度很慢，差点就逼近了赤狐系统的临界执行时长。
 因为一开始没想去用程序处理，也只是想把需求先搞出来。后面数据慢慢稳定。于是想把整个查询进行一些优化。
 
-  以下就是对于mysql查询性能优化的一些心得（无查询缓存情况下）。
+  以下就是对于MySQL查询性能优化的一些心得（无查询缓存情况下）。
 
 ">
     
@@ -30,14 +30,14 @@
     <meta property="article:author" content="wantu">
     
     
-    <meta property="article:tag" content="mysql">
+    <meta property="article:tag" content="MySQL">
     
     
     <meta property="og:image" content="http://localhost:4000/img/wantu.jpg">
     <meta property="og:url" content="http://localhost:4000/2018/10/13/myql/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>个人已知的一些mysql查询性能优化 - 老王 | want</title>
+    <title>个人已知的一些MySQL查询性能优化 - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -401,10 +401,10 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=mysql" title="mysql">mysql</a>
+                        <a class="tag" href="/archive/?tag=MySQL" title="MySQL">MySQL</a>
                         
                     </div>
-                    <h1>个人已知的一些mysql查询性能优化</h1>
+                    <h1>个人已知的一些MySQL查询性能优化</h1>
                     
                     <h2 class="subheading"></h2>
                     <span class="meta">Posted by wantu on October 13, 2018</span>
@@ -439,16 +439,16 @@
   到店达之后一开始接到了大量的导数的数据需求。还记得当时有一个需求是从数据库中拉每周的周报数据（财务）。那个SQL写的非常的大而且开始的时候执行的速度很慢，差点就逼近了赤狐系统的临界执行时长。
 因为一开始没想去用程序处理，也只是想把需求先搞出来。后面数据慢慢稳定。于是想把整个查询进行一些优化。
 <br />
-  以下就是对于mysql查询性能优化的一些心得（无查询缓存情况下）。</p>
+  以下就是对于MySQL查询性能优化的一些心得（无查询缓存情况下）。</p>
 
 <p id="build"></p>
 <hr />
 
 <h2 id="正文">正文</h2>
-<p>  先大致了解一下mysql的架构设计和查询执行路径。<br />
-mysql的逻辑架构分为三层。最上层大多数是基于网络的客户端。第二层是mysql的核心，mysql的核心服务功能都在此层，包括查询解析、分析、优化、缓存以及所有的内置函数。第三层则是存储引擎，引擎的职责是负责mysql中数据的存储和提取。各个引擎各有所长。服务器通过API与存储引擎进行通信。<br />
+<p>  先大致了解一下MySQL的架构设计和查询执行路径。<br />
+MySQL的逻辑架构分为三层。最上层大多数是基于网络的客户端。第二层是MySQL的核心，MySQL的核心服务功能都在此层，包括查询解析、分析、优化、缓存以及所有的内置函数。第三层则是存储引擎，引擎的职责是负责MySQL中数据的存储和提取。各个引擎各有所长。服务器通过API与存储引擎进行通信。<br />
 查询的生命周期大致可以按照顺序来看：从客户端–&gt;服务器–&gt;服务器解析–&gt;生成执行计划–&gt;执行–&gt;返回结果。其中执行阶段可以认为是最重要的阶段了。<br />
-<img src="/img/mysqlDoQuery.jpg" alt="查询执行路径图" /></p>
+<img src="/img/MySQLDoQuery.jpg" alt="查询执行路径图" /></p>
 <h3 id="查询慢可能的原因">查询慢可能的原因：</h3>
 <p>1.计算能力不足<br />
 2.设计表存在问题<br />
@@ -456,13 +456,13 @@ mysql的逻辑架构分为三层。最上层大多数是基于网络的客户端
 4.SQL语句有提高的空间(避免返回不需要的数据)<br /></p>
 
 <h3 id="解决办法">解决办法：</h3>
-<p>1.如果数据体量比较大，mysql处理起来比较费力，可以考虑一些分布式计算框架。<br />
+<p>1.如果数据体量比较大，MySQL处理起来比较费力，可以考虑一些分布式计算框架。<br />
 2.如果一个表的基础数据量就已经够大了并且伴随较大的增量数据，可以考虑分表（按时间分等策略…）<br />
 3.索引，建立高性能的索引策略。（下面会细讲）<br />
 4.优化自己的SQL语句<br />
 5.基础数据预处理（中间表）<br /></p>
 
-<p>抛开数据量一上来就建索引就是耍流氓，因为mysql自身维护它也是需要消耗资源的，小表全表扫描简单粗暴又高效，超大型的表也不适合，索引的代价太高可用考虑分区技术。中到大型表，嘿嘿嘿，就是你了。
+<p>抛开数据量一上来就建索引就是耍流氓，因为MySQL自身维护它也是需要消耗资源的，小表全表扫描简单粗暴又高效，超大型的表也不适合，索引的代价太高可用考虑分区技术。中到大型表，嘿嘿嘿，就是你了。
 在innodb引擎使用的是B+tree索引,基于B-tree对索引列是顺序组织存储的缘故，所以很适合查找范围数据。</p>
 <h4 id="创建高性能的索引">创建高性能的索引：</h4>
 <p>1.查询中列不是独立的<br />
@@ -556,10 +556,10 @@ limit <br />
 <h2 id="后记">后记</h2>
 
 <p>  这应该是我所知道的关于SQL查询优化的所有技能了。<br />
-mysql是有查询优化器帮忙优化，但是正如卓哥（店达架构师）说的一样：一定要有写高性能的sql语句的意识。<br /></p>
+MySQL是有查询优化器帮忙优化，但是正如卓哥（店达架构师）说的一样：一定要有写高性能的sql语句的意识。<br /></p>
 
 <p>再补充几点：<br />
-1、不要想把所有的事情都交给mysql交给SQL。SQL语句整个执行是一个黑盒。我们没有办法去debug看看具体的数据流。<br />
+1、不要想把所有的事情都交给MySQL交给SQL。SQL语句整个执行是一个黑盒。我们没有办法去debug看看具体的数据流。<br />
 一个较为恰当的做法就是粗加工基础数据，再把这些数据用程序来进行相关的计算。这样即便是有问题，我们也可以轻松的定位问题。<br />
 2、个人心得：SQL书写的准确性不是难在语法，而是业务上的。我们需要对用到的每张表有所认知。知道每张表的细粒度。<br />
 也就是这样，我们才会对各种连接查询之后的那个虚拟的表的数据结构有一个清楚的认识。也就是这样才能保证我们的数据是正确的。<br /></p>
@@ -634,12 +634,7 @@ mysql是有查询优化器帮忙优化，但是正如卓哥（店达架构师）
         </a>
         
         
-                <a data-sort="0013" 
-                    href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"
-                    title="数据可视化"
-                    rel="2">数据可视化</a>
-        
-                <a data-sort="0013" 
+                <a data-sort="0014" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书
