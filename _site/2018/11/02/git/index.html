@@ -493,12 +493,9 @@ git push origin :branchName
 集中式：a、b协作，b想提交代码，但是b需要等待a提交，待a提交之后再将a的代码合到本地才能提交。（十分脑残）<br />
 集成管理者工作流：有一个爸爸管理的仓库（官方权威的仓库），你想提代码，先从爸爸那拿一份代码副本,修改代码，把修改后的代码推送到自己的公开仓库。然后给爸爸发邮件，请求他拉取你的代码,爸爸收到邮件，看你顺眼，会在本地将你的公开仓库加为远程仓库合并修改，测试一下，如果bug很多，对不起拉黑！（just joke），通过测试之后爸爸会将本地的代码推送到官方权威仓库。<br />
 司令官与副官工作流: 集成管理者的变种，爸爸上面还有一个爸爸（你大爷）。你大爷维护这官方权威仓库，每个开发者都是从大爷那拿到代码的，修改之后给爸爸审核，审核完爸爸的代码会被爷爷拿走。当然你大爷不只一个爸爸。<br /></p>
-<<<<<<< Updated upstream
 
 <h4 id="git工具">Git工具</h4>
 
-=======
->>>>>>> Stashed changes
 <h4 id="提交规范">提交规范</h4>
 <p>  建议小步提交，防止一次修改过多文件，导致后期维护、撤销等困难。<br /></p>
 
@@ -536,11 +533,7 @@ git push origin :branchName
   <li>git branch 不加任何参数这个命令会列出所有分支的清单 1、-b(new branch新建一个分支) 2、-d 删除本地分支 3、-v 查看各个分支最后一个提交对象的信息 4、-D 强制删除分支 5、–merged 和 –no-merged 筛选出你已经（或尚未）与当前分支合并的分支</li>
   <li>git status 检查当前文件状态 -s参数状态简览</li>
   <li>git diff 对比本地代码与上次的区别 1、–cache查看已经暂存起来的变化 2、–check 检查空白错误</li>
-<<<<<<< Updated upstream
   <li>git add  跟踪新文件（记得和.gitignore一起食用效果更佳） 1、-i 交互式暂存</li>
-=======
-  <li>git add  跟踪新文件（记得和.gitignore一起食用效果更佳）</li>
->>>>>>> Stashed changes
   <li>git RESET HEAD 取消暂存的文件（有个git checkout –fileName命令用于撤销对文件的修改但是不推荐使用）</li>
   <li>git log 查看提交历史 1、-p 显示每次提交的差异，后续可跟-n eg:git log -p -2最近两次提交 的差异 2、–graph 显示 ASCII 图形表示的分支合并历史 3、–oneline 4、–reverse</li>
   <li>git show SHA-1(不短于四个字符) 展示某次提交的内容</li>
@@ -639,7 +632,7 @@ git push origin :branchName
         </a>
         
         
-                <a data-sort="0014" 
+                <a data-sort="0015" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书
