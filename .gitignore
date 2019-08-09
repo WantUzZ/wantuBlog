@@ -1,2 +1,12 @@
+# test
 test.js
-node-modules
+
+# log
+logs
+*.log
+
+
+# # Dependency directory
+.idea/
+.vscode/
+
