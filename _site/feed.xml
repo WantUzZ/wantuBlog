@@ -5,8 +5,8 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 08 Aug 2019 22:31:10 +0800</pubDate>
-    <lastBuildDate>Thu, 08 Aug 2019 22:31:10 +0800</lastBuildDate>
+    <pubDate>Thu, 08 Aug 2019 22:41:32 +0800</pubDate>
+    <lastBuildDate>Thu, 08 Aug 2019 22:41:32 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -1697,6 +1697,7 @@ git push origin :branchName
   &lt;li&gt;杨澜访谈录&lt;/li&gt;
   &lt;li&gt;乌克兰拖拉机简史&lt;/li&gt;
   &lt;li&gt;东晋门阀政治&lt;/li&gt;
+  &lt;li&gt;浮生六记&lt;/li&gt;
   &lt;li&gt;数码摄影教程&lt;/li&gt;
 &lt;/ul&gt;
 </description>
