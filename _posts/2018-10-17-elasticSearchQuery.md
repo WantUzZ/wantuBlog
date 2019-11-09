@@ -9,7 +9,7 @@ catalog: true
 tags:
     - ElasticSearch
     - 搜索
-    - 数据分析
+    - 数据库
 ---
 ## 前言
 #### 写在最前面

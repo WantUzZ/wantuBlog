@@ -1,0 +1,40 @@
+I"�	<h2 id="前言">前言</h2>
+<p>  AMQP：提供统一消息服务的应用层标准高级消息队列协议，是应用层协议的一个开放标准,为面向消息的中间件设计。Erlang中的实现便有RabbitMQ。
+   正如中文文档开篇所言：消息系统允许软件、应用相互连接和扩展．这些应用可以相互链接起来组成一个更大的应用，或者将用户设备和数据进行连接．消息系统通过将消息的发送和接收分离来实现应用程序的异步和解偶。这就是rabbitMQ能为我们做的工作。<br />
+优势：<br /></p>
+<ul>
+  <li>可靠性 RabbitMQ提供了多种技术可以让你在性能和可靠性之间进行权衡。这些技术包括持久性机制、投递确认、发布者证实和高可用性机制。<br /></li>
+  <li>灵活的路由 消息在到达队列前是通过交换机进行路由的。RabbitMQ为典型的路由逻辑提供了多种内置交换机类型。<br /></li>
+  <li>可视化管理工具 RabbitMQ附带了一个易于使用的可视化管理工具，它可以帮助你监控消息代理的每一个环节。<br />
+…<br /></li>
+</ul>
+
+<h2 id="正文">正文</h2>
+<h4 id="amqp概念">AMQP概念</h4>
+<p><img src="/img/AMQP.jpg" alt="基本概念联系图" /></p>
+<h4 id="安装部署">安装部署</h4>
+<p>建议使用docker进行安装。方便又快捷。<br />
+<code class="highlighter-rouge">查询镜像</code><br />
+docker serach rabbitmq:management<br />
+<code class="highlighter-rouge">获取镜像</code><br />
+docker pull rabbitmq:management<br />
+<code class="highlighter-rouge">运行一个镜像是rabbitmq:management的容器</code><br />
+docker run -d -p 5672:5672 -p 15672:15672 –name myrabbitmq rabbitmq:management<br />
+  -d:后台运行容器，并返回容器ID<br />
+  -p:端口映射，格式：主机端口：容器端口<br />
+  –name:为容器指定名称<br />
+  rabbitmq:management:这个是镜像<br />
+  更多参数请查看docker run命令<br />
+<img src="/img/rabbitmq-no1.jpg" alt="看下" /></p>
+
+<p><code class="highlighter-rouge">访问下WEB管理界面</code><br />
+<img src="/img/rabbitmq-no2.jpg" alt="WEB管理界面" /></p>
+<h4 id="客户端简单的说明">客户端简单的说明</h4>
+<!-- 显示当前用户有权访问的所有虚拟主机的对象总数 -->
+
+<h4 id="队列交换机">队列、交换机</h4>
+
+<h4 id="延时队列">延时队列</h4>
+
+<h2 id="总结">总结</h2>
+:ET

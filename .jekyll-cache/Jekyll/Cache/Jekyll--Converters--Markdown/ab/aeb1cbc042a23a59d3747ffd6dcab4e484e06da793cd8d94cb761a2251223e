@@ -1,0 +1,142 @@
+I"�'<h2 id="前言">前言</h2>
+<p>  基于express框架搭建一个项目的壳子是一直想去做但是没有去做的一件事。之前在店达做的多的是模块的编码，也没有自己去搭建过项目。但是毕竟写的代码多了对整个框架也比较熟悉而且本人有定期整理的习惯，所以说express框架还是比较了解的。<br />
+  光说express框架我觉得不是很好，如果有一个横向的对比，可能对理解express框架有更多的帮助。基于暂时除了Node.Js本人之前的学习方向一直是J2EE方向。所以我决定用J2EE很流行的SSM框架与Express框架进行对比。</p>
+
+<h2 id="正文">正文</h2>
+<h4 id="背景知识">背景知识</h4>
+<p><strong>什么是Express框架？如何用？为什么要用它？</strong><br />
+  什么是express框架?在其主页中写到express是一种保持低层度规模的灵活Node.js Web应用程序框架，为Web和移动应用程序提供一组强大的功能。<br />
+  如何使用？我觉得官方文档肯定是写的比我详细的，我也不做搬运工了，君自取。<br />
+<a href="https://expressjs.com/zh-cn/starter/installing.html">入门教程传送门</a> <br />
+<a href="https://github.com/WantUzZ/wantProject.git">一个基于Express搭建的空壳</a> <br />
+<img src="/img/expressKnow1.jpg" alt="教程位置" />
+  为什么要用?我觉得这个问题可以拆分为两个问题？第一为什么要用Node.js？第二为什么选择Express框架？针对第一个问题，我所知道的原因有以下几点：</p>
+<ul>
+  <li>采用事件驱动，异步编程，为网络服务而设计。</li>
+  <li>非阻塞模式的IO处理</li>
+  <li>JavaScript对JSON的功能支持</li>
+  <li>轻量，开发速度快
+同样Node.js也有许多缺点：<br /></li>
+  <li>单进程、单线程，只支持单核CPU,不能充分使用多核CPU服务器。目前Node.js也提供多种方式支持多进程。
+语言好比一种剑术，江湖剑派各有所长。Node.js非常适合IO密集型的系统。</li>
+</ul>
+
+<h4 id="目录结构说明">目录结构说明</h4>
+<p>  如何你很认真的跟着之前的官网的教程上来做，你肯定知道了通过Express应用程序生成器来快速创建应用程序框架。生成的应用程序具有以下目录结构。
+<img src="/img/expressKnow2.jpg" alt="目录结构" />
+但是我还是选择自己手动去创建这个目录结构。存粹为了脑子多点关于这个结构的记忆吧。其实也不必过多的关注这个目录结构，只要多进行练习，这个目录结构会很轻松的浮现在我们的脑海。<br />
+<strong>app.js</strong><br />
+  app.js是整个框架非常重要的一个文件。它是一个请求的入口，框架的相关设置也是在这个文件（诸如：渲染引擎设置、session设置、错误处理等）。</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="rouge-code"><pre><span class="c1">//处理静态的requests请求</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="kd">static</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">'</span><span class="s1">public</span><span class="dl">'</span><span class="p">)));</span>
+<span class="c1">//设置view路径和模版</span>
+<span class="nx">app</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="dl">'</span><span class="s1">views</span><span class="dl">'</span><span class="p">,</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span><span class="dl">'</span><span class="s1">views</span><span class="dl">'</span><span class="p">));</span>
+<span class="c1">//设置渲染引擎 ejs/jade</span>
+<span class="nx">app</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="dl">'</span><span class="s1">view engine is ejs</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">ejs</span><span class="dl">'</span><span class="p">);</span>
+<span class="c1">//-- app.set('view engine is jade','jade') </span>
+
+
+<span class="c1">//app.use配置</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">bodyParser</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">bodyParser</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">({</span><span class="na">extended</span><span class="p">:</span><span class="kc">true</span><span class="p">}));</span>
+<span class="c1">// app.use(cookieParser());</span>
+
+<span class="c1">//session相关设置</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">session</span><span class="p">({</span>
+  <span class="na">store</span><span class="p">:</span> <span class="k">new</span> <span class="nx">redisStore</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">session_redis</span><span class="p">),</span><span class="c1">//使用redis存储session，相关redis配置见session_redis</span>
+  <span class="na">secret</span><span class="p">:</span><span class="dl">'</span><span class="s1">wantProject</span><span class="dl">'</span><span class="p">,</span> <span class="c1">//用来对session id相关的cookie进行签名</span>
+  <span class="na">resave</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span> <span class="c1">//是否每次都重新保存会话，建议false</span>
+  <span class="na">saveUninitialized</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span><span class="c1">//是否自动保存为初始化的会话，建议false</span>
+  <span class="na">cookie</span><span class="p">:{</span>
+    <span class="na">maxAge</span><span class="p">:</span><span class="mi">7</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">3600</span><span class="o">*</span><span class="mi">1000</span> <span class="c1">//有效期单位毫秒</span>
+  <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><strong>routers</strong><br />
+  这是文件夹是项目的路由文件夹。其中包含了view路由和api路由的相关设置。<br />
+一个完整的请求流程：</p>
+<ol>
+  <li>用户发送一个请求某个界面的view请求</li>
+  <li>view路由处理相关请求并渲染views目录下的相关的界面</li>
+  <li>在相关界面中用户发送相关数据求</li>
+  <li>api路由处理请求并通过service层进行相关业务需求的数据组装并响应请求</li>
+  <li>前端接收响应数据并进行相关数据的渲染</li>
+</ol>
+
+<p><strong>package.json</strong><br />
+  这是文件指明了项目的启动命令、项目的作者、项目的名称等一系列信息，但是最为重要的是，在这个文件中支持我们对相关依赖的控制。</p>
+
+<p><strong>config.js</strong><br />
+  config.js是框架的配置文件。在这我们可以灵活的配置各个环境的设置。</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="rouge-code"><pre><span class="c1">// 环境配置</span>
+<span class="kd">let</span> <span class="nx">development</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">system_port</span><span class="p">:</span><span class="mi">8018</span><span class="p">,</span>
+  <span class="na">session_redis</span><span class="p">:{</span>
+    <span class="na">host</span><span class="p">:</span><span class="dl">'</span><span class="s1">127.0.0.1</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">db</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span>
+    <span class="na">port</span><span class="p">:</span><span class="mi">6379</span><span class="p">,</span>
+    <span class="na">ttl</span><span class="p">:</span><span class="mi">7</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">3600</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">let</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">{</span>
+<span class="p">};</span>
+<span class="kd">let</span> <span class="nx">experience</span> <span class="o">=</span> <span class="p">{</span>
+<span class="p">};</span>
+<span class="kd">let</span> <span class="nx">production</span> <span class="o">=</span> <span class="p">{</span>
+<span class="p">};</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">development</span><span class="p">,</span><span class="nx">test</span><span class="p">,</span><span class="nx">experience</span><span class="p">,</span><span class="nx">production</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><strong>logs</strong><br />
+  日志相关文件目录：app.log、error.log、http.log。<br />
+<strong>public</strong><br />
+  一些样式、脚本、第三方插件的存放目录。<br /></p>
+
+<h4 id="对比ssm">对比SSM</h4>
+
+<h2 id="小结">小结</h2>
+:ET

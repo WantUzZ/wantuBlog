@@ -440,11 +440,11 @@
 <img src="/img/echartsShow.jpg" alt="查询执行路径图" />
 <strong>引入相关的js文件</strong></p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre> <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">"/lib/echarts/echarts.min.js"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
+</pre></td><td class="rouge-code"><pre> <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="dl">"</span><span class="s2">/lib/echarts/echarts.min.js</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
 </span></pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>在前端页面上预留一个div用以展示相关的图表</strong></p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"chart"</span> <span class="nx">style</span><span class="o">=</span><span class="s2">"height: 400px;width: 100%;padding: 5px;"</span><span class="o">&gt;&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="dl">"</span><span class="s2">chart</span><span class="dl">"</span> <span class="nx">style</span><span class="o">=</span><span class="dl">"</span><span class="s2">height: 400px;width: 100%;padding: 5px;</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/div</span><span class="err">&gt;
 </span></pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>初始化</strong></p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -539,42 +539,42 @@
 83
 84
 </pre></td><td class="rouge-code"><pre><span class="c1">//这是一个较全的例子</span>
-<span class="kd">var</span> <span class="nx">month_legend</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'上年同期'</span><span class="p">,</span><span class="s1">'上期数据'</span><span class="p">,</span><span class="s1">'当期数据'</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">month_legend</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">上年同期</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">上期数据</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">当期数据</span><span class="dl">'</span><span class="p">];</span>
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-    <span class="na">url</span><span class="p">:</span> <span class="s2">"/xxxx"</span><span class="p">,</span>
-    <span class="na">type</span><span class="p">:</span> <span class="s2">"post"</span><span class="p">,</span>
+    <span class="na">url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/xxxx</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">post</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">data</span><span class="p">:</span> <span class="p">{</span>
         <span class="c1">//请求参数</span>
     <span class="p">},</span>
     <span class="na">success</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">//初始化echarts</span>
-        <span class="kd">var</span> <span class="nx">c1</span> <span class="o">=</span> <span class="nx">echarts</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'chart1'</span><span class="p">));</span>
+        <span class="kd">var</span> <span class="nx">c1</span> <span class="o">=</span> <span class="nx">echarts</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">chart1</span><span class="dl">'</span><span class="p">));</span>
         <span class="kd">var</span> <span class="nx">c1_option</span><span class="p">;</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">tag</span> <span class="o">==</span> <span class="s1">'success'</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">tag</span> <span class="o">==</span> <span class="dl">'</span><span class="s1">success</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">//渲染Echarts</span>
             <span class="kd">function</span> <span class="nx">draw_echar1</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
                 <span class="c1">//单个柱状图中间字体的设置</span>
                 <span class="kd">var</span> <span class="nx">seriesLabel</span> <span class="o">=</span> <span class="p">{</span>
                         <span class="na">normal</span><span class="p">:</span> <span class="p">{</span>
                             <span class="na">show</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                            <span class="na">textBorderColor</span><span class="p">:</span> <span class="s1">'#33'</span><span class="p">,</span>
+                            <span class="na">textBorderColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">#33</span><span class="dl">'</span><span class="p">,</span>
                             <span class="na">textBorderWidth</span><span class="p">:</span> <span class="mi">2</span>
                         <span class="p">}</span>
                     <span class="p">}</span>
                 <span class="c1">//图表的设置</span>
                 <span class="nx">c1_option</span> <span class="o">=</span> <span class="p">{</span>
                         <span class="na">title</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">text</span><span class="p">:</span> <span class="s1">'天气统计'</span>
+                            <span class="na">text</span><span class="p">:</span> <span class="dl">'</span><span class="s1">天气统计</span><span class="dl">'</span>
                         <span class="p">},</span>
                         <span class="na">tooltip</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">trigger</span><span class="p">:</span> <span class="s1">'axis'</span><span class="p">,</span>
+                            <span class="na">trigger</span><span class="p">:</span> <span class="dl">'</span><span class="s1">axis</span><span class="dl">'</span><span class="p">,</span>
                             <span class="na">axisPointer</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'shadow'</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">shadow</span><span class="dl">'</span>
                             <span class="p">}</span>
                         <span class="p">},</span>
                         <span class="na">legend</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="s1">'北京'</span><span class="p">,</span> <span class="s1">'上海'</span><span class="p">,</span> <span class="s1">'深圳'</span><span class="p">]</span>
+                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">北京</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">上海</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">深圳</span><span class="dl">'</span><span class="p">]</span>
                         <span class="p">},</span>
                         <span class="na">grid</span><span class="p">:</span> <span class="p">{</span>
                             <span class="na">left</span><span class="p">:</span> <span class="mi">100</span>
@@ -586,34 +586,34 @@
                             <span class="p">}</span>
                         <span class="p">},</span>
                         <span class="na">yAxis</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">type</span><span class="p">:</span> <span class="s1">'value'</span><span class="p">,</span>
-                            <span class="na">name</span><span class="p">:</span> <span class="s1">'天数'</span><span class="p">,</span>
+                            <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">value</span><span class="dl">'</span><span class="p">,</span>
+                            <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">天数</span><span class="dl">'</span><span class="p">,</span>
                             <span class="na">axisLabel</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="na">formatter</span><span class="p">:</span> <span class="s1">'{value}'</span>
+                                <span class="na">formatter</span><span class="p">:</span> <span class="dl">'</span><span class="s1">{value}</span><span class="dl">'</span>
                             <span class="p">}</span>
                         <span class="p">},</span>
                         <span class="na">xAxis</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">type</span><span class="p">:</span> <span class="s1">'category'</span><span class="p">,</span>
+                            <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">category</span><span class="dl">'</span><span class="p">,</span>
                             <span class="na">inverse</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="s1">'晴天'</span><span class="p">,</span> <span class="s1">'多云'</span><span class="p">,</span> <span class="s1">'下雨'</span><span class="p">]</span>
+                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">晴天</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">多云</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">下雨</span><span class="dl">'</span><span class="p">]</span>
                         <span class="p">},</span>
                         <span class="c1">//一般来说series属性直接拿后台组装的数据前端不负责数据的组装</span>
                         <span class="na">series</span><span class="p">:</span> <span class="p">[</span>
                             <span class="p">{</span>
-                                <span class="na">name</span><span class="p">:</span> <span class="s1">'北京'</span><span class="p">,</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+                                <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">北京</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
                                 <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">165</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
                                 <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span>
                             <span class="p">},</span>
                             <span class="p">{</span>
-                                <span class="na">name</span><span class="p">:</span> <span class="s1">'上海'</span><span class="p">,</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+                                <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">上海</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
                                 <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
                                 <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">110</span><span class="p">]</span>
                             <span class="p">},</span>
                             <span class="p">{</span>
-                                <span class="na">name</span><span class="p">:</span> <span class="s1">'深圳'</span><span class="p">,</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+                                <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">深圳</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
                                 <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
                                 <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">220</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">63</span><span class="p">]</span>
                             <span class="p">}</span>
@@ -646,20 +646,20 @@
 20
 </pre></td><td class="rouge-code"><pre><span class="p">[</span>
     <span class="p">{</span>
-        <span class="na">name</span><span class="p">:</span> <span class="s1">'北京'</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">北京</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">165</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
         <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="na">name</span><span class="p">:</span> <span class="s1">'上海'</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">上海</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
         <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">110</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="na">name</span><span class="p">:</span> <span class="s1">'深圳'</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">深圳</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
         <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">220</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">63</span><span class="p">]</span>
     <span class="p">}</span>
@@ -780,7 +780,7 @@ series//展示设置
         </a>
         
         
-                <a data-sort="0016" 
+                <a data-sort="0017" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书
