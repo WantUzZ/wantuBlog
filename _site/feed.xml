@@ -5,22 +5,267 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 08 Aug 2019 22:41:32 +0800</pubDate>
-    <lastBuildDate>Thu, 08 Aug 2019 22:41:32 +0800</lastBuildDate>
-    <generator>Jekyll v3.8.5</generator>
+    <pubDate>Sat, 09 Nov 2019 17:39:26 +0800</pubDate>
+    <lastBuildDate>Sat, 09 Nov 2019 17:39:26 +0800</lastBuildDate>
+    <generator>Jekyll v4.0.0</generator>
+    
+      <item>
+        <title>对称加密-Aes</title>
+        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;  最近宇哥排查到了一个很匪夷所思的事情。部分小程序接口请求某个接口但是响应莫名其妙被置为空。后面排查到是被 TX 给劫持了，具体被劫持的原因，那次请求中有一个 url(指向七牛云上的图片资源)，应该 TX 拿到了那个资源并且识别到了图片上的“京东”这两个字眼，然后就发生了之后的事情。心疼我东哥 1 东(1 东===2min)。后面宇哥就交代了我们这边的接口提供方要求对数据进行加密。&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;处理思路&quot;&gt;处理思路&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;需求&lt;/strong&gt; &lt;br /&gt;
+  1、对数据进行加密&lt;br /&gt;
+  2、加密过程不要太过复杂&lt;br /&gt;
+  3、对接口响应时间不会造成太大的影响（避免响应时间大幅度增加）&lt;br /&gt;
+  4、灵活配置&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;着手&lt;/strong&gt; &lt;br /&gt;
+  1、首先确定加密方向。因为不能太过复杂，所以最好采用对称加密。个人觉得有必要像组合加密机制那样先用非对称加密加密对称加密的密钥（撇开中间人攻击），但是后面是采用在前后端都维护一个密钥数组。&lt;br /&gt;
+  2、选中对称加密，对称加密算法选择，Aes 是典型的加密算法。而且 node 核心模块 crypto 也支持。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;实现&lt;/strong&gt; &lt;br /&gt;
+  1、打算在服务器端和客户端这边维护一些密钥数组和加密向量数组为的是稍微提高些安全性。&lt;br /&gt;
+  2、加密密钥和加密向量的定位值不应该是明文。采用位运算对实际下标值进行某种位运算进行偏移。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;代码&lt;/strong&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;cm&quot;&gt;/*
+ * @Descripttion: aes加密测试
+ * @version:1.0
+ * @Author: want
+ * @Date: 2019-08-09 10:44:25
+ * @LastEditors: want
+ * @LastEditTime: 2019-08-12 09:33:01
+ */&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crypto&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;crypto&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;/**
+ * 加密方法
+ * @param {String}      加密key
+ * @param {String}       向量
+ * @param {String}      需要加密的数据
+ * @returns string 密文
+ */&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;encrypt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;iv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cipher&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crypto&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createCipheriv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;aes-128-cbc&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;iv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cipher&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;utf8&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;binary&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cipher&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;final&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;binary&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;binary&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;base64&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;/**
+ * @name: 解密方法
+ * @msg: 对密文进行解密
+ * @param {String}  解密算法
+ * @param {String}   解密向量
+ * @param {String} 密文
+ * @return: 解密后的数据
+ */&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;decrypt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;iv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Buffer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;base64&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;binary&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;decipher&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crypto&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createDecipheriv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;aes-128-cbc&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;iv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;decoded&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;decipher&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;binary&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;utf8&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;decoded&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;decipher&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;final&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;utf8&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;decoded&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;(IJf621ea5c0ok8j&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`key:&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;hex&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;iv&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;02kk950004598718&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`iv:&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;iv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;hex&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;want dddd&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;encrypt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;iv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;数据加密后:&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dec&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;decrypt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;iv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;crypted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;数据解密后:&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;/**
+ * k: ['751f621ea5c8f930','751f621ea5c0ok8j','@#$898js8.9ksj8j']
+ *
+ * iv:['2624750004598718','02kk950004598718','9s82,.9#$%hjjHJF']
+ *
+ */&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;困惑&lt;/strong&gt; &lt;br /&gt;
+  1、加密向量感觉很废。
+  2、加密向量为啥长度有要求，为啥是 16 位？&lt;/p&gt;
+
+&lt;h4 id=&quot;aes-细细讲来&quot;&gt;Aes 细细讲来&lt;/h4&gt;
+
+&lt;p&gt;高级加密标准（Advanced Encryption Standard: AES）是美国国家标准与技术研究院（NIST）在 2001 年建立了电子数据的加密规范。其是对称加解密算法的最经典算法之一，它是一种分组加密标准，每个加密块大小为 128 位，允许的密钥长度为 128、192 和 256 位。&lt;br /&gt;&lt;/p&gt;
+
+&lt;!-- 这里只介绍 ECB、CBC、CFB 和 OFB 四种加密模式。 --&gt;
+
+&lt;p&gt;&lt;strong&gt;Aes 算法三个特点：&lt;/strong&gt;
+1、密钥。密钥是 AES 算法实现加密和解密的根本。对称加密算法之所以对称，是因为这类算法对明文的加密和解密需要使用同一个密钥。AES 支持三种长度的密钥。分别是：128 位、192 位、256 位。密钥位数越多加密轮数越多、也就越安全，但是也会导致性能的下降。&lt;br /&gt;
+2、填充。常见的填充：NoPadding（要求明文必须是 16 字节的整数倍）、PKCS5Padding（如果明文块少于 16 个字节，则再明文末尾补足相应数量的字符）、ISO10126Padding（在明文块末尾补足相应数字的字节，最后一个字符值等于缺少的字符数，其他字符填充随机数）。值得注意的是在 AES 加密的时候使用了某一种填充方式，解密的时候也必须采用相同的填充方式。&lt;br /&gt;
+3、模式。常见的模式有：ECB(电子密码本)、CBC(密码块连接)、CTR（计算器模式）、CFB(密码反馈方式) 和 OFB(输出反馈方式)、PCBC(填充密码块链接)。所有工作模式的差别体现在宏观上，即明文块与明文块之间的关联。AES 加密器的内部处理流程都是相同的。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;ECB 电子密码本模式是最简单的加密模式，加密前根据加密块的大小（AES 为 128 位）分成若干块，之后将每块使用相同的密钥单独加密，解密同理。&lt;br /&gt;
+ECB 因为每块数据的加密是独立的因此加密和解密都可以并行计算。ECB 最大的问题是相同的明文快回被加密成相同的密文，在某些特俗环境并不能提供严格的数据保密性。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;CBC 模式又称之为密码分组链接：CBC 模式对于每个待加密的密码块在加密前会先与前一个密码块的密文进行异或然后再用加密器进行加密。显然第一个密码块是没有前一个的密文与之进行异或操作的，所以其采用的是第一个明文块与一个初始化向量（IV）的数据块进行异或操作。&lt;br /&gt;
+AES_cbc_encrypt 允许 length 不是 16(128 位)的整数倍，不足的部分会用 0 填充，输出总是 16 的整数倍。完成加密或解密后会更新初始化向量 IV。CBC 模式相比 ECB 有更高的保密性，但由于对每个数据块的加密依赖与前一个数据块的加密所以加密无法并行。与 ECB 一样在加密前需要对数据进行填充，不是很适合对流数据进行加密。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;CFB 又称为面反馈模式，其与 ECB、CBC 不同的是 CFB 能够将密文转换为流密文。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;OFB 模式又称输出反馈模式（Output feedback）：OFB 是先用块加密器生成密钥流（Keystream），然后再将密钥流与明文流异或得到密文流，解密是先用块加密器生成密钥流，再将密钥流与密文流异或得到明文，由于异或操作的对称性所以加密和解密的流程是完全一样的。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;关于填充&lt;/strong&gt;
+需要了解分组加密特性，何为分组加密，在密码学中分组加密又称之为分块加密或者块密码，是一种对称加密算法。它将明文分为多个等长的模块，使用确定的算法和对称密钥对每组分别加密解密。有一个问题，因为 AES 加密算法是会将明文拆分为一个个独立的明文块，那么显然可能会存在最后一个明文块长度达不到标准，如果出现这种情况就需要对明文进行填充处理。&lt;br /&gt;
+&lt;strong&gt;常见的填充处理方式&lt;/strong&gt;
+1、NoPadding： 不做任何填充，但是明文必须是指定块长度的整数倍。&lt;br /&gt;
+2、PKCS5Padding(默认):如果明文块少于 16 个字节（128bit），在明文块末尾补足相应数量的字符，且每个字节的值等于缺少的字符数。&lt;br /&gt;
+3、ISO10126Padding:如果明文块少于 16 个字节（128bit），在明文块末尾补足相应数量的字节，最后一个字符值等于缺少的字符数，其他字符填充随机数。&lt;br /&gt;
+&lt;br /&gt;
+&lt;strong&gt;AES 整体关系图&lt;/strong&gt;
+1、把明文按照 128bit 拆分为若干个明文块。&lt;br /&gt;
+2、按照选择的填充方式来填充最后一个明文块。&lt;br /&gt;
+3、每一个明文块利用 AES 加密器和密钥，加密成密文块。&lt;br /&gt;
+4、拼接所有的密文块，成为最终的密文结果。&lt;br /&gt;
+&lt;img src=&quot;/img/Aes加密.png&quot; alt=&quot;整体关系图&quot; /&gt;
+&lt;strong&gt;AES 加密器剖析&lt;/strong&gt;
+AES 不是一次把明文变成密文，而是经过很多轮加密。大致可以分为：&lt;br /&gt;
+初始轮 1 次+普通轮 N 次+最终轮 1 次。之前提到 AES 的 key（密钥） 支持三种长度：AES128、AES192、AES256。key 的长度决定轮 AES 加密的轮数。&lt;br /&gt;
+出去初始轮，各种 key 长度对应的轮数如下:&lt;br /&gt;
+AES128 – 10 轮 – 8 次普通轮&lt;br /&gt;
+AES192 – 12 轮 – 10 次普通轮&lt;br /&gt;
+AES256 – 14 轮 – 12 次普通轮&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;初始轮只有一个步骤：加轮密钥。&lt;br /&gt;
+普通轮有四个步骤：1、字节代替。2、行移位。3、列混淆。4、加轮密钥。&lt;br /&gt;
+最终轮有三个步骤：1、字节代替。2、行移位。3、加轮密钥。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;字节代替&lt;/em&gt;&lt;br /&gt;
+16 个字节在明文块在每一个处理步骤中都被排列成 4&lt;em&gt;4 的二维数组。所谓的字节代替就是把明文块的每一个字节都替代成另外一个字节。替代的依据一个被称为 S 盒的 16&lt;/em&gt;16 的二维常量数组。
+假设明文块中 a[2][3] = 5A;那么输出值 b[2,3] = S[5][10]。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;行移位&lt;/em&gt;&lt;br /&gt;
+二维矩阵，第一行不动。第二行循环左移动 1 个字节。第三行循环左移 2 个字节。第 4 行循环左移 3 个字节。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;列混淆&lt;/em&gt;&lt;br /&gt;
+输入数组的每一列要和一个名为修补举证的二维常量数组做矩阵相乘得到对应的输出列。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;加轮密钥&lt;/em&gt;&lt;br /&gt;
+128bit 的密钥也被同样排列成 4*4 的矩阵。让输入数组的每一个字节 a[i][j]与密钥对应位置的字节 k[i][j]异或一次，就生成了输出值 b[i,j]。需要注意的是：加密的每一轮所用到的密钥并不是相同的，这里涉及到一个概念：扩展密钥。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;扩展密钥&lt;/em&gt;&lt;br /&gt;
+AES 源代码中用长度 4 _ 4 _（10+1） 字节的数组 W 来存储所有轮的密钥。W{0-15}的值等同于原始密钥的值，用于为初始轮做处理。后续每一个元素 W[i]都是由 W[i-4]和 W[i-1]计算而来，直到数组 W 的所有元素都赋值完成。W 数组当中，W{0-15}用于初始轮的处理，W{16-31}用于第 1 轮的处理，W{32-47}用于第 2 轮的处理 ……一直到 W{160-175}用于最终轮（第 10 轮）的处理。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;至此加密流程全部走完。解密的过程就是加密的逆过程不再坠述。&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;遇到的问题&quot;&gt;遇到的问题&lt;/h4&gt;
+
+&lt;p&gt;在前端同事进行联调的时候发现，数据量少的情况，前端是可以对后端的密文进行正常解密的，但是当后端提供的密文很长的时候，前端解密的时候就会出现无法解密的情况。
+经过排查发现，因为后端加密采用的是 node 的核心模块中的 crypto，但是前端用的是 crypto-js。最终解决是后端也采用 crypto-js 这个模块进行加密操作。&lt;/p&gt;
+
+&lt;h4 id=&quot;回头看看&quot;&gt;回头看看&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;解答&lt;/strong&gt;&lt;br /&gt;
+1、解答：iv 的作用是在 CBC 加密模式的情况下与第一个明文块进行异步操作的。&lt;br /&gt;
+2、解答：AES 是一种分组加密标准，每个加密块大小为 128 位，允许的密钥长度为 128、192 和 256 位。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;知识收集&lt;/strong&gt;&lt;br /&gt;
+1、http://www.361way.com/aes/5830.html&lt;br /&gt;
+2、https://zhuanlan.zhihu.com/p/45155135&lt;br /&gt;
+3、https://en.wikipedia.org/wiki/Advanced_Encryption_Standard&lt;br /&gt;
+4、https://www.zybuluo.com/coldxiangyu/note/796980&lt;br /&gt;
+5、https://blog.csdn.net/Vieri_32/article/details/48345023&lt;br /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 09 Aug 2019 06:09:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/08/09/Aes/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/08/09/Aes/</guid>
+        
+        <category>Aes</category>
+        
+        
+      </item>
     
       <item>
         <title>MongoDB使用整理（持续更新中）</title>
-        <description>&lt;p&gt;MongoDB是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。&lt;/p&gt;
+        <description>&lt;p&gt;MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。&lt;/p&gt;
+
 &lt;h2 id=&quot;解决什么问题&quot;&gt;解决什么问题&lt;/h2&gt;
-&lt;p&gt;1、项目前期需求不明确，表结构不能定下来可能导致经常变动表结构的场景。
-2、&lt;/p&gt;
+
+&lt;p&gt;1、项目前期需求不明确，表结构不能定下来可能导致经常变动表结构的场景。&lt;/p&gt;
 
 &lt;h2 id=&quot;内容&quot;&gt;内容&lt;/h2&gt;
-&lt;h4 id=&quot;curd简诉&quot;&gt;CURD简诉&lt;/h4&gt;
-&lt;p&gt;其查询语法跟MySQL的SQL是存在很大区别的。个人在刚刚开始写的时候感觉很难记。其实它的查询语法异常简单。后面会想起来感觉所接触到的非关系型数据都是这个样，即查询语句中的条件跟存储的数据的数据结构是一样的，只需要将条件放置到相关位置进行一一对上位即可。&lt;/p&gt;
+
+&lt;h4 id=&quot;curd-简诉&quot;&gt;CURD 简诉&lt;/h4&gt;
+
+&lt;p&gt;其查询语法跟 MySQL 的 SQL 是存在很大区别的。个人在刚刚开始写的时候感觉很难记。其实它的查询语法异常简单。后面会想起来感觉所接触到的几个非关系型数据都是这个套路，即查询语句中的条件跟存储的数据的数据结构是一样的，只需要将条件放置到相关位置进行一一对上位即可。&lt;/p&gt;
 
 &lt;p&gt;举例：&lt;/p&gt;
+
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
 3
@@ -76,7 +321,9 @@
     }
 ]
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;查询的时候比方说要查年龄大于22并且喜欢的学习（study）的人。&lt;/p&gt;
+
+&lt;p&gt;查询的时候比方说要查年龄大于 22 并且喜欢的学习（study）的人。&lt;/p&gt;
+
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
 3
@@ -90,31 +337,123 @@
     hobby:'study' //因为hobby是数组，也可以这么限定：hobby:{$in:['study']}
 }
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;查询条件默认是&amp;amp;&amp;amp;的逻辑，如果想用或的逻辑使用 &lt;strong&gt;$or&lt;/strong&gt; 挂到查询对象上。&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;$or&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;$gt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;$lt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}],&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;hobby&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;study&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;err&quot;&gt;等同与&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;MySQL&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;中的&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;hobby&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;study&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;age&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;age&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;p&gt;更、删、增自个查官方文档吧。&lt;/p&gt;
 
 &lt;h4 id=&quot;索引的问题&quot;&gt;索引的问题&lt;/h4&gt;
+
 &lt;p&gt;由于索引是存储在内存(RAM)中,你应该确保该索引的大小不超过内存的限制。
-如果索引的大小大于内存的限制，MongoDB会删除一些索引，这将导致性能下降。&lt;/p&gt;
+如果索引的大小大于内存的限制，MongoDB 会删除一些索引，这将导致性能下降。&lt;/p&gt;
 
-&lt;p&gt;检测是否使用索引：explain关键字。&lt;/p&gt;
+&lt;p&gt;检测是否使用索引：explain 关键字。&lt;/p&gt;
 
-&lt;p&gt;索引的最大范围：
-1、集合中索引不能超过64个
-2、索引名的长度不能超过125个字符
-3、一个复合索引最多可以有31个字段&lt;/p&gt;
+&lt;p&gt;索引的最大范围：&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;1、集合中索引不能超过 64 个&lt;/li&gt;
+  &lt;li&gt;2、索引名的长度不能超过 125 个字符&lt;/li&gt;
+  &lt;li&gt;3、一个复合索引最多可以有 31 个字段&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;h4 id=&quot;关联表&quot;&gt;关联表&lt;/h4&gt;
+&lt;p&gt;刚刚开始建 schema 的时候没必要过多的索引的，后面有需要再建索引。&lt;/p&gt;
+
+&lt;h4 id=&quot;tips&quot;&gt;tips&lt;/h4&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;选至《深入学习MongDB》&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;1、取最值的方式：a、通过聚合然后使用一些提供的方法拿 b、[推荐使用]对某个字段进行排序然后取第一个。&lt;br /&gt;
+2、索引一般用在返回结果总是总体数据的一小部分的时候。一旦返回的数据较大（举例：超过了集合的一半）就不要用索引了。&lt;br /&gt;
+3、可以使用 $natural 来禁用掉索引。&lt;br /&gt;
+4、建立分级文档加快扫描（实际用的不多感觉）。&lt;br /&gt;
+5、AND 型查询，查询条件越苛刻（匹配最少数据量的条件）越放在前面，减少数据量。&lt;br /&gt;
+6、OR 型查询，查询条件越宽泛（匹配最多数据量的条件）越放在前面。&lt;br /&gt;
+7、在collection在256G之前进行分片&lt;/p&gt;
 
 &lt;h4 id=&quot;聚合&quot;&gt;聚合&lt;/h4&gt;
+&lt;h6 id=&quot;关联表&quot;&gt;关联表&lt;/h6&gt;
+&lt;p&gt;通过3.2版本的新功能$lookup来进行。&lt;br /&gt;
+语法：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;{
+   $lookup:
+     {
+       from: &amp;lt;collection to join&amp;gt;, //指定要执行联结的集合
+       localField: &amp;lt;field from the input documents&amp;gt;, // 
+       foreignField: &amp;lt;field from the documents of the &quot;from&quot; collection&amp;gt;, //指定from文档中的字段
+       as: &amp;lt;output array field&amp;gt; //指定要添加到输入文档中的新数组字段的名称。
+     }
+}
 
-&lt;h4 id=&quot;读书有感&quot;&gt;读书有感&lt;/h4&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;总结&quot;&gt;总结&lt;/h2&gt;
+&lt;p&gt;例子：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;const res = await models.Xxx.aggregate([
+    { $match: query },
+    { $group: { _id: '$tags' } },
+    { $lookup: { from: 'tags', localField: '_id', foreignField: '_id', as: 'tags' } },
+    // 关联后再做筛选
+    { $match: { 'tags.name': { $all: tags_arr } } },
+    { $project: { _id: 1 } },
+]);
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;如果你使用的ORM的包是mongoose的话，请使用Query的populate方法。相关使用详情参阅：&lt;a href=&quot;https://mongoosejs.com/docs/api/query.html#query_Query-populate&quot;&gt;文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;mongodb和关系型数据库的核心区别&quot;&gt;MongoDB和关系型数据库的核心区别&lt;/h4&gt;
+&lt;p&gt;核心区别就是：文档模型。&lt;br /&gt;
+关系模型需要我们把一个数据对象拆分成许多个单项。然后存到各个相应的表中，需要的时候通过查询将所需要的数据从各个表中查询出来。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;MongoDB的文档模式。文档模式存储单位是一个文档，可以支持数组和嵌套文档。在MongoDB中利用富文档的性质，很多时候，关联是一个伪需求，可以通过合理建模来避免。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;文档模型的优点：&lt;br /&gt;
+1、效率高。文档模型将数据集中到来一起，在普通机械盘中不需要在额外的移动磁头。&lt;br /&gt;
+2、可扩展性强。如果不考虑关联，数据分区分库，水平扩展简单。&lt;br /&gt;
+3、动态模式。文档模型支持可变数据模式，不要求每个文档都要有一样的数据结构，对很多异构数据场景支持较好。&lt;br /&gt;
+4、模型自然。最为接近对象模型。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;文档模式设计的基本策略：&lt;br /&gt;
+一般先考虑内嵌，一般的一对一、一对多关系都可以放在一个文档中使用内嵌进行解决。&lt;br /&gt;
+实在不行使用引用，即在主表中存储一个ID值指向另一张表的的ID值，从性能上来说我们一般需要两次以上的查询才能把相关的数据取到。&lt;br /&gt;
+更加重要的是MongoDB暂时还不支持跨表的事务，所以对强事务场景需要谨慎使用。（4.0版本发布后MongoDB支持原生的事务操作）&lt;br /&gt;&lt;/p&gt;
 
 </description>
         <pubDate>Fri, 09 Aug 2019 06:09:00 +0800</pubDate>
         <link>http://localhost:4000/2019/08/09/mongodb/</link>
         <guid isPermaLink="true">http://localhost:4000/2019/08/09/mongodb/</guid>
+        
+        <category>数据库</category>
         
         <category>MongoDB</category>
         
@@ -173,7 +512,7 @@
 26
 27
 28
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'promise'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;promise&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 
 &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;time_ms&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;resolve&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -182,22 +521,22 @@
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'start'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;kr&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'end'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
     &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;timeMsArr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;timeMsArr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-            &lt;span class=&quot;kr&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
         &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
         &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;`err`&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'ok'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;ok&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;nx&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
@@ -275,7 +614,7 @@
 &lt;span class=&quot;c1&quot;&gt;//那么typeof a ==&amp;gt;undefined&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;//如果a是有声明的而且也进行了显式的初始化&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'number'&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//true&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//true&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;逻辑上讲：null值表示空对象指针。这也是typeof null == object的原因。
 如果一个变量将来打算用来保存对象的，那么务必将其初始化为null。&lt;/p&gt;
@@ -410,7 +749,7 @@ IE 中有一部分对象并不是原生 JavaScript 对象。例如，其 BOM 和
 2
 3
 4
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;element&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getElementById&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;some_element&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;element&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getElementById&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;some_element&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
 &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;myObject&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; 
 &lt;span class=&quot;nx&quot;&gt;myObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;element&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nx&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;someObject&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;myObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -613,13 +952,13 @@ js中的作用域就是词法作用域。js并不具备动态作用域。&lt;br 
 9
 10
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'awesome'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;awesome&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
     &lt;span class=&quot;na&quot;&gt;cool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;coolFn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
         &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'not awesome'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;not awesome&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//awesome;&lt;/span&gt;
 &lt;span class=&quot;nx&quot;&gt;setTimeOut&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//nowt awesome&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -1265,7 +1604,7 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
         &lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;5m'&lt;/span&gt;
       &lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; 
         &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;integer&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;20&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;20&lt;/span&gt;
       &lt;span class=&quot;na&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; 
         &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;string&lt;/span&gt;
         &lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;desc'&lt;/span&gt;
@@ -1292,16 +1631,16 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 10
 11
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;//先执行一下npm install&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'express'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; 
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;opn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'opn'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;opn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;opn&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
 
 &lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
-  &lt;span class=&quot;nx&quot;&gt;opn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'http://localhost:3000/api-doc'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'App listening on port 3000!'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;opn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;http://localhost:3000/api-doc&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;App listening on port 3000!&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
 
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;use&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/api-doc'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;static&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'public'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;use&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;/api-doc&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;8、运行node index.js会启用swagger-ui功能，自动打开api展示页面，但是页面是默认的官网上的东西；&lt;br /&gt;
 9、将api/swagger文件夹下的/swagger.yaml文件复制到public文件夹下，打开public/index.html，在脚本中修改url为’./swagger.yaml’,刷新浏览器，即可看到我们的内容&lt;br /&gt;
@@ -1321,20 +1660,20 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 13
 14
 15
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'gulp'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;yaml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'js-yaml'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'path'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'fs'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;yaml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;js-yaml&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;fs&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;// 建立api/swagger的swagger.yaml到public下的swagger.yaml联系&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'swagger'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;doc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;yaml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;safeLoad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;readFileSync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;__dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'./api/swagger/swagger.yaml'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)));&lt;/span&gt; 
-    &lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;writeFile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;__dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'./public/swagger.yaml'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stringify&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;swagger&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;doc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;yaml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;safeLoad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;readFileSync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;__dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./api/swagger/swagger.yaml&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)));&lt;/span&gt; 
+    &lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;writeFile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;__dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./public/swagger.yaml&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stringify&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;// 实时更新&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'default'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;watch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'./api/swagger/swagger.yaml'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'swagger'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;watch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./api/swagger/swagger.yaml&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,[&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;swagger&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;11、再看下package.json中的内容：&lt;/p&gt;
@@ -1362,26 +1701,26 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 22
 23
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;doc-api&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;version&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;1.0.0&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;description&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;main&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;index.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;start&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;node index.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;swg&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;swagger project edit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;gulp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;gulp&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;doc-api&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;version&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;1.0.0&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;description&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;main&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;index.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;start&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;node index.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;swg&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;swagger project edit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;gulp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;gulp&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;author&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;want&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;license&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ISC&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;devDependencies&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;express&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;^4.15.2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;swagger&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0.7.5&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;gulp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;3.9.1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;js-yaml&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;3.8.3&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;opn&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;5.0.0&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;author&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;want&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;license&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ISC&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;devDependencies&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;express&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;^4.15.2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;swagger&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0.7.5&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;gulp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;3.9.1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;js-yaml&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;3.8.3&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;opn&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;5.0.0&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;dependencies&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;cors&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;^2.8.5&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;dependencies&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;cors&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;^2.8.5&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -1461,14 +1800,17 @@ else
       <item>
         <title>Git/提交规范</title>
         <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
-&lt;p&gt;  主要想针对官方文档的知识点做一些整理与记录。&lt;/p&gt;
-&lt;h4 id=&quot;git-基础优势以及相关原理思想&quot;&gt;Git 基础、优势以及相关原理、思想。&lt;/h4&gt;
-&lt;p&gt;Git较之其他版本控制最主要的差别就是它对待数据的方式。其他大部分系统以文件列表变更方式存储信息，而Git更像是把数据看作是对小型文件系统的一组快照。本质来说Git是一个内容寻址文件系统。&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;Git优势：&lt;br /&gt;
+&lt;p&gt;  主要想针对官方文档的知识点做一些整理与记录。&lt;/p&gt;
+
+&lt;h4 id=&quot;git-基础优势以及相关原理思想&quot;&gt;Git 基础、优势以及相关原理、思想。&lt;/h4&gt;
+
+&lt;p&gt;Git 较之其他版本控制最主要的差别就是它对待数据的方式。其他大部分系统以文件列表变更方式存储信息，而 Git 更像是把数据看作是对小型文件系统的一组快照。本质来说 Git 是一个内容寻址文件系统。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Git 优势：&lt;br /&gt;
 1、近乎所有操作都是本地执行&lt;br /&gt;
-2、Git保证完整性&lt;br /&gt;
-3、Git一般只添加数据&lt;br /&gt;&lt;/p&gt;
+2、Git 保证完整性&lt;br /&gt;
+3、Git 一般只添加数据&lt;br /&gt;&lt;/p&gt;
 
 &lt;p&gt;工作目录下的所有文件不外乎两种状态：已跟踪或未跟踪。&lt;br /&gt;
 已跟踪文件又分三种状态：已提交（committed），已修改（modified）和已暂存（staged）。&lt;br /&gt;
@@ -1481,21 +1823,23 @@ else
 &lt;img src=&quot;/img/git本地操作流.jpg&quot; alt=&quot;x&quot; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;分支&quot;&gt;分支&lt;/h4&gt;
-&lt;p&gt;  先看一下进行git add . 、git commit -m ‘xxx’ git在做什么事情。&lt;br /&gt;
-  git add . 操作:git会为每一个文件计算校验和（SHA-1哈希算法）然后会把当前版本的文件快照保存到git仓库（Git使用blob对象来保存他们），最终将校验和加入到暂存区等待提交。&lt;br /&gt;
+
+&lt;p&gt;  先看一下进行 git add . 、git commit -m ‘xxx’ git 在做什么事情。&lt;br /&gt;
+  git add . 操作:git 会为每一个文件计算校验和（SHA-1 哈希算法）然后会把当前版本的文件快照保存到 git 仓库（Git 使用 blob 对象来保存他们），最终将校验和加入到暂存区等待提交。&lt;br /&gt;
   git commit -m ‘xx’操作: Git 会先计算每一个子目录（本例中只有项目根目录）的校验和，然后在 Git 仓库中这些校验和保存为树对象。 随后，Git 便会创建一个提交对象，它除了包含上面提到的那些信息外，还包含指向这个树对象（项目根目录）的指针。如此一来，Git 就可以在需要的时候重现此次保存的快照。&lt;br /&gt;&lt;/p&gt;
 
-&lt;p&gt;  此时Git仓库中有n+2个对象：n个 blob 对象（保存着文件快照）、一个树对象（记录着目录结构和 blob 对象索引）以及一个提交对象（包含着指向前述树对象的指针和所有提交信息）。&lt;br /&gt;
+&lt;p&gt;  此时 Git 仓库中有 n+2 个对象：n 个 blob 对象（保存着文件快照）、一个树对象（记录着目录结构和 blob 对象索引）以及一个提交对象（包含着指向前述树对象的指针和所有提交信息）。&lt;br /&gt;
 &lt;img src=&quot;/img/git分支.png&quot; alt=&quot;x&quot; /&gt;
 第一次提交的提交对象较之之后的提交对象缺少一个指向上次提交对象（父对象）的指针。&lt;br /&gt;
-分支的创建也只是创建了一个可以移动的新指针，通过HEAD这个特殊的指针Git知晓当前是处于那个分支上面。&lt;br /&gt;
-关于HEAD指针的解释：在 Git 中，它是一个指针，指向当前所在的本地分支（译注：将 HEAD 想象为当前分支的别名）。&lt;br /&gt;
-分支切换就是将HEAD指针的指向切换一下。但是git checkout branch-1 这个命令做了两件事。 一是使 HEAD 指回 master 分支，二是将工作目录恢复成 master 分支所指向的快照内容。&lt;br /&gt;&lt;/p&gt;
+分支的创建也只是创建了一个可以移动的新指针，通过 HEAD 这个特殊的指针 Git 知晓当前是处于那个分支上面。&lt;br /&gt;
+关于 HEAD 指针的解释：在 Git 中，它是一个指针，指向当前所在的本地分支（译注：将 HEAD 想象为当前分支的别名）。&lt;br /&gt;
+分支切换就是将 HEAD 指针的指向切换一下。但是 git checkout branch-1 这个命令做了两件事。 一是使 HEAD 指回 master 分支，二是将工作目录恢复成 master 分支所指向的快照内容。&lt;br /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;远程分支&quot;&gt;远程分支&lt;/h4&gt;
-&lt;p&gt;  远程分支（remote branch）是对远程仓库中的分支的索引。它们是一些无法移动的本地分支；只有在 Git 进行网络交互时才会更新。远程分支就像是书签，提醒着你上次连接远程仓库时上面各分支的位置。&lt;br /&gt;
-  一次Git克隆会建立你自己的本地分支master和远程分支origin/master，并且他们都执行origin上的master分支（Git服务器上的master分支）。&lt;br /&gt;
-  如果本地master分支有所改动，那么本地的master分支会往前推进，如果服务器上的master分支也发生变动（他人推送了更新），那么服务器上的master分支也会往前推进。但是origin/master指针仍旧保持原位不会移动。可以通过使用git fetch origin来同步远程服务器上的数据到本地。该命令首先找到 origin 是哪个服务器（本例为 git.ourcompany.com），从上面获取你尚未拥有的数据，更新你本地的数据库，然后把 origin/master 的指针移到它最新的位置上&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;  &lt;strong&gt;远程分支（remote branch）是对远程仓库中的分支的索引&lt;/strong&gt;。它们是一些无法移动的本地分支；只有在 Git 进行网络交互时才会更新。远程分支就像是书签，提醒着你上次连接远程仓库时上面各分支的位置。&lt;br /&gt;
+  一次 Git 克隆会建立你自己的本地分支 master 和远程分支 origin/master，并且他们都执行 origin 上的 master 分支（Git 服务器上的 master 分支）。&lt;br /&gt;
+  如果本地 master 分支有所改动，那么本地的 master 分支会往前推进，如果服务器上的 master 分支也发生变动（他人推送了更新），那么服务器上的 master 分支也会往前推进。但是 origin/master 指针仍旧保持原位不会移动。可以通过使用 git fetch origin 来同步远程服务器上的数据到本地。该命令首先找到 origin 是哪个服务器（本例为 git.ourcompany.com），从上面获取你尚未拥有的数据，更新你本地的数据库，然后把 origin/master 的指针移到它最新的位置上&lt;br /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;推送本地分支&lt;/strong&gt;&lt;br /&gt;
   想要分享某个本地分支，需要手动的将它推送到一个我们拥有写权限的远程仓库。本地分支不会因为我们的写入操作而被自动同步到你引入的远程服务上，需要明确的执行推送分支的操作。&lt;br /&gt;
@@ -1513,29 +1857,34 @@ git push origin :branchName
 还有另外一个选择：你可以把在 C3 里产生的变化补丁在 C4 的基础上重新打一遍。在 Git 里，这种操作叫做变基（rebase）。它的原理是回到两个分支最近的共同祖先，根据当前分支（也就是要进行变基的分支 experiment）后续的历次提交对象（这里只有一个 C3），生成一系列文件补丁，然后以基底分支（也就是主干分支 master）最后一个提交对象（C4）为新的出发点，逐个应用之前准备好的补丁文件，最后会生成一个新的合并提交对象（C3’），从而改写 experiment 的提交历史，使它成为 master 分支的直接下游。变基能产生一次更为完整的提交历史。如果视察一个变基过的分支的历史记录，看起来会更清楚：仿佛所有修改都是在一根线上先后进行的，尽管实际上它们原本是同时并行发生的。&lt;br /&gt;
   一般我们使用变基的目的，是想要得到一个能在远程分支上干净应用的补丁 — 比如某些项目你不是维护者，但想帮点忙的话，最好用变基：先在自己的一个分支里进行开发，当准备向主项目提交补丁的时候，根据最新的 origin/master 进行一次变基操作然后再提交，这样维护者就不需要做任何整合工作（译注：实际上是把解决分支补丁同最新主干代码之间冲突的责任，化转为由提交补丁的人来解决。），只需根据你提供的仓库地址作一次快进合并，或者直接采纳你提交的补丁。[只需根据你提供的仓库地址作一次快进合并，或者直接采纳你提交的补丁。]&lt;br /&gt;&lt;/p&gt;
 
+&lt;p&gt;那么两者的区别是？从官方文档的表述来说，还是对于代码合并的操作步骤的不同。merge只合并一步，但是rebase却有三步。&lt;/p&gt;
 &lt;blockquote&gt;
   &lt;p&gt;要用它得遵守一条准则：一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行变基操作。&lt;br /&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;h4 id=&quot;分布式工作流程&quot;&gt;分布式工作流程&lt;/h4&gt;
+
 &lt;p&gt;常见工作流：&lt;br /&gt;
 1、集中式工作流 2、集成管理者工作流 3、司令官与副官工作流&lt;br /&gt;
-集中式：a、b协作，b想提交代码，但是b需要等待a提交，待a提交之后再将a的代码合到本地才能提交。（十分脑残）&lt;br /&gt;
-集成管理者工作流：有一个爸爸管理的仓库（官方权威的仓库），你想提代码，先从爸爸那拿一份代码副本,修改代码，把修改后的代码推送到自己的公开仓库。然后给爸爸发邮件，请求他拉取你的代码,爸爸收到邮件，看你顺眼，会在本地将你的公开仓库加为远程仓库合并修改，测试一下，如果bug很多，对不起拉黑！（just joke），通过测试之后爸爸会将本地的代码推送到官方权威仓库。&lt;br /&gt;
+集中式：a、b 协作，b 想提交代码，但是 b 需要等待 a 提交，待 a 提交之后再将 a 的代码合到本地才能提交。（十分脑残）&lt;br /&gt;
+集成管理者工作流：有一个爸爸管理的仓库（官方权威的仓库），你想提代码，先从爸爸那拿一份代码副本,修改代码，把修改后的代码推送到自己的公开仓库。然后给爸爸发邮件，请求他拉取你的代码,爸爸收到邮件，看你顺眼，会在本地将你的公开仓库加为远程仓库合并修改，测试一下，如果 bug 很多，对不起拉黑！（just joke），通过测试之后爸爸会将本地的代码推送到官方权威仓库。&lt;br /&gt;
 司令官与副官工作流: 集成管理者的变种，爸爸上面还有一个爸爸（你大爷）。你大爷维护这官方权威仓库，每个开发者都是从大爷那拿到代码的，修改之后给爸爸审核，审核完爸爸的代码会被爷爷拿走。当然你大爷不只一个爸爸。&lt;br /&gt;&lt;/p&gt;
 
-&lt;h4 id=&quot;git工具&quot;&gt;Git工具&lt;/h4&gt;
+&lt;h4 id=&quot;git-工具&quot;&gt;Git 工具&lt;/h4&gt;
 
 &lt;h4 id=&quot;提交规范&quot;&gt;提交规范&lt;/h4&gt;
+
 &lt;p&gt;  建议小步提交，防止一次修改过多文件，导致后期维护、撤销等困难。&lt;br /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;工作&lt;/strong&gt;&lt;br /&gt;
-  如果是使用jira作为看板工具，那么提交的时候最好将jira的任务卡号信息携带进去。&lt;br /&gt;&lt;/p&gt;
+  如果是使用 jira 作为看板工具，那么提交的时候最好将 jira 的任务卡号信息携带进去。&lt;br /&gt;&lt;/p&gt;
+
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;[任务卡号] 老王 &amp;amp; 老李: do something
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;strong&gt;常规&lt;/strong&gt;&lt;/p&gt;
+
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
 3
@@ -1550,162 +1899,65 @@ git push origin :branchName
 4、文档补充
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;p&gt;&lt;strong&gt;功能部分提测&lt;/strong&gt;
+先从master分支切出一个开发分支进行开发。部分功能开发完毕之后将其推送到测试环境会拉取的分支上。测试通过之后将这个开发分支合并到master分支进行发布。&lt;br /&gt;&lt;/p&gt;
+
 &lt;h4 id=&quot;常用命令&quot;&gt;常用命令&lt;/h4&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;git help 帮助&lt;/li&gt;
-  &lt;li&gt;git init 现有目录初始化仓库，仅仅只是初始化，项目中的文件未被跟踪&lt;/li&gt;
-  &lt;li&gt;git clone 克隆代码 ,克隆操作会自动使用默认的master和origin名字&lt;/li&gt;
-  &lt;li&gt;git checkout 分支切换&lt;/li&gt;
+  &lt;li&gt;git help 帮助。&lt;/li&gt;
+  &lt;li&gt;git init 现有目录初始化仓库，仅仅只是初始化，项目中的文件未被跟踪。&lt;/li&gt;
+  &lt;li&gt;git clone 克隆代码 ,克隆操作会自动使用默认的 master 和 origin 名字。&lt;/li&gt;
+  &lt;li&gt;git checkout 分支切换 / 切到指定的某次提交。&lt;/li&gt;
+  &lt;li&gt;git checkout -b ‘xxx’ 切出分支 xxx。&lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;git checkout -b ‘xxx’ 切出分支xxx&lt;/p&gt;
+    &lt;p&gt;git checkout -b 本地分支名 origin/远程分支名 在本地创建一个新的分支，并与远程分支进行关联。&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;git branch 不加任何参数这个命令会列出所有分支的清单 1、-b(new branch新建一个分支) 2、-d 删除本地分支 3、-v 查看各个分支最后一个提交对象的信息 4、-D 强制删除分支 5、–merged 和 –no-merged 筛选出你已经（或尚未）与当前分支合并的分支&lt;/li&gt;
-  &lt;li&gt;git status 检查当前文件状态 -s参数状态简览&lt;/li&gt;
-  &lt;li&gt;git diff 对比本地代码与上次的区别 1、–cache查看已经暂存起来的变化 2、–check 检查空白错误&lt;/li&gt;
-  &lt;li&gt;git add  跟踪新文件（记得和.gitignore一起食用效果更佳） 1、-i 交互式暂存&lt;/li&gt;
-  &lt;li&gt;git RESET HEAD 取消暂存的文件（有个git checkout –fileName命令用于撤销对文件的修改但是不推荐使用）&lt;/li&gt;
-  &lt;li&gt;git log 查看提交历史 1、-p 显示每次提交的差异，后续可跟-n eg:git log -p -2最近两次提交 的差异 2、–graph 显示 ASCII 图形表示的分支合并历史 3、–oneline 4、–reverse&lt;/li&gt;
-  &lt;li&gt;git show SHA-1(不短于四个字符) 展示某次提交的内容&lt;/li&gt;
-  &lt;li&gt;git reflog 查看引用日志。引用日志：一份记录最近几个月你的HEAD和分支的引用的日志。&lt;/li&gt;
-  &lt;li&gt;git commit 提交更新 -a：跳过使用暂存区域【对改动特别自信，又嫌git add .麻烦的，否则还是一步一步来吧】&lt;/li&gt;
-  &lt;li&gt;git commit –amend 重命名上次的commit&lt;/li&gt;
-  &lt;li&gt;git reset –soft HEAD^ 撤销上次的提交&lt;/li&gt;
-  &lt;li&gt;git push 提交代码&lt;/li&gt;
-  &lt;li&gt;git push origin :xxx 删除远程分支xxx&lt;/li&gt;
+  &lt;li&gt;git branch 不加任何参数这个命令会列出所有分支的清单 1、-b(new branch 新建一个分支) 2、-d 删除本地分支 3、-v 查看各个分支最后一个提交对象的信息 4、-D 强制删除分支 5、–merged 和 –no-merged 筛选出你已经（或尚未）与当前分支合并的分支。&lt;/li&gt;
+  &lt;li&gt;git status 检查当前文件状态 -s 参数状态简览。&lt;/li&gt;
+  &lt;li&gt;git stash 将改动暂时存放到git的暂存区（栈结构）。&lt;/li&gt;
+  &lt;li&gt;git stash list 列出暂存区的内容。&lt;/li&gt;
+  &lt;li&gt;git stash pop 推出最进的暂存code到本地工作区间。&lt;/li&gt;
+  &lt;li&gt;git diff 对比本地代码与上次的区别 1、–cache 查看已经暂存起来的变化 2、–check 检查空白错误。&lt;/li&gt;
+  &lt;li&gt;git add 跟踪新文件（记得和.gitignore 一起食用效果更佳） 1、-i 交互式暂存。&lt;/li&gt;
+  &lt;li&gt;git RESET HEAD 取消暂存的文件（有个 git checkout –fileName 命令用于撤销对文件的修改但是不推荐使用）。&lt;/li&gt;
+  &lt;li&gt;git log 查看提交历史 1、-p 显示每次提交的差异，后续可跟-n eg:git log -p -2 最近两次提交 的差异 2、–graph 显示 ASCII 图形表示的分支合并历史 3、–oneline 4、–reverse。&lt;/li&gt;
+  &lt;li&gt;git reflog 查看所有分支的操作记录（包含删除的commit和reset操作）。&lt;/li&gt;
+  &lt;li&gt;git reset –hard [分支hash] 回退到指定提交。&lt;/li&gt;
+  &lt;li&gt;git show SHA-1(不短于四个字符) 展示某次提交的内容。&lt;/li&gt;
+  &lt;li&gt;git reflog 查看引用日志。引用日志：一份记录最近几个月你的 HEAD 和分支的引用的日志。&lt;/li&gt;
+  &lt;li&gt;git commit 提交更新 -a：跳过使用暂存区域【嫌 git add .麻烦的，否则还是一步一步来吧,值得注意的是如果文件还没有被git跟踪，那么使用git commit -am不会生效】&lt;/li&gt;
+  &lt;li&gt;git commit –amend 重命名上次的 commit。&lt;/li&gt;
+  &lt;li&gt;git reset –soft HEAD^ 撤销上次的提交。&lt;/li&gt;
+  &lt;li&gt;git push 提交代码。&lt;/li&gt;
+  &lt;li&gt;git push –set-upstream origin 分支名 把本地分支推送到远程分支。&lt;/li&gt;
+  &lt;li&gt;git push origin :xxx 删除远程分支 xxx。&lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;git rm 移除文件 1、-f 删除文件之前已经对文件进行改动并且已经放到暂存区，需用-f进行强制删除。2、–cached 仅从跟踪清单中删除，当前工作目录仍会保留相关文件。&lt;/p&gt;
+    &lt;p&gt;git rm 移除文件 1、-f 删除文件之前已经对文件进行改动并且已经放到暂存区，需用-f 进行强制删除。2、–cached 仅从跟踪清单中删除，当前工作目录仍会保留相关文件。&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;git remote -v 查看远程仓库&lt;/li&gt;
-  &lt;li&gt;git remote show [remote-name] 查看远程仓库&lt;/li&gt;
-  &lt;li&gt;git remote add &lt;shortName&gt; &lt;url&gt; 添加远程仓库，同时指定一个简写名 eg:git add want git://github.com/xxx/xx 以后就可以用want代替对应的仓库地址了&lt;/url&gt;&lt;/shortName&gt;&lt;/li&gt;
-  &lt;li&gt;git remote rename [new-name] 远程仓库重新命名(修改某个远程仓库在本地的简称) git remote rename want wantu&lt;/li&gt;
-  &lt;li&gt;git remote rm [remote-name] 删除远程仓库&lt;/li&gt;
+  &lt;li&gt;git remote -v 查看远程仓库。&lt;/li&gt;
+  &lt;li&gt;git remote show [remote-name] 查看远程仓库。&lt;/li&gt;
+  &lt;li&gt;git remote add &lt;shortName&gt; &lt;url&gt; 添加远程仓库，同时指定一个简写名 eg:git add want git://github.com/xxx/xx 以后就可以用 want 代替对应的仓库地址了。&lt;/url&gt;&lt;/shortName&gt;&lt;/li&gt;
+  &lt;li&gt;git remote rename [new-name] 远程仓库重新命名(修改某个远程仓库在本地的简称) git remote rename want wantu。&lt;/li&gt;
+  &lt;li&gt;git remote rm [remote-name] 删除远程仓库。&lt;/li&gt;
   &lt;li&gt;git fetch [remote-name] 从远程仓库拉取本地还没有的数据。执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。&lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;git merge branch-name 合并分支（一般在其他分支合并自己的开发分支，因为一旦出现冲突处理起来比较方便）如果顺着一个分支走下去可以到达另一个分支的话，那么 Git 在合并两者时，只会简单地把指针右移，因为这种单线的历史分支不存在任何需要解决的分歧，所以这种合并过程可以称为快进（Fast forward）。&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;git tag 列出标签&lt;/li&gt;
-  &lt;li&gt;git tag -a &lt;tag-version&gt; -m &lt;remark-info&gt; 添加附注标签（推荐使用）-a(annotated：注释)&lt;/remark-info&gt;&lt;/tag-version&gt;&lt;/li&gt;
-  &lt;li&gt;git tag &lt;tag-version&gt; 添加轻量标签&lt;/tag-version&gt;&lt;/li&gt;
-  &lt;li&gt;git tag -a &lt;tag-version&gt; &lt;校验和或者部分校验和&gt; 后期打标签&lt;/校验和或者部分校验和&gt;&lt;/tag-version&gt;&lt;/li&gt;
-  &lt;li&gt;git tag push origin [tagname] 显式的将标签推送到远程服务器&lt;/li&gt;
-  &lt;li&gt;git tag push origin –tags 一次推送所有本地新增的标签上去&lt;/li&gt;
-  &lt;li&gt;git config –global alias.ci commit   =&amp;gt;  git commit 可以用git ci替代 同理其他命令&lt;/li&gt;
+  &lt;li&gt;git tag 列出标签。&lt;/li&gt;
+  &lt;li&gt;git tag -a &lt;tag-version&gt; -m &lt;remark-info&gt; 添加附注标签（推荐使用）-a(annotated：注释)。&lt;/remark-info&gt;&lt;/tag-version&gt;&lt;/li&gt;
+  &lt;li&gt;git tag &lt;tag-version&gt; 添加轻量标签。&lt;/tag-version&gt;&lt;/li&gt;
+  &lt;li&gt;git tag -a &lt;tag-version&gt; &lt;校验和或者部分校验和&gt; 后期打标签。&lt;/校验和或者部分校验和&gt;&lt;/tag-version&gt;&lt;/li&gt;
+  &lt;li&gt;git push origin [tagname] 显式的将标签推送到远程服务器（git push 并不会把 tag 标签推送到远程）。&lt;/li&gt;
+  &lt;li&gt;git push [origin] –tags 一次推送所有本地新增的标签上去 eg: git push –tags。&lt;/li&gt;
+  &lt;li&gt;git config –global alias.ci commit =&amp;gt; git commit 可以用 git ci 替代 同理其他命令。&lt;/li&gt;
 &lt;/ul&gt;
-
 </description>
         <pubDate>Fri, 02 Nov 2018 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2018/11/02/git/</link>
         <guid isPermaLink="true">http://localhost:4000/2018/11/02/git/</guid>
         
         <category>git</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>书</title>
-        <description>&lt;h2 id=&quot;记录&quot;&gt;记录&lt;/h2&gt;
-&lt;h4 id=&quot;技术读完&quot;&gt;技术读完&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;大话数据结构&lt;/li&gt;
-  &lt;li&gt;疯狂Java讲义&lt;/li&gt;
-  &lt;li&gt;你不知道的js上&lt;/li&gt;
-  &lt;li&gt;Git学习指南&lt;/li&gt;
-  &lt;li&gt;JavaScript语言精粹&lt;/li&gt;
-  &lt;li&gt;JavaScript高级程序设计&lt;/li&gt;
-  &lt;li&gt;深入浅出NodeJs&lt;/li&gt;
-  &lt;li&gt;Effective Javascript&lt;/li&gt;
-  &lt;li&gt;2019&lt;/li&gt;
-  &lt;li&gt;编写可读代码的艺术&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;技术选读&quot;&gt;技术选读&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;算法竞赛入门经典第一版&lt;/li&gt;
-  &lt;li&gt;python编程快速-让繁琐工作自动化&lt;/li&gt;
-  &lt;li&gt;Effective Java中文版&lt;/li&gt;
-  &lt;li&gt;大话设计模式&lt;/li&gt;
-  &lt;li&gt;计算机网络&lt;/li&gt;
-  &lt;li&gt;高性能MySql&lt;/li&gt;
-  &lt;li&gt;深入理解Java虚拟机&lt;/li&gt;
-  &lt;li&gt;图解HTTP协议&lt;/li&gt;
-  &lt;li&gt;深入学习MongoDB&lt;/li&gt;
-  &lt;li&gt;go语言从入门到进阶实战&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;非技术读完&quot;&gt;非技术读完&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;达芬奇密码&lt;/li&gt;
-  &lt;li&gt;狼图腾&lt;/li&gt;
-  &lt;li&gt;追风筝的人&lt;/li&gt;
-  &lt;li&gt;偷影子的人&lt;/li&gt;
-  &lt;li&gt;人生&lt;/li&gt;
-  &lt;li&gt;平凡的世界&lt;/li&gt;
-  &lt;li&gt;活着&lt;/li&gt;
-  &lt;li&gt;穷爸爸富爸爸&lt;/li&gt;
-  &lt;li&gt;教父（第一、二部）&lt;/li&gt;
-  &lt;li&gt;白鹿原&lt;/li&gt;
-  &lt;li&gt;呐喊&lt;/li&gt;
-  &lt;li&gt;解忧杂货店&lt;/li&gt;
-  &lt;li&gt;嫌疑人x的献身&lt;/li&gt;
-  &lt;li&gt;挪威的森林&lt;/li&gt;
-  &lt;li&gt;麦田的守望者&lt;/li&gt;
-  &lt;li&gt;悟空传&lt;/li&gt;
-  &lt;li&gt;大江东去（第一、二部）&lt;/li&gt;
-  &lt;li&gt;犯罪心理画像&lt;/li&gt;
-  &lt;li&gt;我与地坛&lt;/li&gt;
-  &lt;li&gt;皮囊&lt;/li&gt;
-  &lt;li&gt;边城&lt;/li&gt;
-  &lt;li&gt;曾国藩传&lt;/li&gt;
-  &lt;li&gt;天才在左疯子在右&lt;/li&gt;
-  &lt;li&gt;李世民秘史&lt;/li&gt;
-  &lt;li&gt;芙蓉镇&lt;/li&gt;
-  &lt;li&gt;人生本来如寄&lt;/li&gt;
-  &lt;li&gt;呼兰河传&lt;/li&gt;
-  &lt;li&gt;亲爱的安德烈&lt;/li&gt;
-  &lt;li&gt;尘埃落定&lt;/li&gt;
-  &lt;li&gt;人间失格&lt;/li&gt;
-  &lt;li&gt;十字街84号&lt;/li&gt;
-  &lt;li&gt;图解美国史&lt;/li&gt;
-  &lt;li&gt;黑客与画家&lt;/li&gt;
-  &lt;li&gt;少女&lt;/li&gt;
-  &lt;li&gt;关键对话&lt;/li&gt;
-  &lt;li&gt;人类简史&lt;/li&gt;
-  &lt;li&gt;激荡四十年&lt;/li&gt;
-  &lt;li&gt;周正毅问题调查&lt;/li&gt;
-  &lt;li&gt;三十年前的一次长跑比赛&lt;/li&gt;
-  &lt;li&gt;俯仰关中&lt;/li&gt;
-  &lt;li&gt;河西走廊&lt;/li&gt;
-  &lt;li&gt;我的奋斗&lt;/li&gt;
-  &lt;li&gt;高效工作&lt;/li&gt;
-  &lt;li&gt;2019&lt;/li&gt;
-  &lt;li&gt;日本行脚&lt;/li&gt;
-  &lt;li&gt;反脆弱&lt;/li&gt;
-  &lt;li&gt;活法&lt;/li&gt;
-  &lt;li&gt;Beyond the label&lt;/li&gt;
-  &lt;li&gt;资本主义简史&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;非技术未完结&quot;&gt;非技术未完结&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;仓央嘉措诗传&lt;/li&gt;
-  &lt;li&gt;黄金时代&lt;/li&gt;
-  &lt;li&gt;拿破仑传&lt;/li&gt;
-  &lt;li&gt;智囊&lt;/li&gt;
-  &lt;li&gt;杨澜访谈录&lt;/li&gt;
-  &lt;li&gt;乌克兰拖拉机简史&lt;/li&gt;
-  &lt;li&gt;东晋门阀政治&lt;/li&gt;
-  &lt;li&gt;浮生六记&lt;/li&gt;
-  &lt;li&gt;数码摄影教程&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Tue, 30 Oct 2018 06:34:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/10/30/tbook/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/10/30/tbook/</guid>
-        
-        <category>书</category>
         
         
       </item>

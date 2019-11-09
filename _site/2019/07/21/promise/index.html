@@ -484,7 +484,7 @@
 26
 27
 28
-</pre></td><td class="rouge-code"><pre><span class="kd">const</span> <span class="nb">Promise</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'promise'</span><span class="p">);</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">const</span> <span class="nb">Promise</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">promise</span><span class="dl">'</span><span class="p">);</span>
 
 <span class="kd">function</span> <span class="nx">sleep</span><span class="p">(</span><span class="nx">time_ms</span><span class="p">){</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span> <span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -493,22 +493,22 @@
 <span class="p">}</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">test</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'start'</span><span class="o">+</span><span class="nx">n</span><span class="p">);</span>
-    <span class="kr">await</span> <span class="nx">sleep</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'end'</span><span class="o">+</span><span class="nx">n</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="dl">'</span><span class="s1">start</span><span class="dl">'</span><span class="o">+</span><span class="nx">n</span><span class="p">);</span>
+    <span class="k">await</span> <span class="nx">sleep</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="dl">'</span><span class="s1">end</span><span class="dl">'</span><span class="o">+</span><span class="nx">n</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">main</span><span class="p">(){</span>
     <span class="kd">let</span> <span class="nx">timeMsArr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
     <span class="k">try</span><span class="p">{</span>
         <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">t</span> <span class="k">of</span> <span class="nx">timeMsArr</span><span class="p">){</span>
-            <span class="kr">await</span> <span class="nx">test</span><span class="p">(</span><span class="nx">t</span><span class="p">);</span>
+            <span class="k">await</span> <span class="nx">test</span><span class="p">(</span><span class="nx">t</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
         <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s2">`err`</span><span class="o">+</span><span class="nx">err</span><span class="p">)</span>
     <span class="p">}</span>
 
-    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'ok'</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="dl">'</span><span class="s1">ok</span><span class="dl">'</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="nx">main</span><span class="p">();</span>
@@ -584,7 +584,7 @@
         </a>
         
         
-                <a data-sort="0016" 
+                <a data-sort="0017" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书

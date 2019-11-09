@@ -396,6 +396,30 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2019/08/09/Aes/">
+        <h2 class="post-title">
+            对称加密-Aes
+        </h2>
+        
+        <h3 class="post-subtitle">
+            
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                前言
+
+  最近宇哥排查到了一个很匪夷所思的事情。部分小程序接口请求某个接口但是响应莫名其妙被置为空。后面排查到是被 TX 给劫持了，具体被劫持的原因，那次请求中有一个 url(指向七牛云上的图片资源)，应该 TX 拿到了那个资源并且识别到了图片上的“京东”这两个字眼，然后就发生了之后的事情。心疼我东哥 1 东(1 东===2min)。后面宇哥就交代了我们这边的接口提供方要求对数据进行加密。...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by wantu on August 9, 2019
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2019/08/09/mongodb/">
         <h2 class="post-title">
             MongoDB使用整理（持续更新中）
@@ -407,14 +431,17 @@
         
         <div class="post-content-preview">
             
-                MongoDB是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。
+                MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。
+
 解决什么问题
+
 1、项目前期需求不明确，表结构不能定下来可能导致经常变动表结构的场景。
-2、
 
 内容
-CURD简诉
-其查询语法跟MySQL的SQL是存在很大区别的。个人在刚刚开始写的时候感觉很难记。其实它的查询语法异常简单。后面会想起来感觉所接触到...
+
+CURD 简诉
+
+其查询语法跟 MySQL 的 SQL 是存在很大区别的。个人在刚刚开始写的时候感觉很难记。其实它的查询语法异常简单。后面会想起...
             
         </div>
     </a>
@@ -639,62 +666,22 @@ docker是开发人员和系统管理员使用容器开发、部署和运行应�
         <div class="post-content-preview">
             
                 前言
+
   主要想针对官方文档的知识点做一些整理与记录。
+
 Git 基础、优势以及相关原理、思想。
-Git较之其他版本控制最主要的差别就是它对待数据的方式。其他大部分系统以文件列表变更方式存储信息，而Git更像是把数据看作是对小型文件系统的一组快照。本质来说Git是一个内容寻址文件系统。
 
-Git优势：
+Git 较之其他版本控制最主要的差别就是它对待数据的方式。其他大部分系统以文件列表变更方式存储信息，而 Git 更像是把数据看作是对小型文件系统的一组快照。本质来说 Git 是一个内容寻址文件系统。
+
+Git 优势：
 1、近乎所有操作都是本地执行
-2、Git保证完整性
-3、Git一般只添加数据
-
-工作目录下的...
+2、Git 保证完整性
+3、Git 一般只添...
             
         </div>
     </a>
     <p class="post-meta">
         Posted by wantu on November 2, 2018
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2018/10/30/tbook/">
-        <h2 class="post-title">
-            书
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                记录
-技术读完
-
-  大话数据结构
-  疯狂Java讲义
-  你不知道的js上
-  Git学习指南
-  JavaScript语言精粹
-  JavaScript高级程序设计
-  深入浅出NodeJs
-  Effective Javascript
-  2019
-  编写可读代码的艺术
-
-
-技术选读
-
-  算法竞赛入门经典第一版
-  python编程快速-让繁琐工作自动化
-  Effective ...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on October 30, 2018
     </p>
 </div>
 <hr>
@@ -735,7 +722,7 @@ Git优势：
         </a>
         
         
-                <a data-sort="0016" 
+                <a data-sort="0017" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书

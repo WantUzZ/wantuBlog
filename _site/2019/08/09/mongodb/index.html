@@ -14,11 +14,7 @@
     <meta property="og:title" content="MongoDB使用整理（持续更新中） - 老王 | want">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="MongoDB是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。
-解决什么问题
-1、项目前期需求不明确，表结构不能定下来可能导致经常变动表结构的场景。
-2、
-
+    <meta property="og:description" content="MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。
 ">
     
     <meta property="article:published_time" content="2019-08-09T06:09:00Z">
@@ -26,6 +22,8 @@
     
     <meta property="article:author" content="wantu">
     
+    
+    <meta property="article:tag" content="数据库">
     
     <meta property="article:tag" content="MongoDB">
     
@@ -372,7 +370,7 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/post-bg-rwd.jpg" width="0" height="0"> -->
+<!-- <img src="/img/mongodb_bg.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -381,7 +379,7 @@
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/post-bg-rwd.jpg');
+        background-image: url('/img/mongodb_bg.jpg');
         background: ;
     }
 
@@ -397,6 +395,8 @@
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-heading">
                     <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93" title="数据库">数据库</a>
                         
                         <a class="tag" href="/archive/?tag=MongoDB" title="MongoDB">MongoDB</a>
                         
@@ -430,16 +430,20 @@
                 <!-- Multi-Lingual -->
                 
 
-                <p>MongoDB是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。</p>
+                <p>MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。</p>
+
 <h2 id="解决什么问题">解决什么问题</h2>
-<p>1、项目前期需求不明确，表结构不能定下来可能导致经常变动表结构的场景。
-2、</p>
+
+<p>1、项目前期需求不明确，表结构不能定下来可能导致经常变动表结构的场景。</p>
 
 <h2 id="内容">内容</h2>
-<h4 id="curd简诉">CURD简诉</h4>
-<p>其查询语法跟MySQL的SQL是存在很大区别的。个人在刚刚开始写的时候感觉很难记。其实它的查询语法异常简单。后面会想起来感觉所接触到的非关系型数据都是这个样，即查询语句中的条件跟存储的数据的数据结构是一样的，只需要将条件放置到相关位置进行一一对上位即可。</p>
+
+<h4 id="curd-简诉">CURD 简诉</h4>
+
+<p>其查询语法跟 MySQL 的 SQL 是存在很大区别的。个人在刚刚开始写的时候感觉很难记。其实它的查询语法异常简单。后面会想起来感觉所接触到的几个非关系型数据都是这个套路，即查询语句中的条件跟存储的数据的数据结构是一样的，只需要将条件放置到相关位置进行一一对上位即可。</p>
 
 <p>举例：</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -495,7 +499,9 @@
     }
 ]
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>查询的时候比方说要查年龄大于22并且喜欢的学习（study）的人。</p>
+
+<p>查询的时候比方说要查年龄大于 22 并且喜欢的学习（study）的人。</p>
+
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -509,26 +515,116 @@
     hobby:'study' //因为hobby是数组，也可以这么限定：hobby:{$in:['study']}
 }
 </pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>查询条件默认是&amp;&amp;的逻辑，如果想用或的逻辑使用 <strong>$or</strong> 挂到查询对象上。</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="p">{</span>
+  <span class="nl">$or</span><span class="p">:</span> <span class="p">[{</span> <span class="na">age</span><span class="p">:</span> <span class="p">{</span> <span class="na">$gt</span><span class="p">:</span> <span class="mi">20</span> <span class="p">},</span> <span class="na">age</span><span class="p">:</span> <span class="p">{</span> <span class="na">$lt</span><span class="p">:</span> <span class="mi">10</span> <span class="p">}</span> <span class="p">}],</span>
+  <span class="na">hobby</span><span class="p">:</span><span class="dl">'</span><span class="s1">study</span><span class="dl">'</span>
+<span class="p">}</span>
+
+<span class="err">等同与</span><span class="nx">MySQL</span><span class="err">中的</span> <span class="nx">where</span> <span class="nx">hobby</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">study</span><span class="dl">'</span> <span class="nx">and</span> <span class="p">(</span><span class="nx">age</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="nx">or</span> <span class="nx">age</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">);</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
 <p>更、删、增自个查官方文档吧。</p>
 
 <h4 id="索引的问题">索引的问题</h4>
+
 <p>由于索引是存储在内存(RAM)中,你应该确保该索引的大小不超过内存的限制。
-如果索引的大小大于内存的限制，MongoDB会删除一些索引，这将导致性能下降。</p>
+如果索引的大小大于内存的限制，MongoDB 会删除一些索引，这将导致性能下降。</p>
 
-<p>检测是否使用索引：explain关键字。</p>
+<p>检测是否使用索引：explain 关键字。</p>
 
-<p>索引的最大范围：
-1、集合中索引不能超过64个
-2、索引名的长度不能超过125个字符
-3、一个复合索引最多可以有31个字段</p>
+<p>索引的最大范围：</p>
+<ul>
+  <li>1、集合中索引不能超过 64 个</li>
+  <li>2、索引名的长度不能超过 125 个字符</li>
+  <li>3、一个复合索引最多可以有 31 个字段</li>
+</ul>
 
-<h4 id="关联表">关联表</h4>
+<p>刚刚开始建 schema 的时候没必要过多的索引的，后面有需要再建索引。</p>
+
+<h4 id="tips">tips</h4>
+<blockquote>
+  <p>选至《深入学习MongDB》</p>
+</blockquote>
+
+<p>1、取最值的方式：a、通过聚合然后使用一些提供的方法拿 b、[推荐使用]对某个字段进行排序然后取第一个。<br />
+2、索引一般用在返回结果总是总体数据的一小部分的时候。一旦返回的数据较大（举例：超过了集合的一半）就不要用索引了。<br />
+3、可以使用 $natural 来禁用掉索引。<br />
+4、建立分级文档加快扫描（实际用的不多感觉）。<br />
+5、AND 型查询，查询条件越苛刻（匹配最少数据量的条件）越放在前面，减少数据量。<br />
+6、OR 型查询，查询条件越宽泛（匹配最多数据量的条件）越放在前面。<br />
+7、在collection在256G之前进行分片</p>
 
 <h4 id="聚合">聚合</h4>
+<h6 id="关联表">关联表</h6>
+<p>通过3.2版本的新功能$lookup来进行。<br />
+语法：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre>{
+   $lookup:
+     {
+       from: &lt;collection to join&gt;, //指定要执行联结的集合
+       localField: &lt;field from the input documents&gt;, // 
+       foreignField: &lt;field from the documents of the "from" collection&gt;, //指定from文档中的字段
+       as: &lt;output array field&gt; //指定要添加到输入文档中的新数组字段的名称。
+     }
+}
 
-<h4 id="读书有感">读书有感</h4>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
-<h2 id="总结">总结</h2>
+<p>例子：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>const res = await models.Xxx.aggregate([
+    { $match: query },
+    { $group: { _id: '$tags' } },
+    { $lookup: { from: 'tags', localField: '_id', foreignField: '_id', as: 'tags' } },
+    // 关联后再做筛选
+    { $match: { 'tags.name': { $all: tags_arr } } },
+    { $project: { _id: 1 } },
+]);
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>如果你使用的ORM的包是mongoose的话，请使用Query的populate方法。相关使用详情参阅：<a href="https://mongoosejs.com/docs/api/query.html#query_Query-populate">文档</a></p>
+
+<h4 id="mongodb和关系型数据库的核心区别">MongoDB和关系型数据库的核心区别</h4>
+<p>核心区别就是：文档模型。<br />
+关系模型需要我们把一个数据对象拆分成许多个单项。然后存到各个相应的表中，需要的时候通过查询将所需要的数据从各个表中查询出来。<br /></p>
+
+<p>MongoDB的文档模式。文档模式存储单位是一个文档，可以支持数组和嵌套文档。在MongoDB中利用富文档的性质，很多时候，关联是一个伪需求，可以通过合理建模来避免。<br /></p>
+
+<p>文档模型的优点：<br />
+1、效率高。文档模型将数据集中到来一起，在普通机械盘中不需要在额外的移动磁头。<br />
+2、可扩展性强。如果不考虑关联，数据分区分库，水平扩展简单。<br />
+3、动态模式。文档模型支持可变数据模式，不要求每个文档都要有一样的数据结构，对很多异构数据场景支持较好。<br />
+4、模型自然。最为接近对象模型。<br /></p>
+
+<p>文档模式设计的基本策略：<br />
+一般先考虑内嵌，一般的一对一、一对多关系都可以放在一个文档中使用内嵌进行解决。<br />
+实在不行使用引用，即在主表中存储一个ID值指向另一张表的的ID值，从性能上来说我们一般需要两次以上的查询才能把相关的数据取到。<br />
+更加重要的是MongoDB暂时还不支持跨表的事务，所以对强事务场景需要谨慎使用。（4.0版本发布后MongoDB支持原生的事务操作）<br /></p>
 
 
                 
@@ -543,6 +639,13 @@
                         </a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="/2019/08/09/Aes/" data-toggle="tooltip" data-placement="top" title="对称加密-Aes">
+                        Next<br>
+                        <span>对称加密-Aes</span>
+                        </a>
+                    </li>
                     
                 </ul>
                 <hr style="visibility: hidden;">
@@ -591,7 +694,7 @@
         </a>
         
         
-                <a data-sort="0016" 
+                <a data-sort="0017" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书

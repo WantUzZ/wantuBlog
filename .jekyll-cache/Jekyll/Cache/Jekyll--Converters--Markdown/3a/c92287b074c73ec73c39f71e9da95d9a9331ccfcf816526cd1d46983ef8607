@@ -1,0 +1,287 @@
+I"�L<h2 id="前言">前言</h2>
+<p>  Echarts是我真正意义上接触最早的一种数据可视化工具。它是由百度开源出来的，是一个纯 Javascript 的图表库，可以流畅的运行在 PC 和移动设备上，兼容当前绝大部分浏览器，底层依赖另一个也是该团队自主研发的轻量级的 Canvas 类库 ZRender，提供直观，生动，可交互，可高度个性化定制的数据可视化图表，它对许多图表提供了封装好的组件。用户可以很轻松的使用它们。但是正是由于它封装程度比较高，所以很多个性化的设置是很难做到的。如果你想要有一些自己的封装，那么请尝试使用D3.js，D3的API比较底层，学习成本比较高，望君留意。
+<a href="http://echarts.baidu.com/">ECharts</a> <br />
+<a href="https://d3js.org/">D3js</a> <br /></p>
+
+<h2 id="正文">正文</h2>
+<h4 id="我要怎么开始呢">我要怎么开始呢？</h4>
+<p>因为是国人开发的所以开发文档必须有中文格式的。这点对于英文差的小伙伴那是大大的好啊（本人英文很不好）。Echarts在其官网提供了大量的实例。新手可以通过实例很快的上手。那么<a href="http://echarts.baidu.com/examples/">传送门</a> <br /></p>
+
+<h4 id="使用">使用</h4>
+<p><strong>样例展示</strong>
+<img src="/img/echartsShow.jpg" alt="查询执行路径图" />
+<strong>引入相关的js文件</strong></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre> <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="dl">"</span><span class="s2">/lib/echarts/echarts.min.js</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p><strong>在前端页面上预留一个div用以展示相关的图表</strong></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="dl">"</span><span class="s2">chart</span><span class="dl">"</span> <span class="nx">style</span><span class="o">=</span><span class="dl">"</span><span class="s2">height: 400px;width: 100%;padding: 5px;</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p><strong>初始化</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre> var c1 = echarts.init(document.getElementById('chart1'));
+ var c1_option;
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><strong>获取数据来源并设置option</strong>
+这一步数据获取是通过ajax来获取的。原则上后段要进行相关的数据的组装工作。前端拿到相关的series属性值直接放上去就能使用。</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+</pre></td><td class="rouge-code"><pre><span class="c1">//这是一个较全的例子</span>
+<span class="kd">var</span> <span class="nx">month_legend</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">上年同期</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">上期数据</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">当期数据</span><span class="dl">'</span><span class="p">];</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+    <span class="na">url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/xxxx</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">post</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="p">{</span>
+        <span class="c1">//请求参数</span>
+    <span class="p">},</span>
+    <span class="na">success</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//初始化echarts</span>
+        <span class="kd">var</span> <span class="nx">c1</span> <span class="o">=</span> <span class="nx">echarts</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">chart1</span><span class="dl">'</span><span class="p">));</span>
+        <span class="kd">var</span> <span class="nx">c1_option</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">tag</span> <span class="o">==</span> <span class="dl">'</span><span class="s1">success</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//渲染Echarts</span>
+            <span class="kd">function</span> <span class="nx">draw_echar1</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">//单个柱状图中间字体的设置</span>
+                <span class="kd">var</span> <span class="nx">seriesLabel</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="na">normal</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="na">show</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                            <span class="na">textBorderColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">#33</span><span class="dl">'</span><span class="p">,</span>
+                            <span class="na">textBorderWidth</span><span class="p">:</span> <span class="mi">2</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="c1">//图表的设置</span>
+                <span class="nx">c1_option</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="na">title</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="na">text</span><span class="p">:</span> <span class="dl">'</span><span class="s1">天气统计</span><span class="dl">'</span>
+                        <span class="p">},</span>
+                        <span class="na">tooltip</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="na">trigger</span><span class="p">:</span> <span class="dl">'</span><span class="s1">axis</span><span class="dl">'</span><span class="p">,</span>
+                            <span class="na">axisPointer</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">shadow</span><span class="dl">'</span>
+                            <span class="p">}</span>
+                        <span class="p">},</span>
+                        <span class="na">legend</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">北京</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">上海</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">深圳</span><span class="dl">'</span><span class="p">]</span>
+                        <span class="p">},</span>
+                        <span class="na">grid</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="na">left</span><span class="p">:</span> <span class="mi">100</span>
+                        <span class="p">},</span>
+                        <span class="na">toolbox</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="na">show</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                            <span class="na">feature</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="na">saveAsImage</span><span class="p">:</span> <span class="p">{}</span>
+                            <span class="p">}</span>
+                        <span class="p">},</span>
+                        <span class="na">yAxis</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">value</span><span class="dl">'</span><span class="p">,</span>
+                            <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">天数</span><span class="dl">'</span><span class="p">,</span>
+                            <span class="na">axisLabel</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="na">formatter</span><span class="p">:</span> <span class="dl">'</span><span class="s1">{value}</span><span class="dl">'</span>
+                            <span class="p">}</span>
+                        <span class="p">},</span>
+                        <span class="na">xAxis</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">category</span><span class="dl">'</span><span class="p">,</span>
+                            <span class="na">inverse</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">晴天</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">多云</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">下雨</span><span class="dl">'</span><span class="p">]</span>
+                        <span class="p">},</span>
+                        <span class="c1">//一般来说series属性直接拿后台组装的数据前端不负责数据的组装</span>
+                        <span class="na">series</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="p">{</span>
+                                <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">北京</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">165</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
+                                <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span>
+                            <span class="p">},</span>
+                            <span class="p">{</span>
+                                <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">上海</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
+                                <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">110</span><span class="p">]</span>
+                            <span class="p">},</span>
+                            <span class="p">{</span>
+                                <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">深圳</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
+                                <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">220</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">63</span><span class="p">]</span>
+                            <span class="p">}</span>
+                        <span class="p">]</span>
+                <span class="p">};</span>
+                <span class="c1">//渲染Echarts</span>
+                <span class="nx">c1</span><span class="p">.</span><span class="nx">setOption</span><span class="p">(</span><span class="nx">c1_option</span><span class="p">);</span>
+<span class="p">}}}});</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>后端数据格式</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="rouge-code"><pre><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">北京</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">165</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
+        <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">上海</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
+        <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">110</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">深圳</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
+        <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">220</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">63</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><strong>渲染Echarts</strong></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nx">draw_echar1</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="小结">小结</h2>
+<p>1、echarts封装的很不错，所以很多设置可能只是一个属性的设置，请多在官方实例中进行尝试修改，并记住常用的属性设置。<br /></p>
+<h4 id="常用属性">常用属性</h4>
+<p><em>后续继续补充</em></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="rouge-code"><pre>一些常用的属性设置：
+xAxis//x轴设置
+yAxis//y轴设置 
+    type:类型
+    min:最小值
+    axisLabel:对y轴的单位进行设置 (例子中将单位元设置为单位为万元)
+        eg:formatter: function (value) {
+                        return Math.round(value/10000)+'万';
+                    }
+toolbox//工具设置其中支持将展示的图表保存成图片
+title//图表标题
+legend//图表头部索引
+series//展示设置
+    type//图表类型 常见pie饼图bar柱状图
+    lable//图内显示设置
+    data//实际数据
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>2、option中的设置就是对图表的一些属性的设置。请多关注option。<br />
+对这echats的实例多多练习几次你就会很快掌握它。<br />
+我个人觉得一些图标的数据组装过程还是比较复杂的。因为前端一般会让后端把series组装好。多看多练。如果条形图，饼图，柱状图都联系过了感觉很轻松。那么请尝试实现这个图表,可以考虑把x,y轴进行转一下。
+所有的数据要写活来哦。<br />
+<a href="http://echarts.baidu.com/examples/editor.html?c=bar-y-category-stack">demo</a> <br /></p>
+:ET
