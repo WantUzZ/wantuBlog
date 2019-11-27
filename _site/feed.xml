@@ -5,9 +5,24 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 14 Nov 2019 00:18:14 +0800</pubDate>
-    <lastBuildDate>Thu, 14 Nov 2019 00:18:14 +0800</lastBuildDate>
+    <pubDate>Wed, 27 Nov 2019 22:37:08 +0800</pubDate>
+    <lastBuildDate>Wed, 27 Nov 2019 22:37:08 +0800</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
+    
+      <item>
+        <title>HTTP协议</title>
+        <description>
+</description>
+        <pubDate>Thu, 21 Nov 2019 06:09:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/11/21/HTTP/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/11/21/HTTP/</guid>
+        
+        <category>HTTP</category>
+        
+        <category>计算机网络</category>
+        
+        
+      </item>
     
       <item>
         <title>对称加密-AES</title>
@@ -241,9 +256,9 @@ AES 源代码中用长度 4 _ 4 _（10+1） 字节的数组 W 来存储所有轮
 4、https://www.zybuluo.com/coldxiangyu/note/796980&lt;br /&gt;
 5、https://blog.csdn.net/Vieri_32/article/details/48345023&lt;br /&gt;&lt;/p&gt;
 </description>
-        <pubDate>Fri, 09 Aug 2019 06:09:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/08/09/Aes/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/08/09/Aes/</guid>
+        <pubDate>Sat, 10 Aug 2019 06:09:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/08/10/Aes/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/08/10/Aes/</guid>
         
         <category>AES</category>
         
@@ -251,12 +266,22 @@ AES 源代码中用长度 4 _ 4 _（10+1） 字节的数组 W 来存储所有轮
       </item>
     
       <item>
-        <title>MongoDB使用整理（持续更新中）</title>
-        <description>&lt;p&gt;MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。&lt;/p&gt;
+        <title>MongoDB使用整理（Doing）</title>
+        <description>&lt;p&gt;MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;优势：&lt;br /&gt;
+1、文档型NoSQL数据库。数据以文档的形式在MongoDB中保存，文档实际就是JSON字符串，JSON字符串容易阅读，且主流的计算机语言对其有很好的支持。&lt;br /&gt;
+2、基于文档的灵活的数据模式。相比MySQL，无需使用DDL对表结构进行修改。&lt;br /&gt;
+3、强大的索引能力。支持一级、二级、TTL索引和地理位置索引等。&lt;br /&gt;
+4、强大的扩展能力。分片机制用于实现业务的水平扩展，每个分片只保留业务的部分数据，并且支持副本集，确保分片上的数据的高可用性。&lt;br /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;解决什么问题&quot;&gt;解决什么问题&lt;/h2&gt;
 
-&lt;p&gt;1、项目前期需求不明确，表结构不能定下来可能导致经常变动表结构的场景。&lt;/p&gt;
+&lt;p&gt;1、敏捷迭代的业务，需求变动频繁，数据模型无法确定。&lt;br /&gt;
+2、存储的数据格式灵活，不固定 ，或属于半结构化数据。&lt;br /&gt;
+3、对数据高可用性有高要求。&lt;br /&gt;
+4、需要大量的地理位置查询、文本查询。&lt;br /&gt;
+5、无需跨文档或跨表的事物及复杂的join查询支持。（4.0之后支持多文档事物，多文档事物可以理解为关系型数据库的多行事物。）&lt;br /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;内容&quot;&gt;内容&lt;/h2&gt;
 
@@ -366,12 +391,22 @@ AES 源代码中用长度 4 _ 4 _（10+1） 字节的数组 W 来存储所有轮
 &lt;p&gt;索引的最大范围：&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;1、集合中索引不能超过 64 个&lt;/li&gt;
-  &lt;li&gt;2、索引名的长度不能超过 125 个字符&lt;/li&gt;
+  &lt;li&gt;2、索引名的长度不能超过 128 个字符&lt;/li&gt;
   &lt;li&gt;3、一个复合索引最多可以有 31 个字段&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;刚刚开始建 schema 的时候没必要过多的索引的，后面有需要再建索引。&lt;/p&gt;
+&lt;p&gt;刚刚开始建 schema 的时候没必要过多的索引的，后面有需要再建索引。&lt;br /&gt;&lt;/p&gt;
 
+&lt;p&gt;mongoose创建索引：&lt;/p&gt;
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;//_id自带索引&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;field&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 1为指定按升序创建索引，-1为降序创建索引。&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;field&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;fieldB&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//多字段索引&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;可选参数列表：
+&lt;img src=&quot;/img/indexOpt.png&quot; alt=&quot;可选参数&quot; /&gt;&lt;/p&gt;
 &lt;h4 id=&quot;tips&quot;&gt;tips&lt;/h4&gt;
 &lt;blockquote&gt;
   &lt;p&gt;选至《深入学习MongDB》&lt;/p&gt;
@@ -1799,173 +1834,6 @@ else
         <category>Swagger</category>
         
         <category>文档管理</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Git/提交规范</title>
-        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
-
-&lt;p&gt;  主要想针对官方文档的知识点做一些整理与记录。&lt;/p&gt;
-
-&lt;h4 id=&quot;git-基础优势以及相关原理思想&quot;&gt;Git 基础、优势以及相关原理、思想。&lt;/h4&gt;
-
-&lt;p&gt;Git 较之其他版本控制最主要的差别就是它对待数据的方式。其他大部分系统以文件列表变更方式存储信息，而 Git 更像是把数据看作是对小型文件系统的一组快照。本质来说 Git 是一个内容寻址文件系统。&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;Git 优势：&lt;br /&gt;
-1、近乎所有操作都是本地执行&lt;br /&gt;
-2、Git 保证完整性&lt;br /&gt;
-3、Git 一般只添加数据&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;工作目录下的所有文件不外乎两种状态：已跟踪或未跟踪。&lt;br /&gt;
-已跟踪文件又分三种状态：已提交（committed），已修改（modified）和已暂存（staged）。&lt;br /&gt;
-&lt;img src=&quot;/img/git文件状态变化周期.jpg&quot; alt=&quot;x&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;基本的 Git 工作流：&lt;br /&gt;
-1、在工作目录中修改某些文件。&lt;br /&gt;
-2、对修改后的文件进行快照，然后保存到暂存区域。&lt;br /&gt;
-3、提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。&lt;br /&gt;
-&lt;img src=&quot;/img/git本地操作流.jpg&quot; alt=&quot;x&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;分支&quot;&gt;分支&lt;/h4&gt;
-
-&lt;p&gt;  先看一下进行 git add . 、git commit -m ‘xxx’ git 在做什么事情。&lt;br /&gt;
-  git add . 操作:git 会为每一个文件计算校验和（SHA-1 哈希算法）然后会把当前版本的文件快照保存到 git 仓库（Git 使用 blob 对象来保存他们），最终将校验和加入到暂存区等待提交。&lt;br /&gt;
-  git commit -m ‘xx’操作: Git 会先计算每一个子目录（本例中只有项目根目录）的校验和，然后在 Git 仓库中这些校验和保存为树对象。 随后，Git 便会创建一个提交对象，它除了包含上面提到的那些信息外，还包含指向这个树对象（项目根目录）的指针。如此一来，Git 就可以在需要的时候重现此次保存的快照。&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;  此时 Git 仓库中有 n+2 个对象：n 个 blob 对象（保存着文件快照）、一个树对象（记录着目录结构和 blob 对象索引）以及一个提交对象（包含着指向前述树对象的指针和所有提交信息）。&lt;br /&gt;
-&lt;img src=&quot;/img/git分支.png&quot; alt=&quot;x&quot; /&gt;
-第一次提交的提交对象较之之后的提交对象缺少一个指向上次提交对象（父对象）的指针。&lt;br /&gt;
-分支的创建也只是创建了一个可以移动的新指针，通过 HEAD 这个特殊的指针 Git 知晓当前是处于那个分支上面。&lt;br /&gt;
-关于 HEAD 指针的解释：在 Git 中，它是一个指针，指向当前所在的本地分支（译注：将 HEAD 想象为当前分支的别名）。&lt;br /&gt;
-分支切换就是将 HEAD 指针的指向切换一下。但是 git checkout branch-1 这个命令做了两件事。 一是使 HEAD 指回 master 分支，二是将工作目录恢复成 master 分支所指向的快照内容。&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;远程分支&quot;&gt;远程分支&lt;/h4&gt;
-
-&lt;p&gt;  &lt;strong&gt;远程分支（remote branch）是对远程仓库中的分支的索引&lt;/strong&gt;。它们是一些无法移动的本地分支；只有在 Git 进行网络交互时才会更新。远程分支就像是书签，提醒着你上次连接远程仓库时上面各分支的位置。&lt;br /&gt;
-  一次 Git 克隆会建立你自己的本地分支 master 和远程分支 origin/master，并且他们都执行 origin 上的 master 分支（Git 服务器上的 master 分支）。&lt;br /&gt;
-  如果本地 master 分支有所改动，那么本地的 master 分支会往前推进，如果服务器上的 master 分支也发生变动（他人推送了更新），那么服务器上的 master 分支也会往前推进。但是 origin/master 指针仍旧保持原位不会移动。可以通过使用 git fetch origin 来同步远程服务器上的数据到本地。该命令首先找到 origin 是哪个服务器（本例为 git.ourcompany.com），从上面获取你尚未拥有的数据，更新你本地的数据库，然后把 origin/master 的指针移到它最新的位置上&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;推送本地分支&lt;/strong&gt;&lt;br /&gt;
-  想要分享某个本地分支，需要手动的将它推送到一个我们拥有写权限的远程仓库。本地分支不会因为我们的写入操作而被自动同步到你引入的远程服务上，需要明确的执行推送分支的操作。&lt;br /&gt;
-git push (远程仓库名) (分支名) 栗子：git push origin want。这里其实走了一点捷径。Git 自动把 want 分支名扩展为 refs/heads/want:refs/heads/want，意为“取出我在本地的 want 分支，推送到远程仓库的 want 分支中去”。可以通过运行 git push origin want:want 来达到相同的效果 &lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;跟踪远程分支&lt;/strong&gt;&lt;br /&gt;
-  从远程分支 checkout 出来的本地分支，称为 跟踪分支 (tracking branch)。跟踪分支是一种和某个远程分支有直接联系的本地分支。在跟踪分支里输入 git push，Git 会自行推断应该向哪个服务器的哪个分支推送数据。同样，在这些分支里运行 git pull 会获取所有远程索引，并把它们的数据都合并到本地分支中来。在克隆仓库时，Git 通常会自动创建一个名为 master 的分支来跟踪 origin/master。这正是 git push 和 git pull 一开始就能正常工作的原因。&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;删除远程分支&lt;/strong&gt;&lt;br /&gt;
-git push origin :branchName
-&lt;strong&gt;分支的变基&lt;/strong&gt;&lt;br /&gt;
-  把一个分支中的修改整合到另一个分支的办法有两种：merge 和 rebase。&lt;br /&gt;
-最容易的整合分支的方法是 merge 命令，它会把两个分支最新的快照（C3 和 C4）以及二者最新的共同祖先（C2）进行三方合并，合并的结果是产生一个新的提交对象（C5）。&lt;br /&gt;
-&lt;img src=&quot;/img/Gitmerge操作.jpg&quot; alt=&quot;x&quot; /&gt;
-还有另外一个选择：你可以把在 C3 里产生的变化补丁在 C4 的基础上重新打一遍。在 Git 里，这种操作叫做变基（rebase）。它的原理是回到两个分支最近的共同祖先，根据当前分支（也就是要进行变基的分支 experiment）后续的历次提交对象（这里只有一个 C3），生成一系列文件补丁，然后以基底分支（也就是主干分支 master）最后一个提交对象（C4）为新的出发点，逐个应用之前准备好的补丁文件，最后会生成一个新的合并提交对象（C3’），从而改写 experiment 的提交历史，使它成为 master 分支的直接下游。变基能产生一次更为完整的提交历史。如果视察一个变基过的分支的历史记录，看起来会更清楚：仿佛所有修改都是在一根线上先后进行的，尽管实际上它们原本是同时并行发生的。&lt;br /&gt;
-  一般我们使用变基的目的，是想要得到一个能在远程分支上干净应用的补丁 — 比如某些项目你不是维护者，但想帮点忙的话，最好用变基：先在自己的一个分支里进行开发，当准备向主项目提交补丁的时候，根据最新的 origin/master 进行一次变基操作然后再提交，这样维护者就不需要做任何整合工作（译注：实际上是把解决分支补丁同最新主干代码之间冲突的责任，化转为由提交补丁的人来解决。），只需根据你提供的仓库地址作一次快进合并，或者直接采纳你提交的补丁。[只需根据你提供的仓库地址作一次快进合并，或者直接采纳你提交的补丁。]&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;那么两者的区别是？从官方文档的表述来说，还是对于代码合并的操作步骤的不同。merge只合并一步，但是rebase却有三步。&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;要用它得遵守一条准则：一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行变基操作。&lt;br /&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h4 id=&quot;分布式工作流程&quot;&gt;分布式工作流程&lt;/h4&gt;
-
-&lt;p&gt;常见工作流：&lt;br /&gt;
-1、集中式工作流 2、集成管理者工作流 3、司令官与副官工作流&lt;br /&gt;
-集中式：a、b 协作，b 想提交代码，但是 b 需要等待 a 提交，待 a 提交之后再将 a 的代码合到本地才能提交。（十分脑残）&lt;br /&gt;
-集成管理者工作流：有一个爸爸管理的仓库（官方权威的仓库），你想提代码，先从爸爸那拿一份代码副本,修改代码，把修改后的代码推送到自己的公开仓库。然后给爸爸发邮件，请求他拉取你的代码,爸爸收到邮件，看你顺眼，会在本地将你的公开仓库加为远程仓库合并修改，测试一下，如果 bug 很多，对不起拉黑！（just joke），通过测试之后爸爸会将本地的代码推送到官方权威仓库。&lt;br /&gt;
-司令官与副官工作流: 集成管理者的变种，爸爸上面还有一个爸爸（你大爷）。你大爷维护这官方权威仓库，每个开发者都是从大爷那拿到代码的，修改之后给爸爸审核，审核完爸爸的代码会被爷爷拿走。当然你大爷不只一个爸爸。&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;git-工具&quot;&gt;Git 工具&lt;/h4&gt;
-
-&lt;h4 id=&quot;提交规范&quot;&gt;提交规范&lt;/h4&gt;
-
-&lt;p&gt;  建议小步提交，防止一次修改过多文件，导致后期维护、撤销等困难。&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;工作&lt;/strong&gt;&lt;br /&gt;
-  如果是使用 jira 作为看板工具，那么提交的时候最好将 jira 的任务卡号信息携带进去。&lt;br /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;[任务卡号] 老王 &amp;amp; 老李: do something
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;常规&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;[任务分类] 修改模块/组件：修改内容
-任务分类：
-1、功能新增
-2、功能完善
-3、bug修复
-4、文档补充
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;功能部分提测&lt;/strong&gt;
-先从master分支切出一个开发分支进行开发。部分功能开发完毕之后将其推送到测试环境会拉取的分支上。测试通过之后将这个开发分支合并到master分支进行发布。&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;常用命令&quot;&gt;常用命令&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;git help 帮助。&lt;/li&gt;
-  &lt;li&gt;git init 现有目录初始化仓库，仅仅只是初始化，项目中的文件未被跟踪。&lt;/li&gt;
-  &lt;li&gt;git clone 克隆代码 ,克隆操作会自动使用默认的 master 和 origin 名字。&lt;/li&gt;
-  &lt;li&gt;git checkout 分支切换 / 切到指定的某次提交。&lt;/li&gt;
-  &lt;li&gt;git checkout -b ‘xxx’ 切出分支 xxx。&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;git checkout -b 本地分支名 origin/远程分支名 在本地创建一个新的分支，并与远程分支进行关联。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;git branch 不加任何参数这个命令会列出所有分支的清单 1、-b(new branch 新建一个分支) 2、-d 删除本地分支 3、-v 查看各个分支最后一个提交对象的信息 4、-D 强制删除分支 5、–merged 和 –no-merged 筛选出你已经（或尚未）与当前分支合并的分支。&lt;/li&gt;
-  &lt;li&gt;git status 检查当前文件状态 -s 参数状态简览。&lt;/li&gt;
-  &lt;li&gt;git stash 将改动暂时存放到git的暂存区（栈结构）。&lt;/li&gt;
-  &lt;li&gt;git stash list 列出暂存区的内容。&lt;/li&gt;
-  &lt;li&gt;git stash pop 推出最进的暂存code到本地工作区间。&lt;/li&gt;
-  &lt;li&gt;git diff 对比本地代码与上次的区别 1、–cache 查看已经暂存起来的变化 2、–check 检查空白错误。&lt;/li&gt;
-  &lt;li&gt;git add 跟踪新文件（记得和.gitignore 一起食用效果更佳） 1、-i 交互式暂存。&lt;/li&gt;
-  &lt;li&gt;git RESET HEAD 取消暂存的文件（有个 git checkout –fileName 命令用于撤销对文件的修改但是不推荐使用）。&lt;/li&gt;
-  &lt;li&gt;git log 查看提交历史 1、-p 显示每次提交的差异，后续可跟-n eg:git log -p -2 最近两次提交 的差异 2、–graph 显示 ASCII 图形表示的分支合并历史 3、–oneline 4、–reverse。&lt;/li&gt;
-  &lt;li&gt;git reflog 查看所有分支的操作记录（包含删除的commit和reset操作）。&lt;/li&gt;
-  &lt;li&gt;git reset –hard [分支hash] 回退到指定提交。&lt;/li&gt;
-  &lt;li&gt;git show SHA-1(不短于四个字符) 展示某次提交的内容。&lt;/li&gt;
-  &lt;li&gt;git reflog 查看引用日志。引用日志：一份记录最近几个月你的 HEAD 和分支的引用的日志。&lt;/li&gt;
-  &lt;li&gt;git commit 提交更新 -a：跳过使用暂存区域【嫌 git add .麻烦的，否则还是一步一步来吧,值得注意的是如果文件还没有被git跟踪，那么使用git commit -am不会生效】&lt;/li&gt;
-  &lt;li&gt;git commit –amend 重命名上次的 commit。&lt;/li&gt;
-  &lt;li&gt;git reset –soft HEAD^ 撤销上次的提交。&lt;/li&gt;
-  &lt;li&gt;git push 提交代码。&lt;/li&gt;
-  &lt;li&gt;git push –set-upstream origin 分支名 把本地分支推送到远程分支。&lt;/li&gt;
-  &lt;li&gt;git push origin :xxx 删除远程分支 xxx。&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;git rm 移除文件 1、-f 删除文件之前已经对文件进行改动并且已经放到暂存区，需用-f 进行强制删除。2、–cached 仅从跟踪清单中删除，当前工作目录仍会保留相关文件。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;git remote -v 查看远程仓库。&lt;/li&gt;
-  &lt;li&gt;git remote show [remote-name] 查看远程仓库。&lt;/li&gt;
-  &lt;li&gt;git remote add &lt;shortName&gt; &lt;url&gt; 添加远程仓库，同时指定一个简写名 eg:git add want git://github.com/xxx/xx 以后就可以用 want 代替对应的仓库地址了。&lt;/url&gt;&lt;/shortName&gt;&lt;/li&gt;
-  &lt;li&gt;git remote rename [new-name] 远程仓库重新命名(修改某个远程仓库在本地的简称) git remote rename want wantu。&lt;/li&gt;
-  &lt;li&gt;git remote rm [remote-name] 删除远程仓库。&lt;/li&gt;
-  &lt;li&gt;git fetch [remote-name] 从远程仓库拉取本地还没有的数据。执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;git merge branch-name 合并分支（一般在其他分支合并自己的开发分支，因为一旦出现冲突处理起来比较方便）如果顺着一个分支走下去可以到达另一个分支的话，那么 Git 在合并两者时，只会简单地把指针右移，因为这种单线的历史分支不存在任何需要解决的分歧，所以这种合并过程可以称为快进（Fast forward）。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;git tag 列出标签。&lt;/li&gt;
-  &lt;li&gt;git tag -a &lt;tag-version&gt; -m &lt;remark-info&gt; 添加附注标签（推荐使用）-a(annotated：注释)。&lt;/remark-info&gt;&lt;/tag-version&gt;&lt;/li&gt;
-  &lt;li&gt;git tag &lt;tag-version&gt; 添加轻量标签。&lt;/tag-version&gt;&lt;/li&gt;
-  &lt;li&gt;git tag -a &lt;tag-version&gt; &lt;校验和或者部分校验和&gt; 后期打标签。&lt;/校验和或者部分校验和&gt;&lt;/tag-version&gt;&lt;/li&gt;
-  &lt;li&gt;git push origin [tagname] 显式的将标签推送到远程服务器（git push 并不会把 tag 标签推送到远程）。&lt;/li&gt;
-  &lt;li&gt;git push [origin] –tags 一次推送所有本地新增的标签上去 eg: git push –tags。&lt;/li&gt;
-  &lt;li&gt;git config –global alias.ci commit =&amp;gt; git commit 可以用 git ci 替代 同理其他命令。&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Fri, 02 Nov 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/11/02/git/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/11/02/git/</guid>
-        
-        <category>git</category>
-        
-        <category>版本控制</category>
         
         
       </item>
