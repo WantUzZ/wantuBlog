@@ -1,8 +1,18 @@
-I"�!<p>MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。</p>
+I"�)<p>MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。<br /></p>
+
+<p>优势：<br />
+1、文档型NoSQL数据库。数据以文档的形式在MongoDB中保存，文档实际就是JSON字符串，JSON字符串容易阅读，且主流的计算机语言对其有很好的支持。<br />
+2、基于文档的灵活的数据模式。相比MySQL，无需使用DDL对表结构进行修改。<br />
+3、强大的索引能力。支持一级、二级、TTL索引和地理位置索引等。<br />
+4、强大的扩展能力。分片机制用于实现业务的水平扩展，每个分片只保留业务的部分数据，并且支持副本集，确保分片上的数据的高可用性。<br /></p>
 
 <h2 id="解决什么问题">解决什么问题</h2>
 
-<p>1、项目前期需求不明确，表结构不能定下来可能导致经常变动表结构的场景。</p>
+<p>1、敏捷迭代的业务，需求变动频繁，数据模型无法确定。<br />
+2、存储的数据格式灵活，不固定 ，或属于半结构化数据。<br />
+3、对数据高可用性有高要求。<br />
+4、需要大量的地理位置查询、文本查询。<br />
+5、无需跨文档或跨表的事物及复杂的join查询支持。（4.0之后支持多文档事物，多文档事物可以理解为关系型数据库的多行事物。）<br /></p>
 
 <h2 id="内容">内容</h2>
 
@@ -112,12 +122,22 @@
 <p>索引的最大范围：</p>
 <ul>
   <li>1、集合中索引不能超过 64 个</li>
-  <li>2、索引名的长度不能超过 125 个字符</li>
+  <li>2、索引名的长度不能超过 128 个字符</li>
   <li>3、一个复合索引最多可以有 31 个字段</li>
 </ul>
 
-<p>刚刚开始建 schema 的时候没必要过多的索引的，后面有需要再建索引。</p>
+<p>刚刚开始建 schema 的时候没必要过多的索引的，后面有需要再建索引。<br /></p>
 
+<p>mongoose创建索引：</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="c1">//_id自带索引</span>
+<span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">({</span> <span class="na">field</span> <span class="p">:</span> <span class="mi">1</span> <span class="p">});</span> <span class="c1">// 1为指定按升序创建索引，-1为降序创建索引。</span>
+<span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">({</span> <span class="na">field</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">fieldB</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="p">});</span><span class="c1">//多字段索引</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>可选参数列表：
+<img src="/img/indexOpt.png" alt="可选参数" /></p>
 <h4 id="tips">tips</h4>
 <blockquote>
   <p>选至《深入学习MongDB》</p>
