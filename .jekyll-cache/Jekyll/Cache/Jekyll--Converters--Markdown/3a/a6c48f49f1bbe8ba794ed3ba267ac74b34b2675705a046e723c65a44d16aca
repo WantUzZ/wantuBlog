@@ -1,4 +1,5 @@
-I"�)<p>MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。<br /></p>
+I"79<p>MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。<br />
+本文旨在列举实际工作中常用到的一些知识点，以及其相关的扩展知识。系统的学习请参阅官方文档。<br /></p>
 
 <p>优势：<br />
 1、文档型NoSQL数据库。数据以文档的形式在MongoDB中保存，文档实际就是JSON字符串，JSON字符串容易阅读，且主流的计算机语言对其有很好的支持。<br />
@@ -6,7 +7,7 @@
 3、强大的索引能力。支持一级、二级、TTL索引和地理位置索引等。<br />
 4、强大的扩展能力。分片机制用于实现业务的水平扩展，每个分片只保留业务的部分数据，并且支持副本集，确保分片上的数据的高可用性。<br /></p>
 
-<h2 id="解决什么问题">解决什么问题</h2>
+<h2 id="适用的业务场景">适用的业务场景</h2>
 
 <p>1、敏捷迭代的业务，需求变动频繁，数据模型无法确定。<br />
 2、存储的数据格式灵活，不固定 ，或属于半结构化数据。<br />
@@ -110,8 +111,6 @@
 <span class="err">等同与</span><span class="nx">MySQL</span><span class="err">中的</span> <span class="nx">where</span> <span class="nx">hobby</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">study</span><span class="dl">'</span> <span class="nx">and</span> <span class="p">(</span><span class="nx">age</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="nx">or</span> <span class="nx">age</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">);</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 
-<p>更、删、增自个查官方文档吧。</p>
-
 <h4 id="索引的问题">索引的问题</h4>
 
 <p>由于索引是存储在内存(RAM)中,你应该确保该索引的大小不超过内存的限制。
@@ -137,21 +136,9 @@
 <span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">({</span> <span class="na">field</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">fieldB</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="p">});</span><span class="c1">//多字段索引</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>可选参数列表：
-<img src="/img/indexoption.png" alt="可选参数" /></p>
-<h4 id="tips">tips</h4>
-<blockquote>
-  <p>选至《深入学习MongDB》</p>
-</blockquote>
+<img src="/img/indexOpt.png" alt="可选参数" /></p>
 
-<p>1、取最值的方式：a、通过聚合然后使用一些提供的方法拿 b、[推荐使用]对某个字段进行排序然后取第一个。<br />
-2、索引一般用在返回结果总是总体数据的一小部分的时候。一旦返回的数据较大（举例：超过了集合的一半）就不要用索引了。<br />
-3、可以使用 $natural 来禁用掉索引。<br />
-4、建立分级文档加快扫描（实际用的不多感觉）。<br />
-5、AND 型查询，查询条件越苛刻（匹配最少数据量的条件）越放在前面，减少数据量。<br />
-6、OR 型查询，查询条件越宽泛（匹配最多数据量的条件）越放在前面。<br />
-7、在collection在256G之前进行分片</p>
-
-<h4 id="聚合">聚合</h4>
+<h4 id="高级">高级</h4>
 <h6 id="关联表">关联表</h6>
 <p>通过3.2版本的新功能$lookup来进行。<br />
 语法：</p>
@@ -197,6 +184,53 @@
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>如果你使用的ORM的包是mongoose的话，请使用Query的populate方法。相关使用详情参阅：<a href="https://mongoosejs.com/docs/api/query.html#query_Query-populate">文档</a></p>
 
+<h6 id="正则表达式">正则表达式</h6>
+<p>MongoDB 使用 $regex 操作符来设置匹配字符串的正则表达式。
+MongoDB使用PCRE (Perl Compatible Regular Expression) 作为正则表达式语言。
+不同于全文检索（2.6 版本以后需要开启相关配置:db.adminCommand({setParameter:true,textSearchEnabled:true})），我们使用正则表达式不需要做任何配置。<br /></p>
+
+<p>使用：</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="na">post_text</span><span class="p">:{</span><span class="na">$regex</span><span class="p">:</span><span class="dl">"</span><span class="s2">xxx</span><span class="dl">"</span><span class="p">}})</span> 
+<span class="err">或者</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="na">post_text</span><span class="p">:</span><span class="sr">/xxx/</span><span class="p">})</span>
+
+<span class="c1">//不区分大小写</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="na">post_text</span><span class="p">:{</span><span class="na">$regex</span><span class="p">:</span><span class="dl">"</span><span class="s2">xxx</span><span class="dl">"</span><span class="p">,</span><span class="na">$options</span><span class="p">:</span><span class="dl">"</span><span class="s2">$i</span><span class="dl">"</span><span class="p">}})</span>
+
+<span class="c1">// 还支持在数组字段中使用正则表达式来查找内容 tags为数组字段</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="na">tags</span><span class="p">:{</span><span class="na">$regex</span><span class="p">:</span><span class="dl">"</span><span class="s2">xxx</span><span class="dl">"</span><span class="p">}})</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>注意：正则中使用变量。需要使用eval将组合的字符串进行转换，不能直接将字符串拼接后传入正则表达式。<br /></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="kd">let</span> <span class="nx">name</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="dl">"</span><span class="s2">/</span><span class="dl">"</span> <span class="o">+</span> <span class="err">变量值</span><span class="nx">key</span> <span class="o">+</span><span class="dl">"</span><span class="s2">/i</span><span class="dl">"</span><span class="p">);</span>
+<span class="nl">title</span><span class="p">:</span><span class="nb">eval</span><span class="p">(</span><span class="dl">"</span><span class="s2">/</span><span class="dl">"</span><span class="o">+</span><span class="nx">title</span><span class="o">+</span><span class="dl">"</span><span class="s2">/i</span><span class="dl">"</span><span class="p">)</span>    <span class="c1">// 等同于 title:{$regex:title,$Option:"$i"}   </span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="相关书籍">相关书籍</h4>
+<blockquote>
+  <p>《深入学习MongDB》</p>
+</blockquote>
+
+<p>1、取最值的方式：a、通过聚合然后使用一些提供的方法拿 b、[推荐使用]对某个字段进行排序然后取第一个。<br />
+2、索引一般用在返回结果总是总体数据的一小部分的时候。一旦返回的数据较大（举例：超过了集合的一半）就不要用索引了。<br />
+3、可以使用 $natural 来禁用掉索引。<br />
+4、建立分级文档加快扫描（实际用的不多感觉）。<br />
+5、AND 型查询，查询条件越苛刻（匹配最少数据量的条件）越放在前面，减少数据量。<br />
+6、OR 型查询，查询条件越宽泛（匹配最多数据量的条件）越放在前面。<br />
+7、在collection在256G之前进行分片</p>
+
+<h2 id="后记">后记</h2>
 <h4 id="mongodb和关系型数据库的核心区别">MongoDB和关系型数据库的核心区别</h4>
 <p>核心区别就是：文档模型。<br />
 关系模型需要我们把一个数据对象拆分成许多个单项。然后存到各个相应的表中，需要的时候通过查询将所需要的数据从各个表中查询出来。<br /></p>
