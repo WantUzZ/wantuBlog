@@ -1,4 +1,4 @@
-I"79<p>MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。<br />
+I"vA<p>MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。<br />
 本文旨在列举实际工作中常用到的一些知识点，以及其相关的扩展知识。系统的学习请参阅官方文档。<br /></p>
 
 <p>优势：<br />
@@ -19,7 +19,7 @@
 
 <h4 id="curd-简诉">CURD 简诉</h4>
 
-<p>其查询语法跟 MySQL 的 SQL 是存在很大区别的。个人在刚刚开始写的时候感觉很难记。其实它的查询语法异常简单。后面会想起来感觉所接触到的几个非关系型数据都是这个套路，即查询语句中的条件跟存储的数据的数据结构是一样的，只需要将条件放置到相关位置进行一一对上位即可。</p>
+<p>其查询语法跟 MySQL 的 SQL 是存在很大区别的。个人在刚刚开始写的时候感觉很难记。其实它的查询语法异常简单。后面会想起来感觉所接触到的几个非关系型数据库都是这个套路，即查询语句中的条件跟存储的数据的数据结构高度相关。</p>
 
 <p>举例：</p>
 
@@ -116,7 +116,55 @@
 <p>由于索引是存储在内存(RAM)中,你应该确保该索引的大小不超过内存的限制。
 如果索引的大小大于内存的限制，MongoDB 会删除一些索引，这将导致性能下降。</p>
 
-<p>检测是否使用索引：explain 关键字。</p>
+<p>检测是否使用索引（官方文档上写了三种方式）：<strong>explain()</strong><br />
+查询计划解读<a href="https://docs.mongodb.com/manual/reference/explain-results/index.html">官方文档传送门</a>：<br />
+<img src="/img/mongoExplain.png" alt="执行计划结果图" /></p>
+
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="rouge-code"><pre><span class="p">-</span> queryplanner: 详细的说明了查询优化器选择的计划，queryplanner模式下并不会真正的执行query语句查询，而是针对query语句进行执行计划分析选出winning plan。
+<span class="p"> -</span> namespace: query所查询的表
+<span class="p"> -</span> indexFilterSet: 这个查询是否应用了索引过滤器。（看query有没有用索引不能看这个）
+<span class="p"> -</span> winningplan: 查询优化器针对这次query所返回的最优执行计划的详细内容
+<span class="p">  -</span> stage: 最优执行计划的stage有以下几个类型：
+<span class="p">    -</span> COLLSCAN: 全表扫描
+<span class="p">    -</span> IXSCAN: 索引扫描
+<span class="p">    -</span> FETCH: 根据索引去检索制定文档
+<span class="p">    -</span> SHARD_MERGE: 将各个分片返回数据进行merge
+<span class="p">  -</span> filter: 过滤条件
+<span class="p">  -</span> inputStage:
+<span class="p">  -</span> keyPattern:
+<span class="p">  -</span> indexName: winning plan所选用的index
+<span class="p">  -</span> isMultiKey: 是否是
+<span class="p">  -</span> direction: 查询顺序
+<span class="p">  -</span> rejectedPlans: 其他非最优执行计划
+<span class="p"> -</span> executionSuccess
+<span class="p">  -</span> executionSuccess: 是否执行成功
+<span class="p">  -</span> nReturned: 返回的数据条数
+<span class="p">  -</span> executionTimeMillis: 执行时间
+<span class="p">  -</span> totalKeysExamined: 索引扫描次数
+<span class="p">  -</span> totalDocsExamined: 文档扫描次数
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 <p>索引的最大范围：</p>
 <ul>
