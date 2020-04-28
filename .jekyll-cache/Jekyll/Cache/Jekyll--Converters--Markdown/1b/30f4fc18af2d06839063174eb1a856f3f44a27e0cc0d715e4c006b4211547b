@@ -1,4 +1,4 @@
-I"�;<h2 id="前言">前言</h2>
+I"�;<h2 id="前言">前言</h2>
 
 <p>  主要想针对官方文档的知识点做一些整理与记录。</p>
 
@@ -149,6 +149,6 @@ git push origin :branchName
   <li>git tag -a <tag-version> <校验和或者部分校验和> 后期打标签。</校验和或者部分校验和></tag-version></li>
   <li>git push origin [tagname] 显式的将标签推送到远程服务器（git push 并不会把 tag 标签推送到远程）。</li>
   <li>git push [origin] –tags 一次推送所有本地新增的标签上去 eg: git push –tags。</li>
-  <li>git config –global alias.ci commit =&gt; git commit 可以用 git ci 替代 同理其他命令。</li>
+  <li>git config --global alias.ci commit =&gt; git commit 可以用 git ci 替代 同理其他命令。</li>
 </ul>
 :ET
