@@ -544,27 +544,27 @@ git push origin :branchName
   <li>
     <p>git checkout -b 本地分支名 origin/远程分支名 在本地创建一个新的分支，并与远程分支进行关联。</p>
   </li>
-  <li>git branch 不加任何参数这个命令会列出所有分支的清单 1、-b(new branch 新建一个分支) 2、-d 删除本地分支 3、-v 查看各个分支最后一个提交对象的信息 4、-D 强制删除分支 5、–merged 和 –no-merged 筛选出你已经（或尚未）与当前分支合并的分支。</li>
+  <li>git branch 不加任何参数这个命令会列出所有分支的清单 1、-b(new branch 新建一个分支) 2、-d 删除本地分支 3、-v 查看各个分支最后一个提交对象的信息 4、-D 强制删除分支 5、--merged 和 --no-merged 筛选出你已经（或尚未）与当前分支合并的分支。</li>
   <li>git status 检查当前文件状态 -s 参数状态简览。</li>
   <li>git stash 将改动暂时存放到git的暂存区（栈结构）。</li>
   <li>git stash list 列出暂存区的内容。</li>
   <li>git stash pop 推出最进的暂存code到本地工作区间。</li>
-  <li>git diff 对比本地代码与上次的区别 1、–cache 查看已经暂存起来的变化 2、–check 检查空白错误。</li>
+  <li>git diff 对比本地代码与上次的区别 1、--cache 查看已经暂存起来的变化 2、--check 检查空白错误。</li>
   <li>git add 跟踪新文件（记得和.gitignore 一起食用效果更佳） 1、-i 交互式暂存。</li>
-  <li>git RESET HEAD 取消暂存的文件（有个 git checkout –fileName 命令用于撤销对文件的修改但是不推荐使用）。</li>
-  <li>git log 查看提交历史 1、-p 显示每次提交的差异，后续可跟-n eg:git log -p -2 最近两次提交 的差异 2、–graph 显示 ASCII 图形表示的分支合并历史 3、–oneline 4、–reverse。</li>
+  <li>git RESET HEAD 取消暂存的文件（有个 git checkout --fileName 命令用于撤销对文件的修改但是不推荐使用）。</li>
+  <li>git log 查看提交历史 1、-p 显示每次提交的差异，后续可跟-n eg:git log -p -2 最近两次提交 的差异 2、--graph 显示 ASCII 图形表示的分支合并历史 3、--oneline 4、--reverse。</li>
   <li>git reflog 查看所有分支的操作记录（包含删除的commit和reset操作）。</li>
-  <li>git reset –hard [分支hash] 回退到指定提交。</li>
+  <li>git reset --hard [分支hash] 回退到指定提交。</li>
   <li>git show SHA-1(不短于四个字符) 展示某次提交的内容。</li>
   <li>git reflog 查看引用日志。引用日志：一份记录最近几个月你的 HEAD 和分支的引用的日志。</li>
   <li>git commit 提交更新 -a：跳过使用暂存区域【嫌 git add .麻烦的，否则还是一步一步来吧,值得注意的是如果文件还没有被git跟踪，那么使用git commit -am不会生效】</li>
-  <li>git commit –amend 重命名上次的 commit。</li>
-  <li>git reset –soft HEAD^ 撤销上次的提交。</li>
+  <li>git commit --amend 重命名上次的 commit。</li>
+  <li>git reset --soft HEAD^ 撤销上次的提交。</li>
   <li>git push 提交代码。</li>
-  <li>git push –set-upstream origin 分支名 把本地分支推送到远程分支。</li>
+  <li>git push --set-upstream origin 分支名 把本地分支推送到远程分支。</li>
   <li>git push origin :xxx 删除远程分支 xxx。</li>
   <li>
-    <p>git rm 移除文件 1、-f 删除文件之前已经对文件进行改动并且已经放到暂存区，需用-f 进行强制删除。2、–cached 仅从跟踪清单中删除，当前工作目录仍会保留相关文件。</p>
+    <p>git rm 移除文件 1、-f 删除文件之前已经对文件进行改动并且已经放到暂存区，需用-f 进行强制删除。2、--cached 仅从跟踪清单中删除，当前工作目录仍会保留相关文件。</p>
   </li>
   <li>git remote -v 查看远程仓库。</li>
   <li>git remote show [remote-name] 查看远程仓库。</li>
@@ -580,8 +580,8 @@ git push origin :branchName
   <li>git tag <tag-version> 添加轻量标签。</tag-version></li>
   <li>git tag -a <tag-version> <校验和或者部分校验和> 后期打标签。</校验和或者部分校验和></tag-version></li>
   <li>git push origin [tagname] 显式的将标签推送到远程服务器（git push 并不会把 tag 标签推送到远程）。</li>
-  <li>git push [origin] –tags 一次推送所有本地新增的标签上去 eg: git push –tags。</li>
-  <li>git config –global alias.ci commit =&gt; git commit 可以用 git ci 替代 同理其他命令。</li>
+  <li>git push [origin] --tags 一次推送所有本地新增的标签上去 eg: git push --tags。</li>
+  <li>git config --global alias.ci commit =&gt; git commit 可以用 git ci 替代 同理其他命令。</li>
 </ul>
 
                 

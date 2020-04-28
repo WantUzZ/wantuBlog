@@ -14,7 +14,7 @@
     <meta property="og:title" content="MongoDB使用整理 - 老王 | want">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。
+    <meta property="og:description" content="  MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。
 本文旨在列举实际工作中常用到的一些知识点，以及其相关的扩展知识。系统的学习请参阅官方文档。
 ">
     
@@ -431,28 +431,28 @@
                 <!-- Multi-Lingual -->
                 
 
-                <p>MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。<br />
+                <p>  MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。<br />
 本文旨在列举实际工作中常用到的一些知识点，以及其相关的扩展知识。系统的学习请参阅官方文档。<br /></p>
 
 <p>优势：<br />
-1、文档型NoSQL数据库。数据以文档的形式在MongoDB中保存，文档实际就是JSON字符串，JSON字符串容易阅读，且主流的计算机语言对其有很好的支持。<br />
-2、基于文档的灵活的数据模式。相比MySQL，无需使用DDL对表结构进行修改。<br />
-3、强大的索引能力。支持一级、二级、TTL索引和地理位置索引等。<br />
-4、强大的扩展能力。分片机制用于实现业务的水平扩展，每个分片只保留业务的部分数据，并且支持副本集，确保分片上的数据的高可用性。<br /></p>
+  1、文档型NoSQL数据库。数据以文档的形式在MongoDB中保存，文档实际就是JSON字符串，JSON字符串容易阅读，且主流的计算机语言对其有很好的支持。<br />
+  2、基于文档的灵活的数据模式。相比MySQL，无需使用DDL对表结构进行修改。<br />
+  3、强大的索引能力。支持一级、二级、TTL索引和地理位置索引等。<br />
+  4、强大的扩展能力。分片机制用于实现业务的水平扩展，每个分片只保留业务的部分数据，并且支持副本集，确保分片上的数据的高可用性。<br /></p>
 
 <h2 id="适用的业务场景">适用的业务场景</h2>
 
-<p>1、敏捷迭代的业务，需求变动频繁，数据模型无法确定。<br />
-2、存储的数据格式灵活，不固定 ，或属于半结构化数据。<br />
-3、对数据高可用性有高要求。<br />
-4、需要大量的地理位置查询、文本查询。<br />
-5、无需跨文档或跨表的事物及复杂的join查询支持。（4.0之后支持多文档事物，多文档事物可以理解为关系型数据库的多行事物。）<br /></p>
+<p>  1、敏捷迭代的业务，需求变动频繁，数据模型无法确定。<br />
+  2、存储的数据格式灵活，不固定 ，或属于半结构化数据。<br />
+  3、对数据高可用性有高要求。<br />
+  4、需要大量的地理位置查询、文本查询。<br />
+  5、无需跨文档或跨表的事物及复杂的join查询支持。（4.0之后支持多文档事物，多文档事物可以理解为关系型数据库的多行事物。）<br /></p>
 
 <h2 id="内容">内容</h2>
 
 <h4 id="curd-简诉">CURD 简诉</h4>
 
-<p>其查询语法跟 MySQL 的 SQL 是存在很大区别的。个人在刚刚开始写的时候感觉很难记。其实它的查询语法异常简单。后面会想起来感觉所接触到的几个非关系型数据库都是这个套路，即查询语句中的条件跟存储的数据的数据结构高度相关。</p>
+<p>  其查询语法跟 MySQL 的 SQL 是存在很大区别的。个人在刚刚开始写的时候感觉很难记。其实它的查询语法异常简单。后面会想起来感觉所接触到的几个非关系型数据库都是这个套路，即查询语句中的条件跟存储的数据的数据结构高度相关。</p>
 
 <p>举例：</p>
 
@@ -479,35 +479,27 @@
 21
 22
 23
-24
-25
-26
-27
 </pre></td><td class="rouge-code"><pre>documents:
 [
     {
         name:'want',
         age:23,
         hobby:['chang', 'tiao', 'rap', 'lanqiu'],
-        girlfriend: null
     },
     {
         name:'haixing',
         age:23,
         hobby:['game', 'eat', 'study', 'acm'],
-        girlfriend: ObjectId("2323231231")
     },
     {
         name:'xuejun',
         age:23,
         hobby:['reading', 'study'],
-        girlfriend: null
     },
     {
         name:'xidada',
         age:23,
         hobby:['reading', 'game'],
-        girlfriend: null
     }
 ]
 </pre></td></tr></tbody></table></code></pre></div></div>
@@ -543,6 +535,43 @@
 
 <span class="err">等同与</span><span class="nx">MySQL</span><span class="err">中的</span> <span class="nx">where</span> <span class="nx">hobby</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">study</span><span class="dl">'</span> <span class="nx">and</span> <span class="p">(</span><span class="nx">age</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="nx">or</span> <span class="nx">age</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">);</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
+<h4 id="mongoose">mongoose</h4>
+<p>  mongoose是一个主流操作MongoDB的node模块。<a href="https://mongoosejs.com/docs/">mongoose官方文档</a><br />
+  mongoose为模型提供了一种直接的，基于scheme结构去定义你的数据模型。它内置数据验证， 查询构建，业务逻辑钩子等，开箱即用。<br />
+  整理:</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="rouge-code"><pre><span class="mi">1</span><span class="p">.</span> <span class="nx">mongoose</span><span class="err">的</span><span class="nx">find</span><span class="err">不同于</span><span class="nx">aggregate</span><span class="err">方法。前者会自动将一个是</span><span class="nx">ObjectId</span><span class="err">的字符串转为</span><span class="nx">ObjectId</span><span class="p">,</span><span class="err">亦或是将一个</span><span class="nx">moment</span><span class="err">对象转为</span><span class="nb">Date</span><span class="err">类型，后者则需要手动的去转换。</span>
+<span class="mi">2</span><span class="p">.</span> <span class="err">理解</span><span class="nx">aggregate</span><span class="err">。这个应该算是</span><span class="nx">MongoDB</span><span class="err">的东西。官方文档上有这么一段话：</span><span class="nx">The</span> <span class="nx">aggregation</span> <span class="nx">pipeline</span> <span class="nx">is</span> <span class="nx">a</span> <span class="nx">framework</span> <span class="k">for</span> <span class="nx">data</span> <span class="nx">aggregation</span> <span class="nx">modeled</span> <span class="nx">on</span> <span class="nx">the</span> <span class="nx">concept</span> <span class="k">of</span> <span class="nx">data</span> <span class="nx">processing</span> <span class="nx">pipelines</span><span class="p">.</span> <span class="nx">Documents</span> <span class="nx">enter</span> <span class="nx">a</span> <span class="nx">multi</span><span class="o">-</span><span class="nx">stage</span> <span class="nx">pipeline</span> <span class="nx">that</span> <span class="nx">transforms</span> <span class="nx">the</span> <span class="nx">documents</span> <span class="nx">into</span> <span class="nx">aggregated</span> <span class="nx">results</span><span class="p">.</span><span class="err">翻译过来就是</span><span class="p">:</span><span class="err">聚合管道是基于数据处理管道概念建模的数据聚合框架。</span> <span class="err">文档进入多阶段流水线，该流水线将文档转换为汇总结果。</span>
+<span class="err">个人理解：</span><span class="nx">aggregate</span><span class="err">就是对指定数据（满足</span><span class="nx">$match</span><span class="err">条件）串行的执行其中定义的操作的过程。</span><span class="nx">aggregate</span><span class="err">的参数是一个数组，结合文档所说其实每一个元素就是一个阶段，每个阶段我们可以对上阶段处理完的数据进行本阶段定义好的方式去加工数据。</span>
+<span class="mi">3</span><span class="p">.</span><span class="nx">populate</span><span class="err">方法，多层填充。例子</span><span class="p">:</span>
+<span class="kd">const</span> <span class="nx">user</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">models</span><span class="p">.</span><span class="nx">User</span>
+      <span class="p">.</span><span class="nx">findOne</span><span class="p">({</span>
+        <span class="na">_id</span><span class="p">:</span> <span class="nx">args</span><span class="p">.</span><span class="nx">id</span>
+      <span class="p">})</span>
+      <span class="p">.</span><span class="nx">populate</span><span class="p">(</span><span class="dl">'</span><span class="s1">children</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">populate</span><span class="p">({</span>
+        <span class="na">path</span><span class="p">:</span> <span class="dl">'</span><span class="s1">children</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">populate</span><span class="p">:</span> <span class="p">{</span>
+          <span class="na">path</span><span class="p">:</span> <span class="dl">'</span><span class="s1">avatar</span><span class="dl">'</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+<span class="c1">//填充children后再针对children的avatar再进行填充。</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
 <h4 id="索引的问题">索引的问题</h4>
 
@@ -550,7 +579,7 @@
 如果索引的大小大于内存的限制，MongoDB 会删除一些索引，这将导致性能下降。</p>
 
 <p>检测是否使用索引（官方文档上写了三种方式）：<strong>explain()</strong><br />
-查询计划解读<a href="https://docs.mongodb.com/manual/reference/explain-results/index.html">官方文档传送门</a>：<br />
+查询计划解读<a href="https://docs.mongodb.com/manual/reference/explain-results/index.html">MongoDB官方文档传送门</a>：<br />
 <img src="/img/mongoExplain.png" alt="执行计划结果图" /></p>
 
 <div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -623,8 +652,7 @@
 <p>可选参数列表：
 <img src="/img/indexOpt.png" alt="可选参数" /></p>
 
-<h4 id="高级">高级</h4>
-<h6 id="关联表">关联表</h6>
+<h4 id="关联表">关联表</h4>
 <p>通过3.2版本的新功能$lookup来进行。<br />
 语法：</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -669,7 +697,7 @@
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>如果你使用的ORM的包是mongoose的话，请使用Query的populate方法。相关使用详情参阅：<a href="https://mongoosejs.com/docs/api/query.html#query_Query-populate">文档</a></p>
 
-<h6 id="正则表达式">正则表达式</h6>
+<h4 id="正则表达式">正则表达式</h4>
 <p>MongoDB 使用 $regex 操作符来设置匹配字符串的正则表达式。
 MongoDB使用PCRE (Perl Compatible Regular Expression) 作为正则表达式语言。
 不同于全文检索（2.6 版本以后需要开启相关配置:db.adminCommand({setParameter:true,textSearchEnabled:true})），我们使用正则表达式不需要做任何配置。<br /></p>
