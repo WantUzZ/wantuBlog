@@ -96,7 +96,7 @@ for (var i=0; i < 10; i++) {
 }
 alert(num);    //55
 ```
-continue同样也可以和标签一起连用。<br>
+continue同样也可以和标签一起连用。注：continue可以在while中使用。<br>
 这种情况下，continue 语句会强制继续执行循环——退出内部循环，执行外部循环。当 j 是 5 时，continue 语句执行，而这也就意味着内部循环少执行了 5 次，因此 num 的结果是 95。<br>
 ```javascript
 var num = 0;
