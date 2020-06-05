@@ -5,9 +5,52 @@
     <description>关于程序与设计、黑客与画家 | 王涛，Web &amp; Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 30 Apr 2020 16:43:02 +0800</pubDate>
-    <lastBuildDate>Thu, 30 Apr 2020 16:43:02 +0800</lastBuildDate>
+    <pubDate>Fri, 05 Jun 2020 16:39:13 +0800</pubDate>
+    <lastBuildDate>Fri, 05 Jun 2020 16:39:13 +0800</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
+    
+      <item>
+        <title>Kafka</title>
+        <description>
+</description>
+        <pubDate>Mon, 01 Jun 2020 18:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2020/06/01/kafka/</link>
+        <guid isPermaLink="true">http://localhost:4000/2020/06/01/kafka/</guid>
+        
+        <category>Kafka</category>
+        
+        <category>消息队列</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>ZooKeeper</title>
+        <description>
+</description>
+        <pubDate>Mon, 01 Jun 2020 18:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2020/06/01/ZooKeeper/</link>
+        <guid isPermaLink="true">http://localhost:4000/2020/06/01/ZooKeeper/</guid>
+        
+        <category>ZooKeeper</category>
+        
+        <category>配置中心</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Go笔记</title>
+        <description>
+</description>
+        <pubDate>Mon, 01 Jun 2020 18:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2020/06/01/Go/</link>
+        <guid isPermaLink="true">http://localhost:4000/2020/06/01/Go/</guid>
+        
+        <category>Go</category>
+        
+        
+      </item>
     
       <item>
         <title>对称加密-AES</title>
@@ -242,8 +285,8 @@ AES 源代码中用长度 4 _ 4 _（10+1） 字节的数组 W 来存储所有轮
 5、https://blog.csdn.net/Vieri_32/article/details/48345023&lt;br /&gt;&lt;/p&gt;
 </description>
         <pubDate>Sat, 10 Aug 2019 06:09:00 +0800</pubDate>
-        <link>http://localhost:4000/2019/08/10/aes/</link>
-        <guid isPermaLink="true">http://localhost:4000/2019/08/10/aes/</guid>
+        <link>http://localhost:4000/2019/08/10/Aes/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/08/10/Aes/</guid>
         
         <category>AES</category>
         
@@ -691,7 +734,7 @@ MongoDB使用PCRE (Perl Compatible Regular Expression) 作为正则表达式语�
       </item>
     
       <item>
-        <title>Redis</title>
+        <title>Redis实操</title>
         <description>&lt;h2 id=&quot;解决什么问题&quot;&gt;解决什么问题&lt;/h2&gt;
 
 &lt;h2 id=&quot;内容&quot;&gt;内容&lt;/h2&gt;
@@ -830,7 +873,7 @@ outermost标签表示外部的for循环。&lt;br /&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;//55&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;continue同样也可以和标签一起连用。&lt;br /&gt;
+&lt;p&gt;continue同样也可以和标签一起连用。注：continue可以在while中使用。&lt;br /&gt;
 这种情况下，continue 语句会强制继续执行循环——退出内部循环，执行外部循环。当 j 是 5 时，continue 语句执行，而这也就意味着内部循环少执行了 5 次，因此 num 的结果是 95。&lt;br /&gt;&lt;/p&gt;
 &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
@@ -1378,728 +1421,6 @@ docker run -d -p 5672:5672 -p 15672:15672 –name myrabbitmq rabbitmq:management
         <category>RabbitMQ</category>
         
         <category>消息队列</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Neo4j知识梳理</title>
-        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
-&lt;p&gt;   图是一种常见的数据结构，其反映数据所对应元素之间的几何关系和拓扑关系。图数据库是一种非关系型数据库。它应用图形理论存储实体之间的关系信息。最常见例子就是社会网络中人与人之间的关系。关系型数据库用于存储“关系型”数据的效果并不好，其查询复杂、缓慢、超出预期，而图形数据库的独特设计恰恰弥补了这个缺陷。&lt;br /&gt;
-   Neo4j是一个高性能的,NOSQL图形数据库，它将结构化数据存储在网络上而不是表中。它是一个嵌入式的、基于磁盘的、具备完全的事务特性的Java持久化引擎，但是它将结构化数据存储在网络(从数学角度叫做图)上而不是表中。Neo4j也可以被看作是一个高性能的图引擎，该引擎具有成熟数据库的所有特性。程序员工作在一个面向对象的、灵活的网络结构下而不是严格、静态的表中——但是他们可以享受到具备完全的事务特性、企业级的数据库的所有好处。&lt;br /&gt;
-  cypher是用于neo4j的查询语言。&lt;br /&gt;
-  本文仅对工作中的使用点进行总结，后期会继续更新。可能有些地方有些偏颇。请见谅。&lt;br /&gt;
-  ⚠️⚠️⚠️社区版免费，企业版收费。并且企业版费用不低。&lt;a href=&quot;http://neo4j.com.cn/topic/59b0a3f59fe13f5e0a2212b2&quot;&gt;价格参考表&lt;/a&gt;。&lt;br /&gt;&lt;/p&gt;
-&lt;h2 id=&quot;正文&quot;&gt;正文&lt;/h2&gt;
-&lt;h4 id=&quot;crud&quot;&gt;CRUD&lt;/h4&gt;
-&lt;p&gt;&lt;strong&gt;增&lt;/strong&gt;&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;节点：&lt;/code&gt;&lt;br /&gt;
-    create (n:xxx{att:value}) //单节点&lt;br /&gt;
-    create (n),(m);//多节点，注意创建多节点的时候自定义变量(前面的n、m是用于捕获结果)不能重复,即create (n),(n);是会报错的。&lt;br /&gt;
-    create (n:label1:lable2:label3) //带标签的节点。标签可以用来创建索引，从而有助于优化对节点的查询。标签的命名规则：数字、字母、下划线，首字母不能是数字。&lt;br /&gt;
-    create (n:xxx{att1:value1})//创建带属性的节点。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;关系：&lt;/code&gt;&lt;br /&gt;
-    create：&lt;br /&gt;
-        create (n1:xx)-[r:xxx]-&amp;gt;(n2:x) //创建单关系&lt;br /&gt;
-        create (n1:xx)-[r:xxx]-&amp;gt;(n2:x),(n11:xx)-[r1:xxx]-&amp;gt;(n22:x)//创建多关系&lt;br /&gt;
-        create ()-[r:xx{att:value}]-()//创建带属性的关系&lt;br /&gt;
-        create k = (n1)-[r1:friend{location:’China’}]-&amp;gt;(n2) return k //创建具有节点和联系的全路径&lt;br /&gt;
-    create unique:&lt;br /&gt;
-        match (n)-[r]-(n1) &lt;br /&gt;
-        where n.id = xx&lt;br /&gt;
-        create unique (n)-[r1]-(n2:{name:’want’}) &lt;br /&gt;
-        return n,r,n1,n2 //创建唯一的节点和联系。create unique语句，这个语句放在match和create这里，对于match上的节点和关系会新建缺省元素。&lt;br /&gt;
-    merge:&lt;br /&gt;
-        megre (n:xxx{att:value}) Merge好似if-else语句，基本逻辑是先检测merge后面的条件，看看有没有匹配的返回值，如果有则执行on merge分支，如果没有则走on create。&lt;br /&gt;
-    create unique与merge区别：Create Unique部分匹配就可以，而Merge则只有整个模式都匹配才创建，否则什么也不做。&lt;br /&gt;
-&lt;strong&gt;改&lt;/strong&gt;&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;更新属性值:&lt;/code&gt;&amp;lt;br
-    match (n:xxx{att:value}) set n.att = newValue return n&lt;br /&gt;
-    除了create 和 delete 以外其他语句都必须要以return结尾&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;更新标签:&lt;/code&gt;&lt;br /&gt;
-    match (n:lable1:label2) set n:newLabel1:newLabel2 return n;&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;更改关系:&lt;/code&gt;&lt;br /&gt;
-    先删除旧的关系，再建立新的关系。&lt;br /&gt;
-&lt;strong&gt;删&lt;/strong&gt;&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;delete:&lt;/code&gt;&lt;br /&gt;
-    不建议使用match (n) delete n （强保护机制，必要要先删除关系再删除节点）&lt;br /&gt;
-    而是使用：match (n) detach delete n (弱保护机制)&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;remove:专门删除属性、标签&lt;/code&gt;&lt;br /&gt;
-    match (n:xxx{att:value}) remove n.att return n;//删除节点的某一个属性&lt;br /&gt;
-    match (n) remove n:label//删除某一个标签，注意如果标签有约束，需要先删除约束：DROP CONSTRAINT ON (p:lable) ASSERT p.id IS UNIQUE&lt;br /&gt;
-    match (n) where n.id = xxx set n.att = null;//将某个属性设置为null也是删除属性的一种方法。&lt;br /&gt;
-&lt;strong&gt;查&lt;/strong&gt;&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;match(查询)...where:&lt;/code&gt;&lt;br /&gt;
-    在match之前可以进行定位用以加快查询速度。&lt;br /&gt;
-    常见聚合操作：count、distinct、max、min…&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;标签限定&quot;&gt;标签限定&lt;/h4&gt;
-&lt;p&gt;  在version2开始引入对标签的限定。暂时只有unique能用。&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;create constraint on (n:MALE) assert n.name is unique;
-可以确保name属性是唯一的。
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;模式与模式匹配&quot;&gt;模式与模式匹配&lt;/h4&gt;
-&lt;ol&gt;
-  &lt;li&gt;节点模式：&lt;br /&gt;
- 使用括号进行描述&lt;br /&gt;&lt;/li&gt;
-  &lt;li&gt;标签模式：&lt;br /&gt;
- 增加标签限定，多个标签起到交集作用&lt;br /&gt;&lt;/li&gt;
-  &lt;li&gt;关系模式&lt;br /&gt;
- match (a:A)-[b:relations]-&amp;gt;(c:C) return a,b,c&lt;br /&gt;
- 首先会搜寻两个标签节点，再去这些节点中寻找符合relations关系。&lt;br /&gt;
- 双向就不要剪头:match (a:A)-[b:relations]-(c:C) return a,b,c&lt;br /&gt;&lt;/li&gt;
-  &lt;li&gt;属性模式&lt;br /&gt;
- 属性匹配使用的是花括号和键值对，其间使用逗号分隔。&lt;br /&gt;&lt;/li&gt;
-  &lt;li&gt;where：&lt;br /&gt;
-where不能单独使用，只能用在match、optionalmatch、start、with的后面，用以进一步过滤模式的数据。&lt;br /&gt;
-where从句中使用模式：
-5.1. 对于一个集合，如果是空集，那么代表false，非空代表true。可以使用in关键字来进一步限定。(这种做法在数据量大的时候会导致查询速度非常慢，在match之前进行定位可以解决)。=～ 不等于。点号和[]是相等，但是用法讲究。对于[]，其间必须是常量。&lt;br /&gt;
-5.2. 使用exists()函数进行属性校验。&lt;br /&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt; match (x)
- where exists(x.age)
- return x.name
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;p&gt;5.3. 字符串匹配：starts with、ends with、contains&lt;br /&gt;&lt;/p&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt; match (x)
- where x.name starts with &quot;B&quot;
- return x.name
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;p&gt;5.4. 其他从句：&lt;br /&gt;
- 5.4.1. order排序(默认是升序，支持混排)&lt;br /&gt;
- 5.4.2. limit限制返回数，skip跳过前多少个数据。&lt;br /&gt;&lt;/p&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt; match (n)
- return n
- order by n.age skip 3 limit 3
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;p&gt;5.5. with从句：with的作用就是连接多个查询结果，有点类似linux中的管道的意思。&lt;br /&gt;
-5.6. union、union all:&lt;br /&gt;
-union的用法与SQL一样，用于连接两个Match，返回结果中剔除了重复记录。但union all功能一样，但不剔除重复记录。&lt;br /&gt;&lt;/p&gt;
-    &lt;h4 id=&quot;apoc&quot;&gt;APOC&lt;/h4&gt;
-    &lt;p&gt;  APOC是Neo4j 3.3版本推出时正式推荐的一个Java存储过程包，里面包含丰富的函数和过程，作为对Cypher所不能提供的复杂图算法和数据操作功能的补充，APOC还具有使用灵活、高性能等优势。&lt;a href=&quot;https://neo4j-contrib.github.io/neo4j-apoc-procedures/&quot;&gt;传送门&lt;/a&gt;。&lt;/p&gt;
-    &lt;ul&gt;
-      &lt;li&gt;内置函数
- 包含 字符串处理、时间戳、统计、日期、科学计数法等。
- &lt;strong&gt;call apoc.meta.stats&lt;/strong&gt;返回当前数据库的一些统计信息。
- &lt;strong&gt;call apoc.meta.graph&lt;/strong&gt;返回当前数据库的一些统计信息。
- &lt;em&gt;*call apoc.text.&lt;/em&gt; **&lt;/li&gt;
-      &lt;li&gt;图论算法&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;其中有一个内置函数：apoc.meta.stats 它可以返回当前数据库的一些统计信息。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/neo4j-apoc.jpg&quot; alt=&quot;cql未优化前&quot; /&gt;&lt;/p&gt;
-&lt;h4 id=&quot;最短路径&quot;&gt;最短路径&lt;/h4&gt;
-&lt;p&gt;  说到图就绕不开图算法中的寻路算法。其中最为常用的就是最短路算法。neo4J自身提供了一个最短路的函数–shortestPath。&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-9
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;MATCH (n:person) where n.id IN (某种条件)
-WITH collect(n) as nodes
-UNWIND nodes as n
-UNWIND nodes as m
-WITH * WHERE id(n) &amp;lt; id(m)
-MATCH path = shortestPath( (n)-[*..%d]-(m) )
-RETURN path
-附上：两个节点之间的最短路
-match (n:account{id:'wxid_zfgv7wjpdajk11'}),(m:account{id:'wxid_htl2hw3r0fbt12'}) match p=shortestPath((n)-[*]-(m)) return p
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;解释：&lt;br /&gt;
-1、match满足某种条件的节点。&lt;br /&gt;
-2、将所有满足条件的节点放到一个列表中命名为nodes。&lt;br /&gt;
-3、使用两个unwind再次将结点列表打散到行，两个unwind的结点是以笛卡尔积的方式返回的，所以这里是两两的任意组合，甚至两个结点相同的组合，实际上我们这里求最短路径1到2和2到1肯定是一样的，所以用id(source) &amp;lt; id(target)来去除一半。&lt;br /&gt;
-4、最后是shortestPath函数，里面的source,target就是前面的组合。&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&quot;查询优化&quot;&gt;查询优化&lt;/h4&gt;
-&lt;p&gt;  Neo4J在version2引入索引策略，可以对标签进行限制和索引。Neo4J的索引和关系型数据库的定义相类似。主要用于提升节点寻找的性能。对于任何已有数据结构的更改操作，索引自动更新。如果出了错而导致索引处于无效状态，便需要差错并重新生成它们。Cypher查询会自动使用索引，Cypher有一个查询计划器和查询优化器，可以对查询进行评估并尝试尽全力依据选索引择最短执行时间。&lt;br /&gt;
-查看索引:&lt;br /&gt;
-    1、：schema（查看索引和约束）&lt;br /&gt;
-    2、CALL db.indexes YIELD description, label, properties;&lt;br /&gt;
-创建索引:&lt;br /&gt;
-    create index on :lable(attName)&lt;br /&gt;
-删除索引:&lt;br /&gt;
-    delete index on :label(attName)&lt;br /&gt;
-索引使用:&lt;br /&gt;
-    默认是自动使用的。 一旦索引建立，随后但凡在where从句中出现具有索引的属性时，不论是简单的等值比较还是其他条件，索引的使用都是自动的。
-    但是也可以显式的指定索引的使用方式–using从句,using从句中是可以在单一查询中提供多个索引项来给cypher查询优化器提供索引提示。&lt;br /&gt;
-附：约束&lt;br /&gt;
-    查看约束情况：&lt;br /&gt;
-    CALL db.constraints&lt;br /&gt;
-    建约束&lt;br /&gt;
-    CREATE CONSTRAINT ON (movie:Movie) ASSERT movie.title IS UNIQUE&lt;br /&gt;
-    注意：Adding the unique constraint will implicitly add an index on that property. If the constraint is dropped, but the index is still needed, the index will have to be created explicitly.–截取至官方文档。唯一约束会自动创建索引。删除约束后需手动创建该索引。&lt;br /&gt;
-    删约束：&lt;br /&gt;
-    DROP CONSTRAINT ON (book:Book) ASSERT book.isbn IS UNIQUE&lt;br /&gt;&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;match (n:label)&amp;lt;br&amp;gt;
-using index n:label(attName)&amp;lt;br&amp;gt;
-where n.attName = attValue&amp;lt;br&amp;gt;
-return n&amp;lt;br&amp;gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;使用scan给Cypher Query Planner先扫描所有标签然后再执行后续的过滤，这种做法的结果意味着优秀的性能，毕竟使用标签本身可以不必考虑那些不必要的数据。这种做法的性能是较好的。&lt;br /&gt;&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;match (n:label)&amp;lt;br&amp;gt;
-using scan n:label&amp;lt;br&amp;gt;
-where n.attName = attValue&amp;lt;br&amp;gt;
-return n&amp;lt;br&amp;gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;理解查询计划:&lt;br /&gt;
-    Neo4j使用的都是基于成本的优化器（Cost Based Optimizer，CBO），用于制订精确的执行过程。可以采用如下两种不同的方式了解其内部的工作机制：&lt;br /&gt;
-    EXPLAIN：是解释机制，加入该关键字的Cypher语句可以预览执行的过程但并不实际执行，所以也不会产生任何结果。&lt;br /&gt;
-    PROFILE：则是画像机制，查询中使用该关键字，不仅能够看到执行计划的详细内容，也可以看到查询的执行结果。&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;优化举例&quot;&gt;优化举例&lt;/h4&gt;
-&lt;p&gt;优化前的cql:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;explain
-MATCH (n) where n.id IN ['binbin287644658'] 
-WITH collect(n) as nodes
-UNWIND nodes as n
-UNWIND nodes as m
-WITH * WHERE id(n) &amp;lt; id(m)
-MATCH path = (n)--(m)
-RETURN path
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;查询速度非常慢，因为节点走了全部节点扫描。原因是match (n)中并没有对标签进行限制。所以我们建立的索引是没有用处的。&lt;br /&gt;
-&lt;img src=&quot;/img/neo4jno1.jpg&quot; alt=&quot;cql未优化前&quot; /&gt;
-优化后的cql，主要就是使用字符串拼接的方式将具体的节点进行定位。&lt;br /&gt;&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;explain
-MATCH (n1:account {id:'wxid_hrm0cfv931j422'}),(n2:account {id:'binbin287644658'}),(n3:person {id:'320682198612083600'}),(n4:tel {id:'15258868649'}),(n5:device {id:'356996069532389'}),(n6:account {id:'a27563427'}),(n7:account {id:'wxid_q409jxhxvd0q12'}),(n8:account {id:'1004250324'}),(n9:tel {id:'666697734343'}),(n10:account {id:'wxid_xdbjmo94qzlm80'}),(n11:account {id:'lcg476634048'}),(n12:account {id:'ann_48'}),(n13:account {id:'liuxin601248'})WITH [n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13] as nodes
-UNWIND nodes as n
-UNWIND nodes as m
-WITH * WHERE id(n) &amp;lt; id(m)
-MATCH path = (n)--(m)
-RETURN path
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/neo4jno2.jpg&quot; alt=&quot;cql优化后&quot; /&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 02 Dec 2018 02:43:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/12/02/neo4J/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/12/02/neo4J/</guid>
-        
-        <category>Neo4J</category>
-        
-        <category>图数据库</category>
-        
-        <category>数据库</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>搭建基于Swagger的接口文档系统</title>
-        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
-&lt;p&gt;  程序员恐怕很多都是不想写文档的，但是一旦接手他人的项目又是第一时间说：文档呢？这确实是一个很常见的现象。其本质反应的就是书写文档比较耗时，技术人员不想做这种“无用功”与接手他人的项目，技术人员又不想看别人的代码，想通过阅读相关的文档加快上手速度之间的矛盾。&lt;br /&gt;
-  个人观点：好的规范一定要尽早养成。个人在刚刚参加工作的时候一开始的做法是在service层上写好接口注释，在注释中将相关的接口的功能、请求参数、响应进行描述。到后来采用Rap进行文档管理，Rap管理的好处就是简单、快速。相关的参数像填表一样的填好，比较简单无脑。但是Rap存在很多不足之处：比如说多人同时编辑存在互斥现象，单一文档同一时间只允许一个用户编辑，亦或是接口不支持在线的请求测试（可能自己不知道）等。而且Rap服务器（私服部署情况除外）是外部的，相关的安全性可能不是很靠得住。个人也没有搭建过公司自用的rap。所以相关的复杂度不是很清楚。但是今天，我想向你推荐的这个东西确实对于搭建一个自用的文档管理系统是很方便、高效的。&lt;br /&gt;
-  它就是Swagger。&lt;/p&gt;
-
-&lt;h2 id=&quot;正文&quot;&gt;正文&lt;/h2&gt;
-&lt;h4 id=&quot;what&quot;&gt;what?&lt;/h4&gt;
-&lt;p&gt;  维基百科:Swagger是一个开源软件框架，由大型工具生态系统支持，可帮助开发人员设计，构建，记录和使用RESTful Web服务。 虽然大多数用户通过Swagger UI工具识别Swagger，但Swagger工具集包括对自动化文档，代码生成和测试用例生成的支持。&lt;br /&gt;
-  其有三大工具：swagger-ui、swagger-editor、swagger-codegen。swagger-ui是用来显示API文档的，并且它还支持编辑和在线的请求测试。
-swagger-editor是一个在线的文档编辑文件工具，有助于整个框架中其他工具的使用，左边编辑右边显示。swagger-codegen,可以根据swagger.json或者swagger.yml文件生成指定的计算机语言指定框架的代码。&lt;/p&gt;
-
-&lt;h4 id=&quot;搭建过程&quot;&gt;搭建过程&lt;/h4&gt;
-&lt;p&gt;1、新建一个项目，执行 npm init初始化package.json。&lt;br /&gt;
-2、运行npm install swagger -g –save-dev安装Swagger包。&lt;br /&gt;
-3、在项目的根目录下新建一个api/swagger/swagger.yaml。并将一下部分复制进来。&lt;br /&gt;&lt;/p&gt;
-&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;na&quot;&gt;swagger&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;2.0&quot;&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
- &lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;1.0.0&quot;&lt;/span&gt;
- &lt;span class=&quot;na&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;xxx后台API&quot;&lt;/span&gt;
- &lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;接口文档说明以及测试&quot;&lt;/span&gt;
- &lt;span class=&quot;na&quot;&gt;contact&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-   &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;want&quot;&lt;/span&gt;
-   &lt;span class=&quot;na&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;beursuperman@163.com&quot;&lt;/span&gt; 
-&lt;span class=&quot;na&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;localhost:5500&quot;&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;schemes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
- &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;http&quot;&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;consumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
- &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;application/json&quot;&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;produces&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
- &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;application/json&quot;&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;paths&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;s&quot;&gt;/api/v1/queryAllGroupMemberChatRecordByChatroomId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;summary&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;查询群组所有节点之间的聊天记录.&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;consumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;application/json&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;parameters&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;body&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;param&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;请求体对象&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;schema&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;s&quot;&gt;$ref&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;#/definitions/queryAllGroupMemberChatRecordByChatroomIdReq&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;responses&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;A responsed object&lt;/span&gt;      
-&lt;span class=&quot;na&quot;&gt;definitions&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;queryAllGroupMemberChatRecordByChatroomIdReq&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;object&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;scroll&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;chatRoomId&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;size&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;sort&lt;/span&gt;
-      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;index&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;properties&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;scroll&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;string&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;5m'&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; 
-        &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;integer&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;20&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; 
-        &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;string&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;desc'&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;chatRoomId&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;string&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;8477243337@chatroom'&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;string&lt;/span&gt;
-        &lt;span class=&quot;na&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;chat'&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;4、运行Swagger project edit，此时会自动打开一个swagger编辑窗口，读取的内容就是上一步中的yaml文件&lt;br /&gt;
-5、尝试修改编辑窗口的内容，此时右侧会及时修改更新，而且api/swagger/swagger.yaml也会跟着自动更新&lt;br /&gt;
-6、下载Swagger-ui，拷贝dist文件夹中的代码到根目录下新建的public文件夹&lt;br /&gt;
-7、创建一个express项目，在根目录下新建index.js。代码如下：&lt;/p&gt;
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c1&quot;&gt;//先执行一下npm install&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; 
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;opn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;opn&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;listen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
-  &lt;span class=&quot;nx&quot;&gt;opn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;http://localhost:3000/api-doc&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;App listening on port 3000!&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;use&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;/api-doc&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;express&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;8、运行node index.js会启用swagger-ui功能，自动打开api展示页面，但是页面是默认的官网上的东西；&lt;br /&gt;
-9、将api/swagger文件夹下的/swagger.yaml文件复制到public文件夹下，打开public/index.html，在脚本中修改url为’./swagger.yaml’,刷新浏览器，即可看到我们的内容&lt;br /&gt;
-10、如何将swagger-editor文件的变化实时反馈到swagger-ui上，运行npm install gulp -g –save-dev安装gulp包，在根目录下新建gulpfile.js，代码如下(记得先安装好依赖)：&lt;br /&gt;&lt;/p&gt;
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;yaml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;js-yaml&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;fs&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// 建立api/swagger的swagger.yaml到public下的swagger.yaml联系&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;swagger&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;doc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;yaml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;safeLoad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;readFileSync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;__dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./api/swagger/swagger.yaml&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)));&lt;/span&gt; 
-    &lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;writeFile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;__dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./public/swagger.yaml&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stringify&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// 实时更新&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;watch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./api/swagger/swagger.yaml&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,[&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;swagger&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;11、再看下package.json中的内容：&lt;/p&gt;
-&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;doc-api&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;version&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;1.0.0&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;description&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;main&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;index.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;start&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;node index.js&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;swg&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;swagger project edit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;gulp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;gulp&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;author&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;want&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;license&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ISC&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;devDependencies&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;express&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;^4.15.2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;swagger&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0.7.5&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;gulp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;3.9.1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;js-yaml&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;3.8.3&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;opn&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;5.0.0&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;dependencies&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;cors&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;^2.8.5&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;12、新增readme.md添加使用说明：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&amp;gt; 须知
-* npm start 启动项目并跳转接口展示页面 
-* swagger project edit 接口文档在线编辑
-* npm run gulp 开始同步编辑 （项目一开始就要执行的命令,因为要实时监控api/swagger/swagger.yaml的编辑变动）
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;效果图&quot;&gt;效果图&lt;/h4&gt;
-&lt;p&gt;&lt;strong&gt;API编就页面&lt;/strong&gt;
-&lt;img src=&quot;/img/swagger-editor.jpg&quot; alt=&quot;编辑页面&quot; /&gt;
-&lt;strong&gt;API展示页面&lt;/strong&gt;
-&lt;img src=&quot;/img/swagger-ui.jpg&quot; alt=&quot;展示页面&quot; /&gt;
-&lt;strong&gt;API在线测试页面&lt;/strong&gt;
-&lt;img src=&quot;/img/swagger-test.jpg&quot; alt=&quot;测试页面&quot; /&gt;
-&lt;strong&gt;API在线测试响应&lt;/strong&gt;
-&lt;img src=&quot;/img/swagger-result.jpg&quot; alt=&quot;测试页面&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;期间遇到的问题&quot;&gt;期间遇到的问题：&lt;/h4&gt;
-&lt;p&gt;1、跨域问题。这个问题发生在swagger-ui中进行接口测试的时候。出现这个问题,谷歌并询问了宝哥,确认是跨域导致的，所以设置相关的跨域访问进行解决。但是通过查看Network发现又一个OPTION请求每次404？&lt;br /&gt;
-&lt;img src=&quot;/img/cors.jpg&quot; alt=&quot;报错&quot; /&gt;
-预检(OPTION)请求产生的大概率原因：&lt;br /&gt;&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;Get、Head、Post方法以外的请求方法&lt;/li&gt;
-  &lt;li&gt;如果是POST请求,Content-Type取这三个值以外的值：
-    &lt;ul&gt;
-      &lt;li&gt;application/x-www-form-urlencoded&lt;/li&gt;
-      &lt;li&gt;multipart/form-data&lt;/li&gt;
-      &lt;li&gt;text/plain
-那么很明显，consumes的值为application/json肯定是要发送预检请求(OPTION)的。那么如何处理。我暂时的做法是在项目中放掉OPTION请求，一旦预检请求没有响应那么后续的请求是不会发送的。
-        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-9
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;app.use (req, res, next)-&amp;gt;
-res.header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);
-res.header(&quot;Access-Control-Allow-Methods&quot;, &quot;PUT, GET, POST, DELETE, OPTIONS&quot;);
-res.header(&quot;Access-Control-Allow-Headers&quot;, &quot;Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials&quot;);
-res.header(&quot;Access-Control-Allow-Credentials&quot;, &quot;true&quot;);
-if req.method == 'OPTIONS'
- res.send(200)
-else 
- next()
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;2、yaml语法
-注意我这书写的格式OAS2的格式。别把OAS3的格式就往上写。相关的语法书写参考官方文档。
-&lt;a href=&quot;https://swagger.io/docs/specification/describing-request-body/&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;搭建参考：&lt;a href=&quot;https://zhuanlan.zhihu.com/p/26741562&quot;&gt;必至&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Mon, 05 Nov 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/11/05/swagger4APIDocument/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/11/05/swagger4APIDocument/</guid>
-        
-        <category>Swagger</category>
-        
-        <category>文档管理</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Git/提交规范</title>
-        <description>&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
-
-&lt;p&gt;  主要想针对官方文档的知识点做一些整理与记录。&lt;/p&gt;
-
-&lt;h4 id=&quot;git-基础优势以及相关原理思想&quot;&gt;Git 基础、优势以及相关原理、思想。&lt;/h4&gt;
-
-&lt;p&gt;Git 较之其他版本控制最主要的差别就是它对待数据的方式。其他大部分系统以文件列表变更方式存储信息，而 Git 更像是把数据看作是对小型文件系统的一组快照。本质来说 Git 是一个内容寻址文件系统。&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;Git 优势：&lt;br /&gt;
-1、近乎所有操作都是本地执行&lt;br /&gt;
-2、Git 保证完整性&lt;br /&gt;
-3、Git 一般只添加数据&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;工作目录下的所有文件不外乎两种状态：已跟踪或未跟踪。&lt;br /&gt;
-已跟踪文件又分三种状态：已提交（committed），已修改（modified）和已暂存（staged）。&lt;br /&gt;
-&lt;img src=&quot;/img/git文件状态变化周期.jpg&quot; alt=&quot;x&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;基本的 Git 工作流：&lt;br /&gt;
-1、在工作目录中修改某些文件。&lt;br /&gt;
-2、对修改后的文件进行快照，然后保存到暂存区域。&lt;br /&gt;
-3、提交更新，将保存在暂存区域的文件快照永久转储到 Git 目录中。&lt;br /&gt;
-&lt;img src=&quot;/img/git本地操作流.jpg&quot; alt=&quot;x&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;分支&quot;&gt;分支&lt;/h4&gt;
-
-&lt;p&gt;  先看一下进行 git add . 、git commit -m ‘xxx’ git 在做什么事情。&lt;br /&gt;
-  git add . 操作:git 会为每一个文件计算校验和（SHA-1 哈希算法）然后会把当前版本的文件快照保存到 git 仓库（Git 使用 blob 对象来保存他们），最终将校验和加入到暂存区等待提交。&lt;br /&gt;
-  git commit -m ‘xx’操作: Git 会先计算每一个子目录（本例中只有项目根目录）的校验和，然后在 Git 仓库中这些校验和保存为树对象。 随后，Git 便会创建一个提交对象，它除了包含上面提到的那些信息外，还包含指向这个树对象（项目根目录）的指针。如此一来，Git 就可以在需要的时候重现此次保存的快照。&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;  此时 Git 仓库中有 n+2 个对象：n 个 blob 对象（保存着文件快照）、一个树对象（记录着目录结构和 blob 对象索引）以及一个提交对象（包含着指向前述树对象的指针和所有提交信息）。&lt;br /&gt;
-&lt;img src=&quot;/img/git分支.png&quot; alt=&quot;x&quot; /&gt;
-第一次提交的提交对象较之之后的提交对象缺少一个指向上次提交对象（父对象）的指针。&lt;br /&gt;
-分支的创建也只是创建了一个可以移动的新指针，通过 HEAD 这个特殊的指针 Git 知晓当前是处于那个分支上面。&lt;br /&gt;
-关于 HEAD 指针的解释：在 Git 中，它是一个指针，指向当前所在的本地分支（译注：将 HEAD 想象为当前分支的别名）。&lt;br /&gt;
-分支切换就是将 HEAD 指针的指向切换一下。但是 git checkout branch-1 这个命令做了两件事。 一是使 HEAD 指回 master 分支，二是将工作目录恢复成 master 分支所指向的快照内容。&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;远程分支&quot;&gt;远程分支&lt;/h4&gt;
-
-&lt;p&gt;  &lt;strong&gt;远程分支（remote branch）是对远程仓库中的分支的索引&lt;/strong&gt;。它们是一些无法移动的本地分支；只有在 Git 进行网络交互时才会更新。远程分支就像是书签，提醒着你上次连接远程仓库时上面各分支的位置。&lt;br /&gt;
-  一次 Git 克隆会建立你自己的本地分支 master 和远程分支 origin/master，并且他们都执行 origin 上的 master 分支（Git 服务器上的 master 分支）。&lt;br /&gt;
-  如果本地 master 分支有所改动，那么本地的 master 分支会往前推进，如果服务器上的 master 分支也发生变动（他人推送了更新），那么服务器上的 master 分支也会往前推进。但是 origin/master 指针仍旧保持原位不会移动。可以通过使用 git fetch origin 来同步远程服务器上的数据到本地。该命令首先找到 origin 是哪个服务器（本例为 git.ourcompany.com），从上面获取你尚未拥有的数据，更新你本地的数据库，然后把 origin/master 的指针移到它最新的位置上&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;推送本地分支&lt;/strong&gt;&lt;br /&gt;
-  想要分享某个本地分支，需要手动的将它推送到一个我们拥有写权限的远程仓库。本地分支不会因为我们的写入操作而被自动同步到你引入的远程服务上，需要明确的执行推送分支的操作。&lt;br /&gt;
-git push (远程仓库名) (分支名) 栗子：git push origin want。这里其实走了一点捷径。Git 自动把 want 分支名扩展为 refs/heads/want:refs/heads/want，意为“取出我在本地的 want 分支，推送到远程仓库的 want 分支中去”。可以通过运行 git push origin want:want 来达到相同的效果 &lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;跟踪远程分支&lt;/strong&gt;&lt;br /&gt;
-  从远程分支 checkout 出来的本地分支，称为 跟踪分支 (tracking branch)。跟踪分支是一种和某个远程分支有直接联系的本地分支。在跟踪分支里输入 git push，Git 会自行推断应该向哪个服务器的哪个分支推送数据。同样，在这些分支里运行 git pull 会获取所有远程索引，并把它们的数据都合并到本地分支中来。在克隆仓库时，Git 通常会自动创建一个名为 master 的分支来跟踪 origin/master。这正是 git push 和 git pull 一开始就能正常工作的原因。&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;删除远程分支&lt;/strong&gt;&lt;br /&gt;
-git push origin :branchName
-&lt;strong&gt;分支的变基&lt;/strong&gt;&lt;br /&gt;
-  把一个分支中的修改整合到另一个分支的办法有两种：merge 和 rebase。&lt;br /&gt;
-最容易的整合分支的方法是 merge 命令，它会把两个分支最新的快照（C3 和 C4）以及二者最新的共同祖先（C2）进行三方合并，合并的结果是产生一个新的提交对象（C5）。&lt;br /&gt;
-&lt;img src=&quot;/img/Gitmerge操作.jpg&quot; alt=&quot;x&quot; /&gt;
-还有另外一个选择：你可以把在 C3 里产生的变化补丁在 C4 的基础上重新打一遍。在 Git 里，这种操作叫做变基（rebase）。它的原理是回到两个分支最近的共同祖先，根据当前分支（也就是要进行变基的分支 experiment）后续的历次提交对象（这里只有一个 C3），生成一系列文件补丁，然后以基底分支（也就是主干分支 master）最后一个提交对象（C4）为新的出发点，逐个应用之前准备好的补丁文件，最后会生成一个新的合并提交对象（C3’），从而改写 experiment 的提交历史，使它成为 master 分支的直接下游。变基能产生一次更为完整的提交历史。如果视察一个变基过的分支的历史记录，看起来会更清楚：仿佛所有修改都是在一根线上先后进行的，尽管实际上它们原本是同时并行发生的。&lt;br /&gt;
-  一般我们使用变基的目的，是想要得到一个能在远程分支上干净应用的补丁 — 比如某些项目你不是维护者，但想帮点忙的话，最好用变基：先在自己的一个分支里进行开发，当准备向主项目提交补丁的时候，根据最新的 origin/master 进行一次变基操作然后再提交，这样维护者就不需要做任何整合工作（译注：实际上是把解决分支补丁同最新主干代码之间冲突的责任，化转为由提交补丁的人来解决。），只需根据你提供的仓库地址作一次快进合并，或者直接采纳你提交的补丁。[只需根据你提供的仓库地址作一次快进合并，或者直接采纳你提交的补丁。]&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;那么两者的区别是？从官方文档的表述来说，还是对于代码合并的操作步骤的不同。merge只合并一步，但是rebase却有三步。&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;要用它得遵守一条准则：一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行变基操作。&lt;br /&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h4 id=&quot;分布式工作流程&quot;&gt;分布式工作流程&lt;/h4&gt;
-
-&lt;p&gt;常见工作流：&lt;br /&gt;
-1、集中式工作流 2、集成管理者工作流 3、司令官与副官工作流&lt;br /&gt;
-集中式：a、b 协作，b 想提交代码，但是 b 需要等待 a 提交，待 a 提交之后再将 a 的代码合到本地才能提交。（十分脑残）&lt;br /&gt;
-集成管理者工作流：有一个爸爸管理的仓库（官方权威的仓库），你想提代码，先从爸爸那拿一份代码副本,修改代码，把修改后的代码推送到自己的公开仓库。然后给爸爸发邮件，请求他拉取你的代码,爸爸收到邮件，看你顺眼，会在本地将你的公开仓库加为远程仓库合并修改，测试一下，如果 bug 很多，对不起拉黑！（just joke），通过测试之后爸爸会将本地的代码推送到官方权威仓库。&lt;br /&gt;
-司令官与副官工作流: 集成管理者的变种，爸爸上面还有一个爸爸（你大爷）。你大爷维护这官方权威仓库，每个开发者都是从大爷那拿到代码的，修改之后给爸爸审核，审核完爸爸的代码会被爷爷拿走。当然你大爷不只一个爸爸。&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;git-工具&quot;&gt;Git 工具&lt;/h4&gt;
-
-&lt;h4 id=&quot;提交规范&quot;&gt;提交规范&lt;/h4&gt;
-
-&lt;p&gt;  建议小步提交，防止一次修改过多文件，导致后期维护、撤销等困难。&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;工作&lt;/strong&gt;&lt;br /&gt;
-  如果是使用 jira 作为看板工具，那么提交的时候最好将 jira 的任务卡号信息携带进去。&lt;br /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;[任务卡号] 老王 &amp;amp; 老李: do something
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;常规&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;[任务分类] 修改模块/组件：修改内容
-任务分类：
-1、功能新增
-2、功能完善
-3、bug修复
-4、文档补充
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;功能部分提测&lt;/strong&gt;
-先从master分支切出一个开发分支进行开发。部分功能开发完毕之后将其推送到测试环境会拉取的分支上。测试通过之后将这个开发分支合并到master分支进行发布。&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;常用命令&quot;&gt;常用命令&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;git help 帮助。&lt;/li&gt;
-  &lt;li&gt;git init 现有目录初始化仓库，仅仅只是初始化，项目中的文件未被跟踪。&lt;/li&gt;
-  &lt;li&gt;git clone 克隆代码 ,克隆操作会自动使用默认的 master 和 origin 名字。&lt;/li&gt;
-  &lt;li&gt;git checkout 分支切换 / 切到指定的某次提交。&lt;/li&gt;
-  &lt;li&gt;git checkout -b ‘xxx’ 切出分支 xxx。&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;git checkout -b 本地分支名 origin/远程分支名 在本地创建一个新的分支，并与远程分支进行关联。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;git branch 不加任何参数这个命令会列出所有分支的清单 1、-b(new branch 新建一个分支) 2、-d 删除本地分支 3、-v 查看各个分支最后一个提交对象的信息 4、-D 强制删除分支 5、--merged 和 --no-merged 筛选出你已经（或尚未）与当前分支合并的分支。&lt;/li&gt;
-  &lt;li&gt;git status 检查当前文件状态 -s 参数状态简览。&lt;/li&gt;
-  &lt;li&gt;git stash 将改动暂时存放到git的暂存区（栈结构）。&lt;/li&gt;
-  &lt;li&gt;git stash list 列出暂存区的内容。&lt;/li&gt;
-  &lt;li&gt;git stash pop 推出最进的暂存code到本地工作区间。&lt;/li&gt;
-  &lt;li&gt;git diff 对比本地代码与上次的区别 1、--cache 查看已经暂存起来的变化 2、--check 检查空白错误。&lt;/li&gt;
-  &lt;li&gt;git add 跟踪新文件（记得和.gitignore 一起食用效果更佳） 1、-i 交互式暂存。&lt;/li&gt;
-  &lt;li&gt;git RESET HEAD 取消暂存的文件（有个 git checkout --fileName 命令用于撤销对文件的修改但是不推荐使用）。&lt;/li&gt;
-  &lt;li&gt;git log 查看提交历史 1、-p 显示每次提交的差异，后续可跟-n eg:git log -p -2 最近两次提交 的差异 2、--graph 显示 ASCII 图形表示的分支合并历史 3、--oneline 4、--reverse。&lt;/li&gt;
-  &lt;li&gt;git reflog 查看所有分支的操作记录（包含删除的commit和reset操作）。&lt;/li&gt;
-  &lt;li&gt;git reset --hard [分支hash] 回退到指定提交。&lt;/li&gt;
-  &lt;li&gt;git show SHA-1(不短于四个字符) 展示某次提交的内容。&lt;/li&gt;
-  &lt;li&gt;git reflog 查看引用日志。引用日志：一份记录最近几个月你的 HEAD 和分支的引用的日志。&lt;/li&gt;
-  &lt;li&gt;git commit 提交更新 -a：跳过使用暂存区域【嫌 git add .麻烦的，否则还是一步一步来吧,值得注意的是如果文件还没有被git跟踪，那么使用git commit -am不会生效】&lt;/li&gt;
-  &lt;li&gt;git commit --amend 重命名上次的 commit。&lt;/li&gt;
-  &lt;li&gt;git reset --soft HEAD^ 撤销上次的提交。&lt;/li&gt;
-  &lt;li&gt;git push 提交代码。&lt;/li&gt;
-  &lt;li&gt;git push --set-upstream origin 分支名 把本地分支推送到远程分支。&lt;/li&gt;
-  &lt;li&gt;git push origin :xxx 删除远程分支 xxx。&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;git rm 移除文件 1、-f 删除文件之前已经对文件进行改动并且已经放到暂存区，需用-f 进行强制删除。2、--cached 仅从跟踪清单中删除，当前工作目录仍会保留相关文件。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;git remote -v 查看远程仓库。&lt;/li&gt;
-  &lt;li&gt;git remote show [remote-name] 查看远程仓库。&lt;/li&gt;
-  &lt;li&gt;git remote add &lt;shortName&gt; &lt;url&gt; 添加远程仓库，同时指定一个简写名 eg:git add want git://github.com/xxx/xx 以后就可以用 want 代替对应的仓库地址了。&lt;/url&gt;&lt;/shortName&gt;&lt;/li&gt;
-  &lt;li&gt;git remote rename [new-name] 远程仓库重新命名(修改某个远程仓库在本地的简称) git remote rename want wantu。&lt;/li&gt;
-  &lt;li&gt;git remote rm [remote-name] 删除远程仓库。&lt;/li&gt;
-  &lt;li&gt;git fetch [remote-name] 从远程仓库拉取本地还没有的数据。执行完成后，你将会拥有那个远程仓库中所有分支的引用，可以随时合并或查看。&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;git merge branch-name 合并分支（一般在其他分支合并自己的开发分支，因为一旦出现冲突处理起来比较方便）如果顺着一个分支走下去可以到达另一个分支的话，那么 Git 在合并两者时，只会简单地把指针右移，因为这种单线的历史分支不存在任何需要解决的分歧，所以这种合并过程可以称为快进（Fast forward）。&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;git tag 列出标签。&lt;/li&gt;
-  &lt;li&gt;git tag -a &lt;tag-version&gt; -m &lt;remark-info&gt; 添加附注标签（推荐使用）-a(annotated：注释)。&lt;/remark-info&gt;&lt;/tag-version&gt;&lt;/li&gt;
-  &lt;li&gt;git tag &lt;tag-version&gt; 添加轻量标签。&lt;/tag-version&gt;&lt;/li&gt;
-  &lt;li&gt;git tag -a &lt;tag-version&gt; &lt;校验和或者部分校验和&gt; 后期打标签。&lt;/校验和或者部分校验和&gt;&lt;/tag-version&gt;&lt;/li&gt;
-  &lt;li&gt;git push origin [tagname] 显式的将标签推送到远程服务器（git push 并不会把 tag 标签推送到远程）。&lt;/li&gt;
-  &lt;li&gt;git push [origin] --tags 一次推送所有本地新增的标签上去 eg: git push --tags。&lt;/li&gt;
-  &lt;li&gt;git config --global alias.ci commit =&amp;gt; git commit 可以用 git ci 替代 同理其他命令。&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Fri, 02 Nov 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/11/02/git/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/11/02/git/</guid>
-        
-        <category>git</category>
-        
-        <category>版本控制</category>
         
         
       </item>
