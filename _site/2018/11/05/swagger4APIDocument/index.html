@@ -550,7 +550,7 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
         <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">5m'</span>
       <span class="na">size</span><span class="pi">:</span> 
         <span class="na">type</span><span class="pi">:</span> <span class="s">integer</span>
-        <span class="na">example</span><span class="pi">:</span> <span class="m">20</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="s">20</span>
       <span class="na">sort</span><span class="pi">:</span> 
         <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
         <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">desc'</span>
@@ -577,16 +577,16 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 10
 11
 </pre></td><td class="rouge-code"><pre><span class="c1">//先执行一下npm install</span>
-<span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span> 
-<span class="kd">var</span> <span class="nx">opn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">opn</span><span class="dl">'</span><span class="p">);</span> 
+<span class="kd">var</span> <span class="nx">opn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'opn'</span><span class="p">);</span> 
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
-  <span class="nx">opn</span><span class="p">(</span><span class="dl">'</span><span class="s1">http://localhost:3000/api-doc</span><span class="dl">'</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">App listening on port 3000!</span><span class="dl">'</span><span class="p">);</span>
+  <span class="nx">opn</span><span class="p">(</span><span class="s1">'http://localhost:3000/api-doc'</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'App listening on port 3000!'</span><span class="p">);</span>
 <span class="p">});</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api-doc</span><span class="dl">'</span><span class="p">,</span> <span class="nx">express</span><span class="p">.</span><span class="kd">static</span><span class="p">(</span><span class="dl">'</span><span class="s1">public</span><span class="dl">'</span><span class="p">));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/api-doc'</span><span class="p">,</span> <span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="s1">'public'</span><span class="p">));</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>8、运行node index.js会启用swagger-ui功能，自动打开api展示页面，但是页面是默认的官网上的东西；<br />
 9、将api/swagger文件夹下的/swagger.yaml文件复制到public文件夹下，打开public/index.html，在脚本中修改url为’./swagger.yaml’,刷新浏览器，即可看到我们的内容<br />
@@ -606,20 +606,20 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 13
 14
 15
-</pre></td><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">gulp</span><span class="dl">'</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">yaml</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">js-yaml</span><span class="dl">'</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">fs</span><span class="dl">'</span><span class="p">);</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">yaml</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'js-yaml'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'path'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'fs'</span><span class="p">);</span>
 
 <span class="c1">// 建立api/swagger的swagger.yaml到public下的swagger.yaml联系</span>
-<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="dl">'</span><span class="s1">swagger</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
-    <span class="kd">var</span> <span class="nx">doc</span> <span class="o">=</span> <span class="nx">yaml</span><span class="p">.</span><span class="nx">safeLoad</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">'</span><span class="s1">./api/swagger/swagger.yaml</span><span class="dl">'</span><span class="p">)));</span> 
-    <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">'</span><span class="s1">./public/swagger.yaml</span><span class="dl">'</span><span class="p">),</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">doc</span><span class="p">,</span><span class="kc">null</span><span class="p">,</span><span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">));</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'swagger'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">doc</span> <span class="o">=</span> <span class="nx">yaml</span><span class="p">.</span><span class="nx">safeLoad</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'./api/swagger/swagger.yaml'</span><span class="p">)));</span> 
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'./public/swagger.yaml'</span><span class="p">),</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">doc</span><span class="p">,</span><span class="kc">null</span><span class="p">,</span><span class="s1">' '</span><span class="p">));</span>
 <span class="p">});</span>
 
 <span class="c1">// 实时更新</span>
-<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="dl">'</span><span class="s1">default</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
-    <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="dl">'</span><span class="s1">./api/swagger/swagger.yaml</span><span class="dl">'</span><span class="p">,[</span><span class="dl">'</span><span class="s1">swagger</span><span class="dl">'</span><span class="p">]);</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'default'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s1">'./api/swagger/swagger.yaml'</span><span class="p">,[</span><span class="s1">'swagger'</span><span class="p">]);</span>
 <span class="p">})</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>11、再看下package.json中的内容：</p>
@@ -647,26 +647,26 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 22
 23
 </pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
-  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"doc-api"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"main"</span><span class="p">:</span><span class="w"> </span><span class="s2">"index.js"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"node index.js"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"swg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"swagger project edit"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gulp"</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"doc-api"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"main"</span><span class="p">:</span><span class="w"> </span><span class="s2">"index.js"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"node index.js"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"swg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"swagger project edit"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gulp"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="nl">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">"want"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ISC"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"devDependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"express"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^4.15.2"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"swagger"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.7.5"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.9.1"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"js-yaml"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.8.3"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"opn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5.0.0"</span><span class="w">
+  </span><span class="s2">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">"want"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ISC"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"devDependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"express"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^4.15.2"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"swagger"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.7.5"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.9.1"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"js-yaml"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.8.3"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"opn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5.0.0"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="nl">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"cors"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^2.8.5"</span><span class="w">
+  </span><span class="s2">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"cors"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^2.8.5"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></pre></td></tr></tbody></table></code></pre></div></div>

@@ -15,6 +15,7 @@
     
     <meta property="og:type" content="article">
     <meta property="og:description" content="前言
+
 ">
     
     <meta property="article:published_time" content="2019-08-10T06:09:00Z">
@@ -519,7 +520,7 @@
  * @LastEditTime: 2019-08-12 09:33:01
  */</span>
 
-<span class="kd">var</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">crypto</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"crypto"</span><span class="p">);</span>
 
 <span class="cm">/**
  * 加密方法
@@ -529,10 +530,10 @@
  * @returns string 密文
  */</span>
 <span class="kd">var</span> <span class="nx">encrypt</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">iv</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">cipher</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createCipheriv</span><span class="p">(</span><span class="dl">"</span><span class="s2">aes-128-cbc</span><span class="dl">"</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">iv</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">crypted</span> <span class="o">=</span> <span class="nx">cipher</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="dl">"</span><span class="s2">utf8</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">binary</span><span class="dl">"</span><span class="p">);</span>
-  <span class="nx">crypted</span> <span class="o">+=</span> <span class="nx">cipher</span><span class="p">.</span><span class="nx">final</span><span class="p">(</span><span class="dl">"</span><span class="s2">binary</span><span class="dl">"</span><span class="p">);</span>
-  <span class="nx">crypted</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">crypted</span><span class="p">,</span> <span class="dl">"</span><span class="s2">binary</span><span class="dl">"</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="dl">"</span><span class="s2">base64</span><span class="dl">"</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">cipher</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createCipheriv</span><span class="p">(</span><span class="s2">"aes-128-cbc"</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">iv</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">crypted</span> <span class="o">=</span> <span class="nx">cipher</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s2">"utf8"</span><span class="p">,</span> <span class="s2">"binary"</span><span class="p">);</span>
+  <span class="nx">crypted</span> <span class="o">+=</span> <span class="nx">cipher</span><span class="p">.</span><span class="kr">final</span><span class="p">(</span><span class="s2">"binary"</span><span class="p">);</span>
+  <span class="nx">crypted</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">crypted</span><span class="p">,</span> <span class="s2">"binary"</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="s2">"base64"</span><span class="p">);</span>
   <span class="k">return</span> <span class="nx">crypted</span><span class="p">;</span>
 <span class="p">};</span>
 
@@ -545,24 +546,24 @@
  * @return: 解密后的数据
  */</span>
 <span class="kd">var</span> <span class="nx">decrypt</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">iv</span><span class="p">,</span> <span class="nx">crypted</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">crypted</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">crypted</span><span class="p">,</span> <span class="dl">"</span><span class="s2">base64</span><span class="dl">"</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="dl">"</span><span class="s2">binary</span><span class="dl">"</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">decipher</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createDecipheriv</span><span class="p">(</span><span class="dl">"</span><span class="s2">aes-128-cbc</span><span class="dl">"</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">iv</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">decoded</span> <span class="o">=</span> <span class="nx">decipher</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">crypted</span><span class="p">,</span> <span class="dl">"</span><span class="s2">binary</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">utf8</span><span class="dl">"</span><span class="p">);</span>
-  <span class="nx">decoded</span> <span class="o">+=</span> <span class="nx">decipher</span><span class="p">.</span><span class="nx">final</span><span class="p">(</span><span class="dl">"</span><span class="s2">utf8</span><span class="dl">"</span><span class="p">);</span>
+  <span class="nx">crypted</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span><span class="nx">crypted</span><span class="p">,</span> <span class="s2">"base64"</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="s2">"binary"</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">decipher</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createDecipheriv</span><span class="p">(</span><span class="s2">"aes-128-cbc"</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">iv</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">decoded</span> <span class="o">=</span> <span class="nx">decipher</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">crypted</span><span class="p">,</span> <span class="s2">"binary"</span><span class="p">,</span> <span class="s2">"utf8"</span><span class="p">);</span>
+  <span class="nx">decoded</span> <span class="o">+=</span> <span class="nx">decipher</span><span class="p">.</span><span class="kr">final</span><span class="p">(</span><span class="s2">"utf8"</span><span class="p">);</span>
   <span class="k">return</span> <span class="nx">decoded</span><span class="p">;</span>
 <span class="p">};</span>
 
-<span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">(IJf621ea5c0ok8j</span><span class="dl">"</span><span class="p">;</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`key:</span><span class="p">${</span><span class="nx">key</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">)}</span><span class="s2">`</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">iv</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">02kk950004598718</span><span class="dl">"</span><span class="p">;</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`iv:</span><span class="p">${</span><span class="nx">iv</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">)}</span><span class="s2">`</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">want dddd</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="s2">"(IJf621ea5c0ok8j"</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`key:</span><span class="p">${</span><span class="nx">key</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="s2">"hex"</span><span class="p">)}</span><span class="s2">`</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">iv</span> <span class="o">=</span> <span class="s2">"02kk950004598718"</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`iv:</span><span class="p">${</span><span class="nx">iv</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="s2">"hex"</span><span class="p">)}</span><span class="s2">`</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="s2">"want dddd"</span><span class="p">;</span>
 
 <span class="kd">var</span> <span class="nx">crypted</span> <span class="o">=</span> <span class="nx">encrypt</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">iv</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
 
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">数据加密后:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">crypted</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"数据加密后:"</span><span class="p">,</span> <span class="nx">crypted</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">dec</span> <span class="o">=</span> <span class="nx">decrypt</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">iv</span><span class="p">,</span> <span class="nx">crypted</span><span class="p">);</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">数据解密后:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">dec</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"数据解密后:"</span><span class="p">,</span> <span class="nx">dec</span><span class="p">);</span>
 
 <span class="cm">/**
  * k: ['751f621ea5c8f930','751f621ea5c0ok8j','@#$898js8.9ksj8j']

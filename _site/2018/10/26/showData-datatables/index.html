@@ -467,10 +467,10 @@
 2
 3
 4
-</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">link</span> <span class="nx">rel</span><span class="o">=</span><span class="dl">"</span><span class="s2">stylesheet</span><span class="dl">"</span> <span class="nx">type</span><span class="o">=</span><span class="dl">"</span><span class="s2">text/css</span><span class="dl">"</span>
-          <span class="nx">href</span><span class="o">=</span><span class="dl">"</span><span class="s2">https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/b-1.4.2/b-html5-1.4.2/datatables.min.css</span><span class="dl">"</span><span class="o">/&gt;</span>
-    <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="dl">"</span><span class="s2">text/javascript</span><span class="dl">"</span>
-            <span class="nx">src</span><span class="o">=</span><span class="dl">"</span><span class="s2">https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/b-1.4.2/b-html5-1.4.2/datatables.min.js</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
+</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">link</span> <span class="nx">rel</span><span class="o">=</span><span class="s2">"stylesheet"</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text/css"</span>
+          <span class="nx">href</span><span class="o">=</span><span class="s2">"https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/b-1.4.2/b-html5-1.4.2/datatables.min.css"</span><span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text/javascript"</span>
+            <span class="nx">src</span><span class="o">=</span><span class="s2">"https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/b-1.4.2/b-html5-1.4.2/datatables.min.js"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
 </span></pre></td></tr></tbody></table></code></pre></div></div>
 
 <blockquote>
@@ -480,7 +480,7 @@
 <p>注意table标签中的内容是可选的，也就是说thead tbody 这两个标签是可选的。</p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">table</span> <span class="kd">class</span><span class="o">=</span><span class="dl">"</span><span class="s2">table b-t</span><span class="dl">"</span>  <span class="nx">id</span><span class="o">=</span><span class="dl">"</span><span class="s2">t1</span><span class="dl">"</span><span class="o">&gt;</span>
+</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">table</span> <span class="kd">class</span><span class="o">=</span><span class="s2">"table b-t"</span>  <span class="nx">id</span><span class="o">=</span><span class="s2">"t1"</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="sr">/table</span><span class="err">&gt;
 </span></pre></td></tr></tbody></table></code></pre></div></div>
 <blockquote>
@@ -593,8 +593,8 @@
 104
 105
 </pre></td><td class="rouge-code"><pre><span class="c1">//最基本的样子</span>
-<span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1"># t1</span><span class="dl">'</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#datatables</span><span class="dl">'</span><span class="p">).</span><span class="nx">dataTable</span><span class="p">({</span>
+<span class="nx">$</span><span class="p">(</span><span class="s1">'# t1'</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">'#datatables'</span><span class="p">).</span><span class="nx">dataTable</span><span class="p">({</span>
     <span class="p">...</span>
     <span class="p">});</span>
     <span class="p">}</span>
@@ -602,26 +602,26 @@
 
 <span class="c1">//一个工作中的例子 </span>
 <span class="c1">//一定注意以下列设置中的对象数组中每个对象的data属性的值一定要和数据库查询出来的列名对上！</span>
-<span class="nx">oTable</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#sales-details</span><span class="dl">'</span><span class="p">).</span><span class="nx">DataTable</span><span class="p">({</span>
-            <span class="dl">"</span><span class="s2">ajax</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+<span class="nx">oTable</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'#sales-details'</span><span class="p">).</span><span class="nx">DataTable</span><span class="p">({</span>
+            <span class="s2">"ajax"</span><span class="p">:</span> <span class="p">{</span>
                 <span class="c1">//请求数据</span>
-                <span class="na">url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/api/brand/sales</span><span class="dl">"</span><span class="p">,</span>
+                <span class="na">url</span><span class="p">:</span> <span class="s2">"/api/brand/sales"</span><span class="p">,</span>
                 <span class="c1">//数据返回格式</span>
-                <span class="na">dataType</span><span class="p">:</span> <span class="dl">'</span><span class="s1">json</span><span class="dl">'</span><span class="p">,</span>
+                <span class="na">dataType</span><span class="p">:</span> <span class="s1">'json'</span><span class="p">,</span>
                 <span class="c1">//请求方式</span>
-                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">get</span><span class="dl">'</span><span class="p">,</span>
+                <span class="na">type</span><span class="p">:</span> <span class="s1">'get'</span><span class="p">,</span>
                 <span class="c1">//请求携带参数</span>
                 <span class="na">data</span><span class="p">:</span> <span class="p">{</span>
                 	<span class="p">...</span>
                 <span class="p">},</span>
                 <span class="c1">//对返回的数据进行处理，其中可以出发其他的一些数据可视化的工具，比如说echarts。对于要展示的数据，对其进行return。</span>
                 <span class="na">dataSrc</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">tag</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">success</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">tag</span> <span class="o">===</span> <span class="s1">'success'</span><span class="p">)</span> <span class="p">{</span>
                         <span class="c1">//data对象中的detail属性的值是我们想要展示在datatables上的。</span>
                         <span class="k">return</span> <span class="nx">data</span><span class="p">.</span><span class="nx">details</span><span class="p">;</span>
                     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 						<span class="nx">BootstrapDialog</span><span class="p">.</span><span class="nx">show</span><span class="p">({</span>
-							<span class="na">title</span><span class="p">:</span> <span class="dl">'</span><span class="s1">服务器返回错误</span><span class="dl">'</span><span class="p">,</span>
+							<span class="na">title</span><span class="p">:</span> <span class="s1">'服务器返回错误'</span><span class="p">,</span>
 							<span class="na">message</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
 						<span class="p">});</span>
                         <span class="k">return</span> <span class="p">[];</span>
@@ -631,66 +631,66 @@
                 <span class="p">},</span>
                 <span class="c1">//错误处理</span>
                 <span class="na">error</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-                    <span class="nx">BootstrapDialog</span><span class="p">.</span><span class="nx">show</span><span class="p">({</span><span class="na">title</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Error</span><span class="dl">'</span><span class="p">,</span> <span class="na">message</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">error</span><span class="p">)});</span>
+                    <span class="nx">BootstrapDialog</span><span class="p">.</span><span class="nx">show</span><span class="p">({</span><span class="na">title</span><span class="p">:</span> <span class="s1">'Error'</span><span class="p">,</span> <span class="na">message</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">error</span><span class="p">)});</span>
                 <span class="p">}</span>
             <span class="p">},</span>
             <span class="c1">//绘制结束触发的回调</span>
-            <span class="dl">"</span><span class="s2">fnDrawCallback</span><span class="dl">"</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">oSettings</span><span class="p">)</span> <span class="p">{</span>
+            <span class="s2">"fnDrawCallback"</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">oSettings</span><span class="p">)</span> <span class="p">{</span>
                 <span class="p">...</span>
             <span class="p">},</span>
-            <span class="dl">"</span><span class="s2">processing</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-            <span class="dl">"</span><span class="s2">iDisplayLength</span><span class="dl">"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
-            <span class="dl">"</span><span class="s2">aaSorting</span><span class="dl">"</span><span class="p">:</span> <span class="p">[[</span><span class="mi">6</span><span class="p">,</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span><span class="p">]],</span>
+            <span class="s2">"processing"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="s2">"iDisplayLength"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+            <span class="s2">"aaSorting"</span><span class="p">:</span> <span class="p">[[</span><span class="mi">6</span><span class="p">,</span> <span class="s2">"desc"</span><span class="p">]],</span>
             <span class="c1">//国际化操作</span>
-            <span class="dl">"</span><span class="s2">oLanguage</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="dl">"</span><span class="s2">sLengthMenu</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">显示 _MENU_ 记录</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sEmptyTable</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">未有相关数据</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sInfo</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录。</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sInfoEmpty</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">当前显示0到0条，共0条记录</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sInfoFiltered</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">（数据库中共为 _MAX_ 条记录）</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sSearch</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">模糊查询：</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">bDeferRender</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sUrl</span><span class="dl">"</span><span class="p">:</span> <span class="dl">""</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">oPaginate</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="dl">"</span><span class="s2">sFirst</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">首页</span><span class="dl">"</span><span class="p">,</span>
-                    <span class="dl">"</span><span class="s2">sPrevious</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2"> 上一页 </span><span class="dl">"</span><span class="p">,</span>
-                    <span class="dl">"</span><span class="s2">sNext</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2"> 下一页 </span><span class="dl">"</span><span class="p">,</span>
-                    <span class="dl">"</span><span class="s2">sLast</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2"> 尾页 </span><span class="dl">"</span>
+            <span class="s2">"oLanguage"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"sLengthMenu"</span><span class="p">:</span> <span class="s2">"显示 _MENU_ 记录"</span><span class="p">,</span>
+                <span class="s2">"sEmptyTable"</span><span class="p">:</span> <span class="s2">"未有相关数据"</span><span class="p">,</span>
+                <span class="s2">"sInfo"</span><span class="p">:</span> <span class="s2">"当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录。"</span><span class="p">,</span>
+                <span class="s2">"sInfoEmpty"</span><span class="p">:</span> <span class="s2">"当前显示0到0条，共0条记录"</span><span class="p">,</span>
+                <span class="s2">"sInfoFiltered"</span><span class="p">:</span> <span class="s2">"（数据库中共为 _MAX_ 条记录）"</span><span class="p">,</span>
+                <span class="s2">"sSearch"</span><span class="p">:</span> <span class="s2">"模糊查询："</span><span class="p">,</span>
+                <span class="s2">"bDeferRender"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="s2">"sUrl"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+                <span class="s2">"oPaginate"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"sFirst"</span><span class="p">:</span> <span class="s2">"首页"</span><span class="p">,</span>
+                    <span class="s2">"sPrevious"</span><span class="p">:</span> <span class="s2">" 上一页 "</span><span class="p">,</span>
+                    <span class="s2">"sNext"</span><span class="p">:</span> <span class="s2">" 下一页 "</span><span class="p">,</span>
+                    <span class="s2">"sLast"</span><span class="p">:</span> <span class="s2">" 尾页 "</span>
                 <span class="p">},</span>
-                <span class="dl">"</span><span class="s2">oAria</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="dl">"</span><span class="s2">sSortAscending</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2"> - click/return to sort ascending</span><span class="dl">"</span><span class="p">,</span>
-                    <span class="dl">"</span><span class="s2">sSortDescending</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2"> - click/return to sort descending</span><span class="dl">"</span>
+                <span class="s2">"oAria"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"sSortAscending"</span><span class="p">:</span> <span class="s2">" - click/return to sort ascending"</span><span class="p">,</span>
+                    <span class="s2">"sSortDescending"</span><span class="p">:</span> <span class="s2">" - click/return to sort descending"</span>
                 <span class="p">}</span>
 
             <span class="p">},</span>
-            <span class="dl">'</span><span class="s1">dom</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;"float_left"B&gt;&lt;"float_right"f&gt;rt&lt;"float_left"i&gt;&lt;"float_right"p&gt;</span><span class="dl">'</span><span class="p">,</span>
+            <span class="s1">'dom'</span><span class="p">:</span> <span class="s1">'&lt;"float_left"B&gt;&lt;"float_right"f&gt;rt&lt;"float_left"i&gt;&lt;"float_right"p&gt;'</span><span class="p">,</span>
             <span class="c1">//数据导出</span>
-            <span class="dl">"</span><span class="s2">buttons</span><span class="dl">"</span><span class="p">:</span> <span class="p">[{</span>
-                <span class="na">extend</span><span class="p">:</span> <span class="dl">'</span><span class="s1">csv</span><span class="dl">'</span><span class="p">,</span>
-                <span class="na">text</span><span class="p">:</span> <span class="dl">'</span><span class="s1">导出csv</span><span class="dl">'</span><span class="p">,</span>
-                <span class="na">className</span><span class="p">:</span> <span class="dl">'</span><span class="s1">btn btn-info</span><span class="dl">'</span><span class="p">,</span>
-                <span class="na">charSet</span><span class="p">:</span> <span class="dl">"</span><span class="s2">utf8</span><span class="dl">"</span>
+            <span class="s2">"buttons"</span><span class="p">:</span> <span class="p">[{</span>
+                <span class="na">extend</span><span class="p">:</span> <span class="s1">'csv'</span><span class="p">,</span>
+                <span class="na">text</span><span class="p">:</span> <span class="s1">'导出csv'</span><span class="p">,</span>
+                <span class="na">className</span><span class="p">:</span> <span class="s1">'btn btn-info'</span><span class="p">,</span>
+                <span class="na">charSet</span><span class="p">:</span> <span class="s2">"utf8"</span>
             <span class="p">},</span> <span class="p">{</span>
-                <span class="na">extend</span><span class="p">:</span> <span class="dl">'</span><span class="s1">excel</span><span class="dl">'</span><span class="p">,</span>
-                <span class="na">text</span><span class="p">:</span> <span class="dl">'</span><span class="s1">导出excel</span><span class="dl">'</span><span class="p">,</span>
-                <span class="na">className</span><span class="p">:</span> <span class="dl">'</span><span class="s1">btn btn-info</span><span class="dl">'</span>
+                <span class="na">extend</span><span class="p">:</span> <span class="s1">'excel'</span><span class="p">,</span>
+                <span class="na">text</span><span class="p">:</span> <span class="s1">'导出excel'</span><span class="p">,</span>
+                <span class="na">className</span><span class="p">:</span> <span class="s1">'btn btn-info'</span>
 
             <span class="p">}],</span>
             <span class="c1">//列设置</span>
-            <span class="dl">"</span><span class="s2">aoColumns</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">城市</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">city_name</span><span class="dl">"</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">店铺</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">store_name</span><span class="dl">"</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">地址</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">商品</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">goods_name</span><span class="dl">"</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">购买量(散装)</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">购买金额</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">asum</span><span class="dl">"</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">送达时间</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">arrived_time</span><span class="dl">"</span><span class="p">},</span>
+            <span class="s2">"aoColumns"</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"城市"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"city_name"</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"店铺"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"store_name"</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"地址"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"address"</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"商品"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"goods_name"</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"购买量(散装)"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"amount"</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"购买金额"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"asum"</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"送达时间"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"arrived_time"</span><span class="p">},</span>
             <span class="p">],</span>
             <span class="c1">//特殊列数据处理 对第7列（从0开始）的值进行时间的格式化</span>
-            <span class="dl">"</span><span class="s2">aoColumnDefs</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"aoColumnDefs"</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
-                    <span class="dl">'</span><span class="s1">aTargets</span><span class="dl">'</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="dl">'</span><span class="s1">mRender</span><span class="dl">'</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="k">return</span> <span class="nx">moment</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">format</span><span class="p">(</span><span class="dl">'</span><span class="s1">YYYY-MM-DD HH:mm:ss</span><span class="dl">'</span><span class="p">);</span>
+                    <span class="s1">'aTargets'</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="s1">'mRender'</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">return</span> <span class="nx">moment</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">format</span><span class="p">(</span><span class="s1">'YYYY-MM-DD HH:mm:ss'</span><span class="p">);</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">]</span>
@@ -723,9 +723,9 @@
 19
 20
 21
-</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">table</span> <span class="nx">id</span><span class="o">=</span><span class="dl">"</span><span class="s2">sales-details</span><span class="dl">"</span>
-               <span class="kd">class</span><span class="o">=</span><span class="dl">"</span><span class="s2">table-condensed font-small table-hover table-striped dataTable no-footer</span><span class="dl">"</span> <span class="nx">cellspacing</span><span class="o">=</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span>
-               <span class="nx">width</span><span class="o">=</span><span class="dl">"</span><span class="s2">100%</span><span class="dl">"</span><span class="o">&gt;</span>
+</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">table</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"sales-details"</span>
+               <span class="kd">class</span><span class="o">=</span><span class="s2">"table-condensed font-small table-hover table-striped dataTable no-footer"</span> <span class="nx">cellspacing</span><span class="o">=</span><span class="s2">"0"</span>
+               <span class="nx">width</span><span class="o">=</span><span class="s2">"100%"</span><span class="o">&gt;</span>
             <span class="o">&lt;</span><span class="nx">tfoot</span><span class="o">&gt;</span>
             <span class="o">&lt;</span><span class="nx">tr</span><span class="o">&gt;</span>
                 <span class="o">&lt;</span><span class="nx">th</span><span class="o">&gt;</span><span class="err">合计</span><span class="o">&lt;</span><span class="sr">/th</span><span class="err">&gt;
@@ -893,93 +893,93 @@
 145
 146
 147
-</pre></td><td class="rouge-code"><pre><span class="nx">oTable</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#sales-details</span><span class="dl">'</span><span class="p">).</span><span class="nx">DataTable</span><span class="p">({</span>
-            <span class="dl">"</span><span class="s2">ajax</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="na">url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/</span><span class="dl">"</span><span class="p">,</span>
-                <span class="na">dataType</span><span class="p">:</span> <span class="dl">'</span><span class="s1">json</span><span class="dl">'</span><span class="p">,</span>
-                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">get</span><span class="dl">'</span><span class="p">,</span>
+</pre></td><td class="rouge-code"><pre><span class="nx">oTable</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'#sales-details'</span><span class="p">).</span><span class="nx">DataTable</span><span class="p">({</span>
+            <span class="s2">"ajax"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="na">url</span><span class="p">:</span> <span class="s2">"/"</span><span class="p">,</span>
+                <span class="na">dataType</span><span class="p">:</span> <span class="s1">'json'</span><span class="p">,</span>
+                <span class="na">type</span><span class="p">:</span> <span class="s1">'get'</span><span class="p">,</span>
                 <span class="na">data</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="na">start_date_no1</span><span class="p">:</span><span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#start-date-no1</span><span class="dl">'</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span><span class="dl">''</span><span class="p">,</span>
-                    <span class="na">end_date_no1</span><span class="p">:</span><span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#end-date-no1</span><span class="dl">'</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span> <span class="dl">''</span><span class="p">,</span>
-                    <span class="na">cityIds</span><span class="p">:</span><span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#city-select</span><span class="dl">'</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span><span class="dl">''</span>
+                    <span class="na">start_date_no1</span><span class="p">:</span><span class="nx">$</span><span class="p">(</span><span class="s1">'#start-date-no1'</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span><span class="s1">''</span><span class="p">,</span>
+                    <span class="na">end_date_no1</span><span class="p">:</span><span class="nx">$</span><span class="p">(</span><span class="s1">'#end-date-no1'</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span> <span class="s1">''</span><span class="p">,</span>
+                    <span class="na">cityIds</span><span class="p">:</span><span class="nx">$</span><span class="p">(</span><span class="s1">'#city-select'</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">||</span><span class="s1">''</span>
                 <span class="p">},</span>
                 <span class="na">dataSrc</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">tag</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">success</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">tag</span> <span class="o">===</span> <span class="s1">'success'</span><span class="p">)</span> <span class="p">{</span>
                         <span class="nx">echart9_data</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
                         <span class="k">return</span> <span class="nx">data</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
                     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                         <span class="nx">BootstrapDialog</span><span class="p">.</span><span class="nx">show</span><span class="p">({</span>
-                            <span class="na">title</span><span class="p">:</span> <span class="dl">'</span><span class="s1">服务器返回错误</span><span class="dl">'</span><span class="p">,</span>
+                            <span class="na">title</span><span class="p">:</span> <span class="s1">'服务器返回错误'</span><span class="p">,</span>
                             <span class="na">message</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
                         <span class="p">});</span>
                         <span class="k">return</span> <span class="p">[];</span>
                     <span class="p">}</span>
                 <span class="p">},</span>
                 <span class="na">error</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-                    <span class="nx">BootstrapDialog</span><span class="p">.</span><span class="nx">show</span><span class="p">({</span><span class="na">title</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Error</span><span class="dl">'</span><span class="p">,</span> <span class="na">message</span><span class="p">:</span><span class="nx">error</span><span class="p">.</span><span class="nx">toString</span><span class="p">()})</span>
+                    <span class="nx">BootstrapDialog</span><span class="p">.</span><span class="nx">show</span><span class="p">({</span><span class="na">title</span><span class="p">:</span> <span class="s1">'Error'</span><span class="p">,</span> <span class="na">message</span><span class="p">:</span><span class="nx">error</span><span class="p">.</span><span class="nx">toString</span><span class="p">()})</span>
                 <span class="p">},</span>
                  <span class="na">complete</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">oSettings</span><span class="p">)</span> <span class="p">{</span>
                     <span class="c1">//console.log('wantu.....');</span>
                      <span class="c1">//draw_echart9(echart9_data);</span>
                  <span class="p">},</span>
             <span class="p">},</span>
-            <span class="dl">"</span><span class="s2">processing</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-            <span class="dl">"</span><span class="s2">iDisplayLength</span><span class="dl">"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+            <span class="s2">"processing"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+            <span class="s2">"iDisplayLength"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
             <span class="c1">//默认对第7列进行降序排</span>
-            <span class="dl">"</span><span class="s2">aaSorting</span><span class="dl">"</span><span class="p">:</span> <span class="p">[[</span><span class="mi">6</span><span class="p">,</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span><span class="p">]],</span>
-            <span class="dl">"</span><span class="s2">oLanguage</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-                <span class="dl">"</span><span class="s2">sLengthMenu</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">显示 _MENU_ 记录</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sEmptyTable</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">未有相关数据</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sInfo</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录。</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sInfoEmpty</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">当前显示0到0条，共0条记录</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sInfoFiltered</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">（数据库中共为 _MAX_ 条记录）</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sSearch</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">模糊查询：</span><span class="dl">"</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">bDeferRender</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">sUrl</span><span class="dl">"</span><span class="p">:</span> <span class="dl">""</span><span class="p">,</span>
-                <span class="dl">"</span><span class="s2">oPaginate</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="dl">"</span><span class="s2">sFirst</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">首页</span><span class="dl">"</span><span class="p">,</span>
-                    <span class="dl">"</span><span class="s2">sPrevious</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2"> 上一页 </span><span class="dl">"</span><span class="p">,</span>
-                    <span class="dl">"</span><span class="s2">sNext</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2"> 下一页 </span><span class="dl">"</span><span class="p">,</span>
-                    <span class="dl">"</span><span class="s2">sLast</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2"> 尾页 </span><span class="dl">"</span>
+            <span class="s2">"aaSorting"</span><span class="p">:</span> <span class="p">[[</span><span class="mi">6</span><span class="p">,</span> <span class="s2">"desc"</span><span class="p">]],</span>
+            <span class="s2">"oLanguage"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"sLengthMenu"</span><span class="p">:</span> <span class="s2">"显示 _MENU_ 记录"</span><span class="p">,</span>
+                <span class="s2">"sEmptyTable"</span><span class="p">:</span> <span class="s2">"未有相关数据"</span><span class="p">,</span>
+                <span class="s2">"sInfo"</span><span class="p">:</span> <span class="s2">"当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录。"</span><span class="p">,</span>
+                <span class="s2">"sInfoEmpty"</span><span class="p">:</span> <span class="s2">"当前显示0到0条，共0条记录"</span><span class="p">,</span>
+                <span class="s2">"sInfoFiltered"</span><span class="p">:</span> <span class="s2">"（数据库中共为 _MAX_ 条记录）"</span><span class="p">,</span>
+                <span class="s2">"sSearch"</span><span class="p">:</span> <span class="s2">"模糊查询："</span><span class="p">,</span>
+                <span class="s2">"bDeferRender"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="s2">"sUrl"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+                <span class="s2">"oPaginate"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"sFirst"</span><span class="p">:</span> <span class="s2">"首页"</span><span class="p">,</span>
+                    <span class="s2">"sPrevious"</span><span class="p">:</span> <span class="s2">" 上一页 "</span><span class="p">,</span>
+                    <span class="s2">"sNext"</span><span class="p">:</span> <span class="s2">" 下一页 "</span><span class="p">,</span>
+                    <span class="s2">"sLast"</span><span class="p">:</span> <span class="s2">" 尾页 "</span>
                 <span class="p">},</span>
-                <span class="dl">"</span><span class="s2">oAria</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="dl">"</span><span class="s2">sSortAscending</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2"> - click/return to sort ascending</span><span class="dl">"</span><span class="p">,</span>
-                    <span class="dl">"</span><span class="s2">sSortDescending</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2"> - click/return to sort descending</span><span class="dl">"</span>
+                <span class="s2">"oAria"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"sSortAscending"</span><span class="p">:</span> <span class="s2">" - click/return to sort ascending"</span><span class="p">,</span>
+                    <span class="s2">"sSortDescending"</span><span class="p">:</span> <span class="s2">" - click/return to sort descending"</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="dl">'</span><span class="s1">dom</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;"float_left"B&gt;&lt;"float_right"f&gt;rt&lt;"float_left"i&gt;&lt;"float_right"p&gt;</span><span class="dl">'</span><span class="p">,</span>
-            <span class="dl">"</span><span class="s2">buttons</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s1">'dom'</span><span class="p">:</span> <span class="s1">'&lt;"float_left"B&gt;&lt;"float_right"f&gt;rt&lt;"float_left"i&gt;&lt;"float_right"p&gt;'</span><span class="p">,</span>
+            <span class="s2">"buttons"</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">],</span>
-            <span class="dl">"</span><span class="s2">columns</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">城市</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">cityName</span><span class="dl">"</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">实际GMV</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">gmv</span><span class="dl">"</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">GMV目标</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">gmvGoal</span><span class="dl">"</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">GMV月目标</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">gmvMonthGoalShow</span><span class="dl">"</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">GMV完成率</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">gmvPercent</span><span class="dl">'</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">实际毛利额</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">profit</span><span class="dl">'</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">毛利额目标</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">profitGoal</span><span class="dl">'</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">毛利额月目标</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">profitMonthGoalShow</span><span class="dl">'</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">毛利额完成率</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">profitPercent</span><span class="dl">'</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">实际净利润</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">netProfit</span><span class="dl">'</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">净利润目标</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">netProfitGoal</span><span class="dl">'</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">净利润月目标</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">netProfitMonthGoalShow</span><span class="dl">'</span><span class="p">},</span>
-                <span class="p">{</span><span class="dl">"</span><span class="s2">sTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">净利润完成率</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">netProfitPercent</span><span class="dl">'</span><span class="p">}</span>
+            <span class="s2">"columns"</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"城市"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"cityName"</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"实际GMV"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"gmv"</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"GMV目标"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"gmvGoal"</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"GMV月目标"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s2">"gmvMonthGoalShow"</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"GMV完成率"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s1">'gmvPercent'</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"实际毛利额"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s1">'profit'</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"毛利额目标"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s1">'profitGoal'</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"毛利额月目标"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s1">'profitMonthGoalShow'</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"毛利额完成率"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s1">'profitPercent'</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"实际净利润"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s1">'netProfit'</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"净利润目标"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s1">'netProfitGoal'</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"净利润月目标"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s1">'netProfitMonthGoalShow'</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"sTitle"</span><span class="p">:</span> <span class="s2">"净利润完成率"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="s1">'netProfitPercent'</span><span class="p">}</span>
             <span class="p">],</span>
-            <span class="dl">"</span><span class="s2">aoColumnDefs</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"aoColumnDefs"</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
-                    <span class="dl">'</span><span class="s1">aTargets</span><span class="dl">'</span><span class="p">:</span> <span class="p">[],</span>
-                    <span class="dl">'</span><span class="s1">mRender</span><span class="dl">'</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="k">return</span> <span class="p">(</span><span class="nx">data</span> <span class="o">*</span> <span class="mi">100</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">%</span><span class="dl">"</span><span class="p">;</span>
+                    <span class="s1">'aTargets'</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="s1">'mRender'</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">return</span> <span class="p">(</span><span class="nx">data</span> <span class="o">*</span> <span class="mi">100</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"%"</span><span class="p">;</span>
                     <span class="p">}</span>
                 <span class="p">},</span>
             <span class="p">],</span>
-            <span class="dl">"</span><span class="s2">footerCallback</span><span class="dl">"</span><span class="p">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">start</span><span class="p">,</span> <span class="nx">end</span><span class="p">,</span> <span class="nx">display</span><span class="p">){</span>
+            <span class="s2">"footerCallback"</span><span class="p">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">start</span><span class="p">,</span> <span class="nx">end</span><span class="p">,</span> <span class="nx">display</span><span class="p">){</span>
                 <span class="kd">var</span> <span class="nx">api</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">api</span><span class="p">(),</span> <span class="nx">data</span><span class="p">;</span>
                 <span class="c1">// Remove the formatting to get integer data for summation</span>
                 <span class="kd">var</span> <span class="nx">intVal</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="nx">i</span> <span class="p">)</span> <span class="p">{</span>
-                    <span class="k">return</span> <span class="k">typeof</span> <span class="nx">i</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">string</span><span class="dl">'</span> <span class="p">?</span>
-                        <span class="nx">i</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[\$</span><span class="sr">,</span><span class="se">]</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">''</span><span class="p">)</span><span class="o">*</span><span class="mi">1</span> <span class="p">:</span>
-                        <span class="k">typeof</span> <span class="nx">i</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">number</span><span class="dl">'</span> <span class="p">?</span>
+                    <span class="k">return</span> <span class="k">typeof</span> <span class="nx">i</span> <span class="o">===</span> <span class="s1">'string'</span> <span class="p">?</span>
+                        <span class="nx">i</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[\$</span><span class="sr">,</span><span class="se">]</span><span class="sr">/g</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span><span class="o">*</span><span class="mi">1</span> <span class="p">:</span>
+                        <span class="k">typeof</span> <span class="nx">i</span> <span class="o">===</span> <span class="s1">'number'</span> <span class="p">?</span>
                             <span class="nx">i</span> <span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
                 <span class="p">};</span>
                 <span class="kd">var</span> <span class="nx">goalToal</span> <span class="o">=</span> <span class="p">{};</span>
@@ -989,7 +989,7 @@
                     <span class="c1">//实际总计</span>
                     <span class="k">if</span><span class="p">(</span><span class="nx">i</span><span class="o">===</span><span class="mi">1</span><span class="o">||</span><span class="nx">i</span><span class="o">===</span><span class="mi">5</span><span class="o">||</span><span class="nx">i</span><span class="o">===</span><span class="mi">9</span><span class="p">){</span>
                         <span class="nx">pageTotal</span> <span class="o">=</span> <span class="nx">api</span>
-                            <span class="p">.</span><span class="nx">column</span><span class="p">(</span> <span class="nx">i</span><span class="p">,</span> <span class="p">{</span> <span class="na">page</span><span class="p">:</span> <span class="dl">'</span><span class="s1">current</span><span class="dl">'</span><span class="p">}</span> <span class="p">)</span>
+                            <span class="p">.</span><span class="nx">column</span><span class="p">(</span> <span class="nx">i</span><span class="p">,</span> <span class="p">{</span> <span class="na">page</span><span class="p">:</span> <span class="s1">'current'</span><span class="p">}</span> <span class="p">)</span>
                             <span class="p">.</span><span class="nx">data</span><span class="p">()</span>
                             <span class="p">.</span><span class="nx">reduce</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
                                 <span class="nx">a</span><span class="o">=</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="o">||</span><span class="mi">0</span><span class="p">;</span>
@@ -1003,7 +1003,7 @@
                     <span class="p">}</span>
                     <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="mi">2</span><span class="o">||</span><span class="nx">i</span><span class="o">===</span><span class="mi">6</span><span class="o">||</span><span class="nx">i</span><span class="o">===</span><span class="mi">10</span><span class="p">){</span>
                         <span class="nx">pageTotal</span> <span class="o">=</span> <span class="nx">api</span>
-                            <span class="p">.</span><span class="nx">column</span><span class="p">(</span> <span class="nx">i</span><span class="p">,</span> <span class="p">{</span> <span class="na">page</span><span class="p">:</span> <span class="dl">'</span><span class="s1">current</span><span class="dl">'</span><span class="p">}</span> <span class="p">)</span>
+                            <span class="p">.</span><span class="nx">column</span><span class="p">(</span> <span class="nx">i</span><span class="p">,</span> <span class="p">{</span> <span class="na">page</span><span class="p">:</span> <span class="s1">'current'</span><span class="p">}</span> <span class="p">)</span>
                             <span class="p">.</span><span class="nx">data</span><span class="p">()</span>
                             <span class="p">.</span><span class="nx">reduce</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
                                 <span class="nx">a</span><span class="o">=</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="o">||</span><span class="mi">0</span><span class="p">;</span>
@@ -1018,13 +1018,13 @@
                     <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">i</span> <span class="o">===</span><span class="mi">4</span> <span class="o">||</span><span class="nx">i</span> <span class="o">===</span><span class="mi">8</span><span class="o">||</span><span class="nx">i</span><span class="o">===</span> <span class="mi">12</span><span class="p">){</span>
                         <span class="nx">$</span><span class="p">(</span><span class="nx">api</span><span class="p">.</span><span class="nx">column</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nx">footer</span><span class="p">()).</span><span class="nx">html</span><span class="p">(</span>
                             <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="p">((</span><span class="nx">actual</span><span class="p">[</span><span class="nx">i</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="nx">goalToal</span><span class="p">[</span><span class="nx">i</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">goalToal</span><span class="p">[</span><span class="nx">i</span><span class="o">-</span><span class="mi">2</span><span class="p">])))).</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="mi">10000</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span>
-                            <span class="o">+</span><span class="dl">'</span><span class="s1">%</span><span class="dl">'</span>
+                            <span class="o">+</span><span class="s1">'%'</span>
                         <span class="p">)</span>
                     <span class="p">}</span>
                     <span class="k">else</span><span class="p">{</span>
                         <span class="c1">// Total over this page</span>
                         <span class="nx">pageTotal</span> <span class="o">=</span> <span class="nx">api</span>
-                            <span class="p">.</span><span class="nx">column</span><span class="p">(</span> <span class="nx">i</span><span class="p">,</span> <span class="p">{</span> <span class="na">page</span><span class="p">:</span> <span class="dl">'</span><span class="s1">current</span><span class="dl">'</span><span class="p">}</span> <span class="p">)</span>
+                            <span class="p">.</span><span class="nx">column</span><span class="p">(</span> <span class="nx">i</span><span class="p">,</span> <span class="p">{</span> <span class="na">page</span><span class="p">:</span> <span class="s1">'current'</span><span class="p">}</span> <span class="p">)</span>
                             <span class="p">.</span><span class="nx">data</span><span class="p">()</span>
                             <span class="p">.</span><span class="nx">reduce</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
                                 <span class="nx">a</span><span class="o">=</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="o">||</span><span class="mi">0</span><span class="p">;</span>
