@@ -315,6 +315,8 @@ ES背景故事
                     
                     
                     
+                    
+                    
                 </ul>
             </div>
         </div>
@@ -553,8 +555,8 @@ ES背景故事
 </pre></td><td class="rouge-code"><pre><span class="c1">//新增索引别名</span>
 <span class="nx">POST</span> <span class="o">/</span><span class="nx">_aliases</span>
 <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">actions</span><span class="dl">"</span> <span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span> <span class="dl">"</span><span class="s2">add</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">index</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">test1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">alias</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">alias1</span><span class="dl">"</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="s2">"actions"</span> <span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">"add"</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">"index"</span> <span class="p">:</span> <span class="s2">"test1"</span><span class="p">,</span> <span class="s2">"alias"</span> <span class="p">:</span> <span class="s2">"alias1"</span> <span class="p">}</span> <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
 <span class="err">或者是：</span><span class="nx">PUT</span> <span class="o">/</span><span class="p">{</span><span class="nx">index</span><span class="p">}</span><span class="sr">/_alias/</span><span class="p">{</span><span class="nx">name</span><span class="p">}</span>
@@ -562,16 +564,16 @@ ES背景故事
 <span class="c1">//移除索引别名</span>
 <span class="nx">POST</span> <span class="o">/</span><span class="nx">_aliases</span>
 <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">actions</span><span class="dl">"</span> <span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span> <span class="dl">"</span><span class="s2">remove</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">index</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">test1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">alias</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">alias1</span><span class="dl">"</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="s2">"actions"</span> <span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">"remove"</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">"index"</span> <span class="p">:</span> <span class="s2">"test1"</span><span class="p">,</span> <span class="s2">"alias"</span> <span class="p">:</span> <span class="s2">"alias1"</span> <span class="p">}</span> <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
 <span class="c1">//重命名索引别名，此操作是原子操作。</span>
 <span class="nx">POST</span> <span class="o">/</span><span class="nx">_aliases</span>
 <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">actions</span><span class="dl">"</span> <span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span> <span class="dl">"</span><span class="s2">remove</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">index</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">test1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">alias</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">alias1</span><span class="dl">"</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span> <span class="dl">"</span><span class="s2">add</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">index</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">test2</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">alias</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">alias1</span><span class="dl">"</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="s2">"actions"</span> <span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">"remove"</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">"index"</span> <span class="p">:</span> <span class="s2">"test1"</span><span class="p">,</span> <span class="s2">"alias"</span> <span class="p">:</span> <span class="s2">"alias1"</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">"add"</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">"index"</span> <span class="p">:</span> <span class="s2">"test2"</span><span class="p">,</span> <span class="s2">"alias"</span> <span class="p">:</span> <span class="s2">"alias1"</span> <span class="p">}</span> <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
 
@@ -618,15 +620,15 @@ must_not:查询文档一定不能被包含。<br /></p>
 15
 </pre></td><td class="rouge-code"><pre><span class="nx">GET</span> <span class="o">/</span><span class="nx">_search</span>
 <span class="p">{</span>
-  <span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> 
-    <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> 
-      <span class="dl">"</span><span class="s2">must</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span> <span class="dl">"</span><span class="s2">match</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">title</span><span class="dl">"</span><span class="p">:</span>   <span class="dl">"</span><span class="s2">Search</span><span class="dl">"</span>        <span class="p">}},</span> 
-        <span class="p">{</span> <span class="dl">"</span><span class="s2">match</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">content</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Elasticsearch</span><span class="dl">"</span> <span class="p">}}</span>  
+  <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span> 
+    <span class="s2">"bool"</span><span class="p">:</span> <span class="p">{</span> 
+      <span class="s2">"must"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">"match"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"title"</span><span class="p">:</span>   <span class="s2">"Search"</span>        <span class="p">}},</span> 
+        <span class="p">{</span> <span class="s2">"match"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"Elasticsearch"</span> <span class="p">}}</span>  
       <span class="p">],</span>
-      <span class="dl">"</span><span class="s2">filter</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span> 
-        <span class="p">{</span> <span class="dl">"</span><span class="s2">term</span><span class="dl">"</span><span class="p">:</span>  <span class="p">{</span> <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">published</span><span class="dl">"</span> <span class="p">}},</span> 
-        <span class="p">{</span> <span class="dl">"</span><span class="s2">range</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">publish_date</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">gte</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2015-01-01</span><span class="dl">"</span> <span class="p">}}}</span> 
+      <span class="s2">"filter"</span><span class="p">:</span> <span class="p">[</span> 
+        <span class="p">{</span> <span class="s2">"term"</span><span class="p">:</span>  <span class="p">{</span> <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"published"</span> <span class="p">}},</span> 
+        <span class="p">{</span> <span class="s2">"range"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"publish_date"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"gte"</span><span class="p">:</span> <span class="s2">"2015-01-01"</span> <span class="p">}}}</span> 
       <span class="p">]</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -687,23 +689,23 @@ must_not:查询文档一定不能被包含。<br /></p>
 20
 </pre></td><td class="rouge-code"><pre><span class="p">(</span><span class="err">通过</span><span class="nx">API</span><span class="err">调用</span><span class="nx">search</span><span class="err">方法</span><span class="p">)</span><span class="err">：</span>
 <span class="p">{</span>
-	<span class="dl">"</span><span class="s2">index</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">chat</span><span class="dl">"</span><span class="p">,</span>
-	<span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-	<span class="dl">"</span><span class="s2">size</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
-	<span class="dl">"</span><span class="s2">scroll</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">5m</span><span class="dl">"</span><span class="p">,</span><span class="c1">//5分钟之后失效</span>
-	<span class="dl">"</span><span class="s2">body</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-		<span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">:</span> <span class="p">{},</span>
-		<span class="dl">"</span><span class="s2">sort</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-			<span class="dl">"</span><span class="s2">time</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span>
+	<span class="s2">"index"</span><span class="p">:</span> <span class="s2">"chat"</span><span class="p">,</span>
+	<span class="s2">"from"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+	<span class="s2">"size"</span><span class="p">:</span> <span class="s2">"1"</span><span class="p">,</span>
+	<span class="s2">"scroll"</span><span class="p">:</span> <span class="s2">"5m"</span><span class="p">,</span><span class="c1">//5分钟之后失效</span>
+	<span class="s2">"body"</span><span class="p">:</span> <span class="p">{</span>
+		<span class="s2">"query"</span><span class="p">:</span> <span class="p">{},</span>
+		<span class="s2">"sort"</span><span class="p">:</span> <span class="p">{</span>
+			<span class="s2">"time"</span><span class="p">:</span> <span class="s2">"desc"</span>
 		<span class="p">}</span>
 	<span class="p">}</span>
 <span class="p">}</span>
 <span class="p">(</span><span class="nx">elasticsearch</span><span class="o">-</span><span class="nx">head</span><span class="err">中使用</span><span class="p">)</span>
 <span class="nx">GET</span><span class="p">:</span> <span class="o">/</span><span class="nx">index</span><span class="o">/</span><span class="nx">_search</span><span class="p">?</span><span class="nx">scroll</span> <span class="o">=</span> <span class="mi">10</span><span class="nx">m</span>
 <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">match_all</span><span class="dl">"</span><span class="p">:</span> <span class="p">{}},</span>
-    <span class="dl">"</span><span class="s2">sort</span><span class="dl">"</span> <span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">_doc</span><span class="dl">"</span><span class="p">],</span> 
-    <span class="dl">"</span><span class="s2">size</span><span class="dl">"</span><span class="p">:</span>  <span class="mi">1000</span>
+    <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"match_all"</span><span class="p">:</span> <span class="p">{}},</span>
+    <span class="s2">"sort"</span> <span class="p">:</span> <span class="p">[</span><span class="s2">"_doc"</span><span class="p">],</span> 
+    <span class="s2">"size"</span><span class="p">:</span>  <span class="mi">1000</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。scrollId在失效时间内是存在的，但是es维护它是需要额外的开销的，好习惯：每次查询结束进行手动的清除scrollId.<br /></p>
@@ -771,8 +773,8 @@ must_not:查询文档一定不能被包含。<br /></p>
   <span class="nx">searchRBN</span><span class="p">:</span> <span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span><span class="o">-&gt;</span>
     <span class="nx">dsl</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">cloneDeep</span> <span class="nx">DSL</span><span class="p">.</span><span class="nx">COMMUNICATION_RECORD_BETWEEN_NODES</span>
     <span class="nx">dsl</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">index</span>
-    <span class="k">if</span> <span class="nx">query</span><span class="p">.</span><span class="nx">sort</span> <span class="nx">and</span> <span class="nx">query</span><span class="p">.</span><span class="nx">sort</span> <span class="nx">is</span> <span class="dl">'</span><span class="s1">asc</span><span class="dl">'</span>
-      <span class="nx">dsl</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">sort</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">time</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">asc</span><span class="dl">'</span>
+    <span class="k">if</span> <span class="nx">query</span><span class="p">.</span><span class="nx">sort</span> <span class="nx">and</span> <span class="nx">query</span><span class="p">.</span><span class="nx">sort</span> <span class="nx">is</span> <span class="s1">'asc'</span>
+      <span class="nx">dsl</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">sort</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">time</span> <span class="o">=</span> <span class="s1">'asc'</span>
 
     <span class="nx">dsl</span><span class="p">.</span><span class="nx">scroll</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">scroll</span> <span class="k">if</span> <span class="nx">query</span><span class="p">.</span><span class="nx">scroll</span>
     <span class="nx">dsl</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">bool</span><span class="p">.</span><span class="nx">should</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">bool</span><span class="p">.</span><span class="nx">must</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">term</span><span class="p">.</span><span class="nx">source</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">source</span>
@@ -834,15 +836,15 @@ must_not:查询文档一定不能被包含。<br /></p>
 13
 </pre></td><td class="rouge-code"><pre><span class="nx">GET</span> <span class="nx">twitter</span><span class="o">/</span><span class="nx">_search</span>
 <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">size</span><span class="dl">"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">match</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span>
-            <span class="dl">"</span><span class="s2">title</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">elasticsearch</span><span class="dl">"</span>
+    <span class="s2">"size"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"match"</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"title"</span> <span class="p">:</span> <span class="s2">"elasticsearch"</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="dl">"</span><span class="s2">sort</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="dl">"</span><span class="s2">date</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">asc</span><span class="dl">"</span><span class="p">},</span>
-        <span class="p">{</span><span class="dl">"</span><span class="s2">_id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span><span class="p">}</span>
+    <span class="s2">"sort"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"date"</span><span class="p">:</span> <span class="s2">"asc"</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"_id"</span><span class="p">:</span> <span class="s2">"desc"</span><span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
@@ -864,16 +866,16 @@ must_not:查询文档一定不能被包含。<br /></p>
 15
 </pre></td><td class="rouge-code"><pre><span class="nx">GET</span> <span class="nx">twitter</span><span class="o">/</span><span class="nx">_search</span>
 <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">size</span><span class="dl">"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">match</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span>
-            <span class="dl">"</span><span class="s2">title</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">elasticsearch</span><span class="dl">"</span>
+    <span class="s2">"size"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"match"</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"title"</span> <span class="p">:</span> <span class="s2">"elasticsearch"</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="dl">"</span><span class="s2">search_after</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1463538857</span><span class="p">,</span> <span class="dl">"</span><span class="s2">654323</span><span class="dl">"</span><span class="p">],</span>
-    <span class="dl">"</span><span class="s2">sort</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="dl">"</span><span class="s2">date</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">asc</span><span class="dl">"</span><span class="p">},</span>
-        <span class="p">{</span><span class="dl">"</span><span class="s2">_id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span><span class="p">}</span>
+    <span class="s2">"search_after"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1463538857</span><span class="p">,</span> <span class="s2">"654323"</span><span class="p">],</span>
+    <span class="s2">"sort"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"date"</span><span class="p">:</span> <span class="s2">"asc"</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"_id"</span><span class="p">:</span> <span class="s2">"desc"</span><span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
 <span class="c1">//search_afetr就是根据你的sort排序规则，填写上一次获取的最后一个数据的值，我们第一次查的是按照date、_id排序，所以填写上次获取的最后一个数据的date和_id即可。</span>
@@ -979,15 +981,20 @@ POST /_refresh 全部刷新
         </a>
         
         
-                <a data-sort="0014" 
+                <a data-sort="0017" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
                     title="数据库"
                     rel="5">数据库</a>
         
-                <a data-sort="0017" 
+                <a data-sort="0020" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
-                    rel="2">书
+                    rel="2">书</a>
+        
+                <a data-sort="0020" 
+                    href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
+                    title="消息队列"
+                    rel="2">消息队列
     </div>
 </section>
 

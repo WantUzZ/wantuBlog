@@ -311,6 +311,8 @@
                     
                     
                     
+                    
+                    
                 </ul>
             </div>
         </div>
@@ -484,7 +486,7 @@
 26
 27
 28
-</pre></td><td class="rouge-code"><pre><span class="kd">const</span> <span class="nb">Promise</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">promise</span><span class="dl">'</span><span class="p">);</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">const</span> <span class="nb">Promise</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'promise'</span><span class="p">);</span>
 
 <span class="kd">function</span> <span class="nx">sleep</span><span class="p">(</span><span class="nx">time_ms</span><span class="p">){</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span> <span class="nx">resolve</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -493,22 +495,22 @@
 <span class="p">}</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">test</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="dl">'</span><span class="s1">start</span><span class="dl">'</span><span class="o">+</span><span class="nx">n</span><span class="p">);</span>
-    <span class="k">await</span> <span class="nx">sleep</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="dl">'</span><span class="s1">end</span><span class="dl">'</span><span class="o">+</span><span class="nx">n</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'start'</span><span class="o">+</span><span class="nx">n</span><span class="p">);</span>
+    <span class="kr">await</span> <span class="nx">sleep</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'end'</span><span class="o">+</span><span class="nx">n</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">main</span><span class="p">(){</span>
     <span class="kd">let</span> <span class="nx">timeMsArr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">];</span>
     <span class="k">try</span><span class="p">{</span>
         <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">t</span> <span class="k">of</span> <span class="nx">timeMsArr</span><span class="p">){</span>
-            <span class="k">await</span> <span class="nx">test</span><span class="p">(</span><span class="nx">t</span><span class="p">);</span>
+            <span class="kr">await</span> <span class="nx">test</span><span class="p">(</span><span class="nx">t</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
         <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s2">`err`</span><span class="o">+</span><span class="nx">err</span><span class="p">)</span>
     <span class="p">}</span>
 
-    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="dl">'</span><span class="s1">ok</span><span class="dl">'</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">'ok'</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="nx">main</span><span class="p">();</span>
@@ -523,9 +525,9 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2019/06/14/redis/" data-toggle="tooltip" data-placement="top" title="Redis">
+                        <a href="/2019/06/14/redis/" data-toggle="tooltip" data-placement="top" title="Redis实操">
                         Previous<br>
-                        <span>Redis</span>
+                        <span>Redis实操</span>
                         </a>
                     </li>
                     
@@ -584,15 +586,20 @@
         </a>
         
         
-                <a data-sort="0014" 
+                <a data-sort="0017" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
                     title="数据库"
                     rel="5">数据库</a>
         
-                <a data-sort="0017" 
+                <a data-sort="0020" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
-                    rel="2">书
+                    rel="2">书</a>
+        
+                <a data-sort="0020" 
+                    href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
+                    title="消息队列"
+                    rel="2">消息队列
     </div>
 </section>
 

@@ -16,6 +16,7 @@
     <meta property="og:type" content="article">
     <meta property="og:description" content="开这个的原因
   温故而知新。内容控制在原先读过的技术书目上。
+
 ">
     
     <meta property="article:published_time" content="2019-03-09T17:57:00Z">
@@ -308,6 +309,8 @@
                     
                     
                     
+                    
+                    
                 </ul>
             </div>
         </div>
@@ -451,7 +454,7 @@
 <span class="c1">//那么typeof a ==&gt;undefined</span>
 <span class="c1">//如果a是有声明的而且也进行了显式的初始化</span>
 <span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">typeof</span> <span class="nx">a</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">number</span><span class="dl">'</span> <span class="c1">//true</span>
+<span class="k">typeof</span> <span class="nx">a</span> <span class="o">===</span> <span class="s1">'number'</span> <span class="c1">//true</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>逻辑上讲：null值表示空对象指针。这也是typeof null == object的原因。
 如果一个变量将来打算用来保存对象的，那么务必将其初始化为null。</p>
@@ -531,7 +534,7 @@ outermost标签表示外部的for循环。<br />
 <span class="p">}</span>
 <span class="nx">alert</span><span class="p">(</span><span class="nx">num</span><span class="p">);</span>    <span class="c1">//55</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
-<p>continue同样也可以和标签一起连用。<br />
+<p>continue同样也可以和标签一起连用。注：continue可以在while中使用。<br />
 这种情况下，continue 语句会强制继续执行循环——退出内部循环，执行外部循环。当 j 是 5 时，continue 语句执行，而这也就意味着内部循环少执行了 5 次，因此 num 的结果是 95。<br /></p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -586,7 +589,7 @@ IE 中有一部分对象并不是原生 JavaScript 对象。例如，其 BOM 和
 2
 3
 4
-</pre></td><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">some_element</span><span class="dl">"</span><span class="p">);</span> 
+</pre></td><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"some_element"</span><span class="p">);</span> 
 <span class="kd">var</span> <span class="nx">myObject</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="p">();</span> 
 <span class="nx">myObject</span><span class="p">.</span><span class="nx">element</span> <span class="o">=</span> <span class="nx">element</span><span class="p">;</span>
 <span class="nx">element</span><span class="p">.</span><span class="nx">someObject</span> <span class="o">=</span> <span class="nx">myObject</span><span class="p">;</span>
@@ -789,13 +792,13 @@ js中的作用域就是词法作用域。js并不具备动态作用域。<br />
 9
 10
 </pre></td><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
-<span class="na">id</span><span class="p">:</span><span class="dl">'</span><span class="s1">awesome</span><span class="dl">'</span><span class="p">,</span>
+<span class="na">id</span><span class="p">:</span><span class="s1">'awesome'</span><span class="p">,</span>
     <span class="na">cool</span><span class="p">:</span><span class="kd">function</span> <span class="nx">coolFn</span><span class="p">(){</span>
         <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">not awesome</span><span class="dl">'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="s1">'not awesome'</span><span class="p">;</span>
 <span class="nx">obj</span><span class="p">.</span><span class="nx">cool</span><span class="p">();</span><span class="c1">//awesome;</span>
 <span class="nx">setTimeOut</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">cool</span><span class="p">(),</span><span class="mi">100</span><span class="p">);</span><span class="c1">//nowt awesome</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
@@ -816,9 +819,9 @@ js中的作用域就是词法作用域。js并不具备动态作用域。<br />
                     
                     
                     <li class="next">
-                        <a href="/2019/06/14/redis/" data-toggle="tooltip" data-placement="top" title="Redis">
+                        <a href="/2019/06/14/redis/" data-toggle="tooltip" data-placement="top" title="Redis实操">
                         Next<br>
-                        <span>Redis</span>
+                        <span>Redis实操</span>
                         </a>
                     </li>
                     
@@ -869,15 +872,20 @@ js中的作用域就是词法作用域。js并不具备动态作用域。<br />
         </a>
         
         
-                <a data-sort="0014" 
+                <a data-sort="0017" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
                     title="数据库"
                     rel="5">数据库</a>
         
-                <a data-sort="0017" 
+                <a data-sort="0020" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
-                    rel="2">书
+                    rel="2">书</a>
+        
+                <a data-sort="0020" 
+                    href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
+                    title="消息队列"
+                    rel="2">消息队列
     </div>
 </section>
 
