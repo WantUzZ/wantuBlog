@@ -93,6 +93,8 @@ cat /proc/version  //查看系统版本和内核版本
 ### 数据迁移
 
 redis:通过主从复制完成。
+**相关命令**
+```md
 redis-cli -h 172.19.89.14 // 登陆某一台redis
 slaveof 172.19.88.60 20001 // 将自己设置为某个Redis实例的从库
 
@@ -105,24 +107,22 @@ redis-cli -h 172.19.88.60 -p 20001 client list  |awk -F'addr=' '{print$2}' | awk
 
 // 查看当前Redis实例的角色，判断连接是否断开
 redis-cli -h 172.19.89.149 -p 6379 info |grep role
+```
 
-mongodb: mongodump&mongorestore
-1.将所有数据库导出到指定目录
+**mongodb: mongodump&mongorestore**
+
+1. 将所有数据库导出到指定目录
 mongodump -h 172.19.88.50 -o /home/want/mongodb
-2.mongorestore还原数据库
+2. mongorestore还原数据库
 mongorestore -r -h 172.19.89.149 --drop /home/want/mongodb
 mongoresotre 支持-h可选项，所以不需要用scp将相关文件传输到对应的服务器上。
 
-mysql: mysqldump
-// 将全部的数据库导成为一个sql文件
+**mysql: mysqldump (将全部的数据库导成为一个sql文件)** 
 1. mysqldump -h 172.19.88.50 -u root -p --all-databases > /usr/local/sqlfile.sql // 本地文件路径随意
-
 2. 登陆到指定MySQL实例上
 mysql -h xxx.xx.xxx.xx -u -username -p
-
 3. 将sql文件恢复到指定MySQL数据库实例中
 source /usr/local/sqlfile.sql
-
 
 ### Docker下载以及相关容器的部署
 1. 安装Docker。略～
