@@ -57,188 +57,8 @@
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
@@ -394,7 +214,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 			<div id='tag_cloud' class="tags tags-sup js-tags">
 				<a class="tag-button--all" data-encode="">
 					Show All
-					<sup>22</sup>
+					<sup>27</sup>
 				</a>
 
 				
@@ -402,7 +222,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 				
 				</a>
 				
-				<a data-sort="0017"
+				<a data-sort="0022"
 					data-encode="%E6%95%B0%E6%8D%AE%E5%BA%93"
 					class="tag-button"
 					title="数据库" rel="5">
@@ -410,7 +230,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>5</sup>
 				</a>
 				
-				<a data-sort="0020"
+				<a data-sort="0025"
 					data-encode="%E4%B9%A6"
 					class="tag-button"
 					title="书" rel="2">
@@ -418,15 +238,39 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>2</sup>
 				</a>
 				
-				<a data-sort="0020"
-					data-encode="%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
+				<a data-sort="0025"
+					data-encode="%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93"
 					class="tag-button"
-					title="消息队列" rel="2">
-					消息队列
+					title="年度总结" rel="2">
+					年度总结
 					<sup>2</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0025"
+					data-encode="Docker"
+					class="tag-button"
+					title="Docker" rel="2">
+					Docker
+					<sup>2</sup>
+				</a>
+				
+				<a data-sort="0026"
+					data-encode="%E4%B8%AD%E5%9B%BD"
+					class="tag-button"
+					title="中国" rel="1">
+					中国
+					<sup>1</sup>
+				</a>
+				
+				<a data-sort="0026"
+					data-encode="%E5%8E%86%E5%8F%B2"
+					class="tag-button"
+					title="历史" rel="1">
+					历史
+					<sup>1</sup>
+				</a>
+				
+				<a data-sort="0026"
 					data-encode="%E5%9B%9E%E9%A1%BE%E5%9F%BA%E7%A1%80"
 					class="tag-button"
 					title="回顾基础" rel="1">
@@ -434,7 +278,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="%E5%9B%BE%E6%95%B0%E6%8D%AE%E5%BA%93"
 					class="tag-button"
 					title="图数据库" rel="1">
@@ -442,7 +286,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="%E5%AE%B9%E5%99%A8"
 					class="tag-button"
 					title="容器" rel="1">
@@ -450,7 +294,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="%E5%B0%8F%E8%AF%B4"
 					class="tag-button"
 					title="小说" rel="1">
@@ -458,7 +302,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="%E6%8E%92%E5%BA%8F"
 					class="tag-button"
 					title="排序" rel="1">
@@ -466,7 +310,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="%E6%90%9C%E7%B4%A2"
 					class="tag-button"
 					title="搜索" rel="1">
@@ -474,7 +318,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"
 					class="tag-button"
 					title="数据结构" rel="1">
@@ -482,7 +326,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="%E6%96%87%E6%A1%A3%E7%AE%A1%E7%90%86"
 					class="tag-button"
 					title="文档管理" rel="1">
@@ -490,7 +334,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="%E6%9C%80%E7%9F%AD%E8%B7%AF%E7%AE%97%E6%B3%95"
 					class="tag-button"
 					title="最短路算法" rel="1">
@@ -498,7 +342,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="%E6%A0%91"
 					class="tag-button"
 					title="树" rel="1">
@@ -506,7 +350,15 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
+					data-encode="%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
+					class="tag-button"
+					title="消息队列" rel="1">
+					消息队列
+					<sup>1</sup>
+				</a>
+				
+				<a data-sort="0026"
 					data-encode="%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"
 					class="tag-button"
 					title="版本控制" rel="1">
@@ -514,15 +366,31 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
-					data-encode="%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83"
+				<a data-sort="0026"
+					data-encode="%E7%BD%91%E7%BB%9C"
 					class="tag-button"
-					title="配置中心" rel="1">
-					配置中心
+					title="网络" rel="1">
+					网络
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
+					data-encode="%E7%BE%8E%E9%A3%9F"
+					class="tag-button"
+					title="美食" rel="1">
+					美食
+					<sup>1</sup>
+				</a>
+				
+				<a data-sort="0026"
+					data-encode="%E8%BF%91%E4%BB%A3%E5%8F%B2"
+					class="tag-button"
+					title="近代史" rel="1">
+					近代史
+					<sup>1</sup>
+				</a>
+				
+				<a data-sort="0026"
 					data-encode="AES"
 					class="tag-button"
 					title="AES" rel="1">
@@ -530,7 +398,23 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
+					data-encode="CD"
+					class="tag-button"
+					title="CD" rel="1">
+					CD
+					<sup>1</sup>
+				</a>
+				
+				<a data-sort="0026"
+					data-encode="CI"
+					class="tag-button"
+					title="CI" rel="1">
+					CI
+					<sup>1</sup>
+				</a>
+				
+				<a data-sort="0026"
 					data-encode="Datatables"
 					class="tag-button"
 					title="Datatables" rel="1">
@@ -538,15 +422,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
-					data-encode="Docker"
-					class="tag-button"
-					title="Docker" rel="1">
-					Docker
-					<sup>1</sup>
-				</a>
-				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="Echarts"
 					class="tag-button"
 					title="Echarts" rel="1">
@@ -554,7 +430,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="ElasticSearch"
 					class="tag-button"
 					title="ElasticSearch" rel="1">
@@ -562,7 +438,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="Express"
 					class="tag-button"
 					title="Express" rel="1">
@@ -570,23 +446,31 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
-					data-encode="Go"
+				<a data-sort="0026"
+					data-encode="Git+Lab"
 					class="tag-button"
-					title="Go" rel="1">
-					Go
+					title="Git Lab" rel="1">
+					Git Lab
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
-					data-encode="Kafka"
+				<a data-sort="0026"
+					data-encode="IP"
 					class="tag-button"
-					title="Kafka" rel="1">
-					Kafka
+					title="IP" rel="1">
+					IP
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
+					data-encode="Linux"
+					class="tag-button"
+					title="Linux" rel="1">
+					Linux
+					<sup>1</sup>
+				</a>
+				
+				<a data-sort="0026"
 					data-encode="MongoDB"
 					class="tag-button"
 					title="MongoDB" rel="1">
@@ -594,7 +478,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="MySQL"
 					class="tag-button"
 					title="MySQL" rel="1">
@@ -602,7 +486,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="Neo4J"
 					class="tag-button"
 					title="Neo4J" rel="1">
@@ -610,7 +494,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="Node.js"
 					class="tag-button"
 					title="Node.js" rel="1">
@@ -618,7 +502,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="Promise"
 					class="tag-button"
 					title="Promise" rel="1">
@@ -626,7 +510,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="RabbitMQ"
 					class="tag-button"
 					title="RabbitMQ" rel="1">
@@ -634,7 +518,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="Swagger"
 					class="tag-button"
 					title="Swagger" rel="1">
@@ -642,15 +526,15 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
-					data-encode="ZooKeeper"
+				<a data-sort="0026"
+					data-encode="TCP"
 					class="tag-button"
-					title="ZooKeeper" rel="1">
-					ZooKeeper
+					title="TCP" rel="1">
+					TCP
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="algorithm"
 					class="tag-button"
 					title="algorithm" rel="1">
@@ -658,7 +542,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="async"
 					class="tag-button"
 					title="async" rel="1">
@@ -666,7 +550,15 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
+					data-encode="code"
+					class="tag-button"
+					title="code" rel="1">
+					code
+					<sup>1</sup>
+				</a>
+				
+				<a data-sort="0026"
 					data-encode="git"
 					class="tag-button"
 					title="git" rel="1">
@@ -674,7 +566,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="jQuery"
 					class="tag-button"
 					title="jQuery" rel="1">
@@ -682,7 +574,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
 					data-encode="jekyll%2Bgithub+page"
 					class="tag-button"
 					title="jekyll+github page" rel="1">
@@ -690,7 +582,15 @@ https://github.com/kitian616/jekyll-TeXt-theme
 					<sup>1</sup>
 				</a>
 				
-				<a data-sort="0021"
+				<a data-sort="0026"
+					data-encode="pm2"
+					class="tag-button"
+					title="pm2" rel="1">
+					pm2
+					<sup>1</sup>
+				</a>
+				
+				<a data-sort="0026"
 					data-encode="redis"
 					class="tag-button"
 					title="redis" rel="1">
@@ -702,11 +602,85 @@ https://github.com/kitian616/jekyll-TeXt-theme
             <!-- Article List -->
 			<div class="mini-post-list js-result d-none"><section>
 				<span class="fa listing-seperator">
+					<span class="tag-text">2023</span>
+				</span><div class="post-preview item" data-tags="CI,CD,Git+Lab">
+				    <a href="/2023/09/10/CICD/">
+				        <h2 class="post-title">
+                            CI/CD
+				        </h2>
+				        
+				        <h3 class="post-subtitle">
+				            
+				        </h3>
+				        
+				    </a>
+					<hr>
+				</div>
+			</section><section>
+				<span class="fa listing-seperator">
+					<span class="tag-text">2022</span>
+				</span><div class="post-preview item" data-tags="%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93">
+				    <a href="/2022/05/10/yearSummary/">
+				        <h2 class="post-title">
+                            回顾这一年，2021。
+				        </h2>
+				        
+				        <h3 class="post-subtitle">
+				            
+				        </h3>
+				        
+				    </a>
+					<hr>
+				</div>
+			</section><section>
+				<span class="fa listing-seperator">
+					<span class="tag-text">2021</span>
+				</span><div class="post-preview item" data-tags="%E7%BE%8E%E9%A3%9F">
+				    <a href="/2021/11/28/cook/">
+				        <h2 class="post-title">
+                            食记
+				        </h2>
+				        
+				        <h3 class="post-subtitle">
+				            持续更新中～
+				        </h3>
+				        
+				    </a>
+					<hr>
+				</div>
+			<div class="post-preview item" data-tags="%E5%8E%86%E5%8F%B2,%E4%B8%AD%E5%9B%BD,%E8%BF%91%E4%BB%A3%E5%8F%B2">
+				    <a href="/2021/07/17/chinaHistory/">
+				        <h2 class="post-title">
+                            中国近代史
+				        </h2>
+				        
+				        <h3 class="post-subtitle">
+				            
+				        </h3>
+				        
+				    </a>
+					<hr>
+				</div>
+			<div class="post-preview item" data-tags="code">
+				    <a href="/2021/07/17/codeStyle/">
+				        <h2 class="post-title">
+                            写代码的一些整理
+				        </h2>
+				        
+				        <h3 class="post-subtitle">
+				            
+				        </h3>
+				        
+				    </a>
+					<hr>
+				</div>
+			</section><section>
+				<span class="fa listing-seperator">
 					<span class="tag-text">2020</span>
-				</span><div class="post-preview item" data-tags="Kafka,%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97">
-				    <a href="/2020/06/01/kafka/">
+				</span><div class="post-preview item" data-tags="Linux,Docker,pm2">
+				    <a href="/2020/12/03/buildServer/">
 				        <h2 class="post-title">
-                            Kafka
+                            环境搭建
 				        </h2>
 				        
 				        <h3 class="post-subtitle">
@@ -716,10 +690,10 @@ https://github.com/kitian616/jekyll-TeXt-theme
 				    </a>
 					<hr>
 				</div>
-			<div class="post-preview item" data-tags="Go">
-				    <a href="/2020/06/01/Go/">
+			<div class="post-preview item" data-tags="%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93">
+				    <a href="/2020/12/03/summary/">
 				        <h2 class="post-title">
-                            Go笔记
+                            2020年年度总结
 				        </h2>
 				        
 				        <h3 class="post-subtitle">
@@ -729,10 +703,10 @@ https://github.com/kitian616/jekyll-TeXt-theme
 				    </a>
 					<hr>
 				</div>
-			<div class="post-preview item" data-tags="ZooKeeper,%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83">
-				    <a href="/2020/06/01/ZooKeeper/">
+			<div class="post-preview item" data-tags="%E7%BD%91%E7%BB%9C,TCP,IP">
+				    <a href="/2020/12/03/network-tcpip/">
 				        <h2 class="post-title">
-                            ZooKeeper
+                            TCP/IP相关知识
 				        </h2>
 				        
 				        <h3 class="post-subtitle">
@@ -810,10 +784,10 @@ https://github.com/kitian616/jekyll-TeXt-theme
 				    </a>
 					<hr>
 				</div>
-			<div class="post-preview item" data-tags="Docker,%E5%AE%B9%E5%99%A8">
-				    <a href="/2019/01/16/rocker/">
+			<div class="post-preview item" data-tags="RabbitMQ,%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97">
+				    <a href="/2019/01/16/RabbitMQ/">
 				        <h2 class="post-title">
-                            Docker的整理
+                            RabbitMQ的整理
 				        </h2>
 				        
 				        <h3 class="post-subtitle">
@@ -823,10 +797,10 @@ https://github.com/kitian616/jekyll-TeXt-theme
 				    </a>
 					<hr>
 				</div>
-			<div class="post-preview item" data-tags="RabbitMQ,%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97">
-				    <a href="/2019/01/16/RabbitMQ/">
+			<div class="post-preview item" data-tags="Docker,%E5%AE%B9%E5%99%A8">
+				    <a href="/2019/01/16/rocker/">
 				        <h2 class="post-title">
-                            RabbitMQ的整理
+                            Docker的整理
 				        </h2>
 				        
 				        <h3 class="post-subtitle">
@@ -1002,6 +976,14 @@ https://github.com/kitian616/jekyll-TeXt-theme
 
 
     <!-- Footer -->
+
+
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("", "");</script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
 <footer>
     <div class="container">
         <div class="row">
@@ -1031,7 +1013,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
   
 </ul>
                 <p class="copyright text-muted">
-                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span> | <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> | <span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
+                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span><span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
                    <!-- <a href="http://gfwant.com">want</a> | -->
                   <iframe
                       style="margin-left: 2px; margin-bottom:-5px;"
@@ -1040,7 +1022,7 @@ https://github.com/kitian616/jekyll-TeXt-theme
                   </iframe>
                 </p>
                 <p class="copyright text-muted">
-                    Copyright &copy; want 2020
+                    Copyright &copy; want 2023
                      <!-- <a href="http://gfwant.com">want</a> | -->
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
@@ -1153,193 +1135,6 @@ https://github.com/kitian616/jekyll-TeXt-theme
 
 
 <!-- Multi-Lingual -->
-
-
-
-  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 
 <!-- Image to hack wechat -->

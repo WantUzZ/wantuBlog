@@ -57,188 +57,8 @@
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
@@ -398,6 +218,154 @@
             ">
     			
 <div class="post-preview">
+    <a href="/2018/10/26/showData-datatables/">
+        <h2 class="post-title">
+            jQuery datatables
+        </h2>
+        
+        <h3 class="post-subtitle">
+            
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                前言
+数据可视化就是借助图形化手段将原本冷冰冰的数据生动的传达给用户。用户能够轻松的获取有价值的数据并及时的做出相应的决策支撑。
+目前接触到的数据表示形式有一下几点：
+1、表格
+2、常见的统计图行（柱状、条形、饼图、折线，雷达等）
+3、关系图（连通图）
+那么有哪些技术可以轻松的帮助我们对以上需求进行处理呢？
+1、jQuery的datatables
+2、ECharts、D3.js
+3、cyto...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by wantu on October 26, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/10/26/algorithm/">
+        <h2 class="post-title">
+            常用算法实现
+        </h2>
+        
+        <h3 class="post-subtitle">
+            
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                相关代码已经托管到github上，欢迎指正bug.戳我
+排序
+冒泡
+  冒泡排序，就跟它的名字一样，你可以想象一条🐟现在在一个湖底。鱼肚子里面是我们将要排序的数据。这个鱼每隔一段时间会打个嗝（吐个泡泡），而这个泡泡中的数总是鱼肚子里面的最大值或者最小值。然后一个小朋友在岸上拿了一个泡泡收集器，把它吐出的泡泡一个一个按顺序放进机器里面。最后整个泡泡收集器中的数据都是有序的了。
+1
+2
+3
+4
+...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by wantu on October 26, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/10/24/buildExpressProject/">
+        <h2 class="post-title">
+            回顾搭建一个基于express的web项目遇到的问题
+        </h2>
+        
+        <h3 class="post-subtitle">
+            
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                前言
+  基于express框架搭建一个项目的壳子是一直想去做但是没有去做的一件事。之前在店达做的多的是模块的编码，也没有自己去搭建过项目。但是毕竟写的代码多了对整个框架也比较熟悉而且本人有定期整理的习惯，所以说express框架还是比较了解的。
+  光说express框架我觉得不是很好，如果有一个横向的对比，可能对理解express框架有更多的帮助。基于暂时除了Node.Js本人之前的学习...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by wantu on October 24, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/10/17/elasticSearchQuery/">
+        <h2 class="post-title">
+            回顾ElasticSearch的使用
+        </h2>
+        
+        <h3 class="post-subtitle">
+            
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                前言
+官方文档地址
+  官方文档
+  中文文档翻译
+ES背景故事
+  多年前，一个叫做Shay Banon的刚结婚不久的失业开发者，由于妻子要去伦敦学习厨师，他便跟着也去了。
+在他找工作的过程中，为了给妻子构建一个食谱的搜索引擎，他开始构建一个早期版本的Lucene。
+直接基于Lucene工作会比较困难，所以Shay开始抽象Lucene代码以便Java程序员可以在应用中添加搜索功能。他发布了...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by wantu on October 17, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2018/10/17/bookSummary/">
+        <h2 class="post-title">
+            书摘
+        </h2>
+        
+        <h3 class="post-subtitle">
+            
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                书摘
+
+精进：如何成为
+
+
+    这个世界上多的是短平快、付出马上就有回报的立竿见影的事，也多的是需要长期投入、靠矢志不渝的坚持才有大成的事，只不过，对前一种人们常常趋之若鹜，对后一种人们却避之唯恐不及——而正因为如此，才更有去做后一种事的必要。
+    人生是持续而反复的构造，校正选择，作出建设性的改变。
+
+
+波兰来客
+
+
+    那时我们有梦,关于文学,关于爱情,关于穿越世界的旅行，如...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by wantu on October 17, 2018
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
     <a href="/2018/10/13/myql/">
         <h2 class="post-title">
             个人已知的一些MySQL查询性能优化
@@ -447,7 +415,7 @@
 
 want 的 Blog 就这么开通了。
 
-跳过废话，直接看技术实现  
+跳过废话，直接看技术实现
 这个博客网站是基于Jekyll+GitHub Pages搭建而成的。
 主要是为了记录自己的生活、工作、学习的事情。之前一直使用为之笔记进行总结。
 加法要做减法也要做，笔记中的一些有趣的知识希望在博客中进行分享。
@@ -458,10 +426,12 @@ want 的 Blog 就这么开通了。
 正文
 
 接下来说说搭建这个博客的步骤。（OSX）
+
 1
 2
 3
-4...
+4
+...
             
         </div>
     </a>
@@ -507,20 +477,25 @@ want 的 Blog 就这么开通了。
         </a>
         
         
-                <a data-sort="0017" 
+                <a data-sort="0022" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
                     title="数据库"
                     rel="5">数据库</a>
         
-                <a data-sort="0020" 
+                <a data-sort="0025" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书</a>
         
-                <a data-sort="0020" 
-                    href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
-                    title="消息队列"
-                    rel="2">消息队列
+                <a data-sort="0025" 
+                    href="/archive/?tag=%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93"
+                    title="年度总结"
+                    rel="2">年度总结</a>
+        
+                <a data-sort="0025" 
+                    href="/archive/?tag=Docker"
+                    title="Docker"
+                    rel="2">Docker
     </div>
 </section>
 
@@ -573,6 +548,14 @@ want 的 Blog 就这么开通了。
 
 
     <!-- Footer -->
+
+
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("", "");</script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
 <footer>
     <div class="container">
         <div class="row">
@@ -602,7 +585,7 @@ want 的 Blog 就这么开通了。
   
 </ul>
                 <p class="copyright text-muted">
-                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span> | <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> | <span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
+                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span><span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
                    <!-- <a href="http://gfwant.com">want</a> | -->
                   <iframe
                       style="margin-left: 2px; margin-bottom:-5px;"
@@ -611,7 +594,7 @@ want 的 Blog 就这么开通了。
                   </iframe>
                 </p>
                 <p class="copyright text-muted">
-                    Copyright &copy; want 2020
+                    Copyright &copy; want 2023
                      <!-- <a href="http://gfwant.com">want</a> | -->
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
@@ -712,193 +695,6 @@ want 的 Blog 就这么开通了。
 
 
 <!-- Multi-Lingual -->
-
-
-
-  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 
 <!-- Image to hack wechat -->

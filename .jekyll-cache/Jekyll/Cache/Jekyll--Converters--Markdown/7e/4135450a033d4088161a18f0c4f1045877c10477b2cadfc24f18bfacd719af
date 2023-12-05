@@ -1,4 +1,4 @@
-I"��<h2 id="前言">前言</h2>
+I"��<h2 id="前言">前言</h2>
 <p>数据可视化就是借助图形化手段将原本冷冰冰的数据生动的传达给用户。用户能够轻松的获取有价值的数据并及时的做出相应的决策支撑。<br />
 目前接触到的数据表示形式有一下几点：<br />
 1、表格<br />
@@ -286,7 +286,7 @@
                <span class="nx">width</span><span class="o">=</span><span class="dl">"</span><span class="s2">100%</span><span class="dl">"</span><span class="o">&gt;</span>
             <span class="o">&lt;</span><span class="nx">tfoot</span><span class="o">&gt;</span>
             <span class="o">&lt;</span><span class="nx">tr</span><span class="o">&gt;</span>
-                <span class="o">&lt;</span><span class="nx">th</span><span class="o">&gt;</span><span class="err">合计</span><span class="o">&lt;</span><span class="sr">/th</span><span class="err">&gt;
+                <span class="o">&lt;</span><span class="nx">th</span><span class="o">&gt;</span><span class="nx">合计</span><span class="o">&lt;</span><span class="sr">/th</span><span class="err">&gt;
 </span>                <span class="o">&lt;</span><span class="nx">th</span><span class="o">&gt;&lt;</span><span class="sr">/th</span><span class="err">&gt;
 </span>                <span class="o">&lt;</span><span class="nx">th</span><span class="o">&gt;&lt;</span><span class="sr">/th</span><span class="err">&gt;
 </span>                <span class="o">&lt;</span><span class="nx">th</span><span class="o">&gt;&lt;</span><span class="sr">/th</span><span class="err">&gt;

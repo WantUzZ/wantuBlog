@@ -57,188 +57,8 @@
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
@@ -398,9 +218,9 @@
             ">
     			
 <div class="post-preview">
-    <a href="/2020/06/01/kafka/">
+    <a href="/2023/09/10/CICD/">
         <h2 class="post-title">
-            Kafka
+            CI/CD
         </h2>
         
         <h3 class="post-subtitle">
@@ -409,21 +229,24 @@
         
         <div class="post-content-preview">
             
-                
+                介绍
 
+CICD 代表持续集成（Continuous Integration）和持续交付（Continuous Delivery），是一种软件开发实践，旨在通过自动化软件构建、测试和部署的过程，实现对软件的快速、可靠的交付。
+
+CICD 工具集包括各种自动化构建工具、测试工具、部署工具，以及用于监视和日志记录的工具。流行的 CICD 工具包括 Jenkins、Travis CI、GitLab...
             
         </div>
     </a>
     <p class="post-meta">
-        Posted by wantu on June 1, 2020
+        Posted by wantu on September 10, 2023
     </p>
 </div>
 <hr>
 
 <div class="post-preview">
-    <a href="/2020/06/01/ZooKeeper/">
+    <a href="/2022/05/10/yearSummary/">
         <h2 class="post-title">
-            ZooKeeper
+            回顾这一年，2021。
         </h2>
         
         <h3 class="post-subtitle">
@@ -432,21 +255,66 @@
         
         <div class="post-content-preview">
             
-                
+                去年
 
+
+  换了一份工作
+  去了重庆、成都、黄山、千岛湖
+  读了几本书
+  锻炼了 100 次
+  …
+
+
+感悟
+
+
+  世界上完满的东西都是极其稀少的，聪明的头脑、和谐美满的家庭、靠谱的朋友、体贴的爱人、美丽的容颜和健硕得体的身体，想都要，是不是有些贪心～
+  回过头看，确确实实是那些沉重又窒息的时刻不断淬炼你的身心，让你更加强大。
+  一个人的人格和脾性或如树木。汲取身边的土壤的养...
             
         </div>
     </a>
     <p class="post-meta">
-        Posted by wantu on June 1, 2020
+        Posted by wantu on May 10, 2022
     </p>
 </div>
 <hr>
 
 <div class="post-preview">
-    <a href="/2020/06/01/Go/">
+    <a href="/2021/11/28/cook/">
         <h2 class="post-title">
-            Go笔记
+            食记
+        </h2>
+        
+        <h3 class="post-subtitle">
+            持续更新中～
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                中国菜的特点
+
+传统中国菜
+
+传统的中国菜分为 8 大菜系，分别是：川、鲁、湘、粤、徽、闽、浙、苏。
+川、湘菜以辣见长，口味较重。口味区别在于川菜多麻辣，但是湘菜多香辣。
+徽菜口味鲜辣，重油、重色、重火功。口味适中，不如江浙菜的清淡、也不如川湘菜的浓重。
+苏（江苏）菜、浙（浙江）菜个人喜欢统称之为江浙菜，两者口味相近，都是十分清淡的，菜式精致、小巧。
+鲁菜，口味咸鲜为主，火候精湛，善制汤。
+...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by wantu on November 28, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/07/17/codeStyle/">
+        <h2 class="post-title">
+            写代码的一些整理
         </h2>
         
         <h3 class="post-subtitle">
@@ -455,13 +323,187 @@
         
         <div class="post-content-preview">
             
-                
+                编码是每个程序员每天都在做的事情。写好代码是很重要的！
+
+写好代码不是那么容易的
+
+0-&gt;40
+
+
+  代码是由字母组成。所以请确保单词拼写正确。可以借助辅助的单词检查插件进行检查。
+  命名最好简单明了，谷歌翻译是个好东西。
+  变量命令请用名词，如果不清楚其可数、不可数名次的拼写形式，建议后面加上集合的名称。例如 nameList、nameArr。动作函数请用动词。
+  减少变量。...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by wantu on July 17, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2021/07/17/chinaHistory/">
+        <h2 class="post-title">
+            中国近代史
+        </h2>
+        
+        <h3 class="post-subtitle">
+            
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                问题
+
+Q: 中国为何会遭受这几百年屈辱的历史，造成近代中国的苦难的原因是什么？
+Q: 中国国内的精英都做了些什么？
+
+近代史
+
+第一次鸦片战争
+
+第二次鸦片战争
+
+洋务运动
+
+太平天国运动
+
+义和团
+
+五四爱国运动
+
+中华民国
+
+新中国
 
             
         </div>
     </a>
     <p class="post-meta">
-        Posted by wantu on June 1, 2020
+        Posted by wantu on July 17, 2021
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2020/12/03/buildServer/">
+        <h2 class="post-title">
+            环境搭建
+        </h2>
+        
+        <h3 class="post-subtitle">
+            
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                2021年年初接到一个搭建新测试环境的活。
+
+要求
+
+  服务器OS得为CentOS
+  大部分的中间件跑到Docker
+  原先数据迁移到新的测试服务器
+  拉起原先的服务
+
+
+具体实施
+
+安装CentOS
+
+  下载软件用以制作启动盘
+ 1.1 下载UltralIso 用来制作启动盘。 教程 - https://jingyan.baidu.com/article/d621e8da4aae...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by wantu on December 3, 2020
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2020/12/03/network-tcpip/">
+        <h2 class="post-title">
+            TCP/IP相关知识
+        </h2>
+        
+        <h3 class="post-subtitle">
+            
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                开始
+
+我们在地址栏中输入www.baidu.com发生了什么？
+
+
+
+流程：
+
+
+  域名解析
+  发起TCP3次握手
+  建立TCP连接后发起http请求
+  服务器响应请求，返回结果
+  浏览器获取到响应，构建DOM
+
+
+网络
+
+它在哪？
+
+
+
+它理想的样子：
+
+
+
+每一层的作用：
+
+
+
+现实中实际使用的TCP/IP协议簇的样子–五层模型：
+
+
+
+问题1 为什么TCP/IP协议要进行分...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by wantu on December 3, 2020
+    </p>
+</div>
+<hr>
+
+<div class="post-preview">
+    <a href="/2020/12/03/summary/">
+        <h2 class="post-title">
+            2020年年度总结
+        </h2>
+        
+        <h3 class="post-subtitle">
+            
+        </h3>
+        
+        <div class="post-content-preview">
+            
+                2020年是一个魔幻的一年。说起魔幻是因为确实见证了很多的第一次，第一次千万人口级别的封城、高考延期等等……
+个人的命运无法挣脱外部环境的影响，这是每个身处其中的人们无法回避的事实。
+
+总有一条蜿蜒在童话镇里的河
+
+如果说2019年的主旋律是转，那么今年的主旋律是平。先说结论，今年做出了一些尝试，做了一些事情，但是依旧在许多事情上没能在进一步。
+生活上，慢慢走出了迷雾。工作上虽有一些不尽人意...
+            
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by wantu on December 3, 2020
     </p>
 </div>
 <hr>
@@ -516,160 +558,6 @@
 </div>
 <hr>
 
-<div class="post-preview">
-    <a href="/2019/07/21/promise/">
-        <h2 class="post-title">
-            Promise、async流程控制库
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                解决什么问题
-  Promise是一种异步编程中流程控制的解决方案之一。它的诞生有利于我们写出更具可读性的代码，解决了回调地狱问题。Promise最大的好处是在异步执行的流程中，把执行代码和处理结果的代码清晰地分离了。
-内容
-基础知识
-什么是callback？
-  周知在同步编程中一个函数如果想要把函数体内部的处理结果进行返回，那么需要借助return关键字。但是在异步编程中主线程是暂时不会...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on July 21, 2019
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2019/06/14/redis/">
-        <h2 class="post-title">
-            Redis实操
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                解决什么问题
-
-内容
-安装
-1、先安装docker
-2、搜索镜像
-3、下载镜像
-4、试用镜像运行一个容器
-基础知识
-redis 几种key的数据类型：
-    1、字符串
-    2、哈希
-    3、列表
-    4、集合
-    5、有序集合
-
-哨兵机制
-
-发布订阅
-
-分布式锁
-
-思考与总结
-
-
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on June 14, 2019
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2019/03/09/reviewBook/">
-        <h2 class="post-title">
-            技术书目笔记
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                开这个的原因
-  温故而知新。内容控制在原先读过的技术书目上。
-
-JS高级程序设计
-变量：
-5中基本类型：Null、Undefined、String、Number、Boolean。注意是类型（首字母大写）
-其中注意：typeof操作符 对 null的结果：[typeof null ==object] [typeof 函数== function] [typeof NaN ==&gt; NaN]...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on March 9, 2019
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2019/01/16/rocker/">
-        <h2 class="post-title">
-            Docker的整理
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                前言
-docker是开发人员和系统管理员使用容器开发、部署和运行应用程序的平台。使用Linux容器部署应用程序称为容器化。容器不是新的，但是它们用于轻松部署应用程序。
-容器化的优势：
-1、灵活，再复杂的应用也可以集装箱化。
-2、轻量级，容器利用并共享主机内核。
-3、可互换，支持即时部署更新和升级。
-4、便携性，我们可以本地构建，部署到云，并在任何地方运行。
-5、可扩展，我们可以增加并自动分发...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on January 16, 2019
-    </p>
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2019/01/16/RabbitMQ/">
-        <h2 class="post-title">
-            RabbitMQ的整理
-        </h2>
-        
-        <h3 class="post-subtitle">
-            
-        </h3>
-        
-        <div class="post-content-preview">
-            
-                前言
-  AMQP：提供统一消息服务的应用层标准高级消息队列协议，是应用层协议的一个开放标准,为面向消息的中间件设计。Erlang中的实现便有RabbitMQ。
-   正如中文文档开篇所言：消息系统允许软件、应用相互连接和扩展．这些应用可以相互链接起来组成一个更大的应用，或者将用户设备和数据进行连接．消息系统通过将消息的发送和接收分离来实现应用程序的异步和解偶。这就是rabbitMQ能为我们...
-            
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by wantu on January 16, 2019
-    </p>
-</div>
-<hr>
-
 
 <!-- Pager -->
 
@@ -706,20 +594,25 @@ docker是开发人员和系统管理员使用容器开发、部署和运行应�
         </a>
         
         
-                <a data-sort="0017" 
+                <a data-sort="0022" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
                     title="数据库"
                     rel="5">数据库</a>
         
-                <a data-sort="0020" 
+                <a data-sort="0025" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书</a>
         
-                <a data-sort="0020" 
-                    href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
-                    title="消息队列"
-                    rel="2">消息队列
+                <a data-sort="0025" 
+                    href="/archive/?tag=%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93"
+                    title="年度总结"
+                    rel="2">年度总结</a>
+        
+                <a data-sort="0025" 
+                    href="/archive/?tag=Docker"
+                    title="Docker"
+                    rel="2">Docker
     </div>
 </section>
 
@@ -772,6 +665,14 @@ docker是开发人员和系统管理员使用容器开发、部署和运行应�
 
 
     <!-- Footer -->
+
+
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("", "");</script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
 <footer>
     <div class="container">
         <div class="row">
@@ -801,7 +702,7 @@ docker是开发人员和系统管理员使用容器开发、部署和运行应�
   
 </ul>
                 <p class="copyright text-muted">
-                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span> | <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> | <span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
+                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span><span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
                    <!-- <a href="http://gfwant.com">want</a> | -->
                   <iframe
                       style="margin-left: 2px; margin-bottom:-5px;"
@@ -810,7 +711,7 @@ docker是开发人员和系统管理员使用容器开发、部署和运行应�
                   </iframe>
                 </p>
                 <p class="copyright text-muted">
-                    Copyright &copy; want 2020
+                    Copyright &copy; want 2023
                      <!-- <a href="http://gfwant.com">want</a> | -->
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
@@ -911,193 +812,6 @@ docker是开发人员和系统管理员使用容器开发、部署和运行应�
 
 
 <!-- Multi-Lingual -->
-
-
-
-  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 
 <!-- Image to hack wechat -->

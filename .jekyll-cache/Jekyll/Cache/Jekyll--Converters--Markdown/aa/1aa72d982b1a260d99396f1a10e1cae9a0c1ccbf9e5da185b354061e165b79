@@ -1,4 +1,4 @@
-I"�Q<h2 id="前言">前言</h2>
+I"�Q<h2 id="前言">前言</h2>
 <p>  程序员恐怕很多都是不想写文档的，但是一旦接手他人的项目又是第一时间说：文档呢？这确实是一个很常见的现象。其本质反应的就是书写文档比较耗时，技术人员不想做这种“无用功”与接手他人的项目，技术人员又不想看别人的代码，想通过阅读相关的文档加快上手速度之间的矛盾。<br />
   个人观点：好的规范一定要尽早养成。个人在刚刚参加工作的时候一开始的做法是在service层上写好接口注释，在注释中将相关的接口的功能、请求参数、响应进行描述。到后来采用Rap进行文档管理，Rap管理的好处就是简单、快速。相关的参数像填表一样的填好，比较简单无脑。但是Rap存在很多不足之处：比如说多人同时编辑存在互斥现象，单一文档同一时间只允许一个用户编辑，亦或是接口不支持在线的请求测试（可能自己不知道）等。而且Rap服务器（私服部署情况除外）是外部的，相关的安全性可能不是很靠得住。个人也没有搭建过公司自用的rap。所以相关的复杂度不是很清楚。但是今天，我想向你推荐的这个东西确实对于搭建一个自用的文档管理系统是很方便、高效的。<br />
   它就是Swagger。</p>
@@ -85,7 +85,7 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 <span class="na">produces</span><span class="pi">:</span>
  <span class="pi">-</span> <span class="s2">"</span><span class="s">application/json"</span>
 <span class="na">paths</span><span class="pi">:</span>
-  <span class="s">/api/v1/queryAllGroupMemberChatRecordByChatroomId</span><span class="pi">:</span>
+  <span class="na">/api/v1/queryAllGroupMemberChatRecordByChatroomId</span><span class="pi">:</span>
     <span class="na">post</span><span class="pi">:</span>
       <span class="na">summary</span><span class="pi">:</span> <span class="s">查询群组所有节点之间的聊天记录.</span>
       <span class="na">consumes</span><span class="pi">:</span>
@@ -96,7 +96,7 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
           <span class="na">description</span><span class="pi">:</span> <span class="s">请求体对象</span>
           <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
           <span class="na">schema</span><span class="pi">:</span>
-            <span class="s">$ref</span><span class="pi">:</span> <span class="s2">"</span><span class="s">#/definitions/queryAllGroupMemberChatRecordByChatroomIdReq"</span>
+            <span class="na">$ref</span><span class="pi">:</span> <span class="s2">"</span><span class="s">#/definitions/queryAllGroupMemberChatRecordByChatroomIdReq"</span>
       <span class="na">responses</span><span class="pi">:</span>
         <span class="na">200</span><span class="pi">:</span>
           <span class="na">description</span><span class="pi">:</span> <span class="s">A responsed object</span>      
@@ -236,7 +236,7 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 </span><span class="p">}</span><span class="w">
 </span></pre></td></tr></tbody></table></code></pre></div></div>
 <p>12、新增readme.md添加使用说明：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -267,7 +267,7 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
       <li>multipart/form-data</li>
       <li>text/plain
 那么很明显，consumes的值为application/json肯定是要发送预检请求(OPTION)的。那么如何处理。我暂时的做法是在项目中放掉OPTION请求，一旦预检请求没有响应那么后续的请求是不会发送的。
-        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4

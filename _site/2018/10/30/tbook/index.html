@@ -15,20 +15,6 @@
     
     <meta property="og:type" content="article">
     <meta property="og:description" content="记录
-技术读完
-
-  大话数据结构
-  疯狂Java讲义
-  你不知道的js上
-  Git学习指南
-  JavaScript语言精粹
-  JavaScript高级程序设计
-  深入浅出NodeJs
-  Effective Javascript
-  编写可读代码的艺术[9]
-  深入学习MongoDB[9]
-
-
 ">
     
     <meta property="article:published_time" content="2018-10-30T06:34:00Z">
@@ -81,188 +67,8 @@
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
@@ -443,71 +249,82 @@
                 
 
                 <h2 id="记录">记录</h2>
+
 <h4 id="技术读完">技术读完</h4>
+
 <ul>
   <li>大话数据结构</li>
-  <li>疯狂Java讲义</li>
-  <li>你不知道的js上</li>
-  <li>Git学习指南</li>
-  <li>JavaScript语言精粹</li>
-  <li>JavaScript高级程序设计</li>
-  <li>深入浅出NodeJs</li>
+  <li>疯狂 Java 讲义</li>
+  <li>你不知道的 js 上</li>
+  <li>Git 学习指南</li>
+  <li>JavaScript 语言精粹</li>
+  <li>JavaScript 高级程序设计</li>
+  <li>深入浅出 NodeJs</li>
   <li>Effective Javascript</li>
-  <li>编写可读代码的艺术[9]</li>
-  <li>深入学习MongoDB[9]</li>
+  <li>编写可读代码的艺术</li>
+  <li>深入学习 MongoDB</li>
+  <li>图解 HTTP 协议</li>
+  <li>图解 TCP/IP</li>
+  <li>软件设计师教程</li>
+  <li>Java 核心技术卷一第十版</li>
+  <li>凤凰架构</li>
 </ul>
 
 <h4 id="技术选读">技术选读</h4>
+
 <ul>
   <li>算法竞赛入门经典第一版</li>
-  <li>python编程快速-让繁琐工作自动化</li>
-  <li>Effective Java中文版</li>
+  <li>python 编程快速-让繁琐工作自动化</li>
+  <li>Effective Java 中文版</li>
   <li>大话设计模式</li>
   <li>计算机网络</li>
-  <li>高性能MySql</li>
-  <li>深入理解Java虚拟机</li>
-  <li>图解HTTP协议</li>
-  <li>go语言从入门到进阶实战</li>
-  <li>软件设计师教程</li>
+  <li>高性能 MySql</li>
+  <li>深入理解 Java 虚拟机</li>
+  <li>go 语言从入门到进阶实战</li>
+  <li>Spring 实战第四版</li>
+  <li>Maven 实战</li>
+  <li>Spring Boot 实战</li>
+  <li>从根理解 MySQL 小册子</li>
 </ul>
 
 <h4 id="非技术读完">非技术读完</h4>
+
 <ul>
-  <li>达芬奇密码</li>
-  <li>狼图腾</li>
-  <li>追风筝的人</li>
-  <li>偷影子的人</li>
-  <li>人生</li>
-  <li>平凡的世界</li>
-  <li>活着</li>
+  <li>达芬奇密码（美 丹·布朗）</li>
+  <li>狼图腾（姜戎）</li>
+  <li>追风筝的人（美籍阿富汗裔作家 卡勒德·胡赛尼）</li>
+  <li>偷影子的人（法 马克·李维）</li>
+  <li>人生（路遥）</li>
+  <li>平凡的世界（路遥）</li>
+  <li>活着（余华）</li>
   <li>穷爸爸富爸爸</li>
-  <li>教父（第一、二部）</li>
-  <li>白鹿原</li>
-  <li>呐喊</li>
-  <li>解忧杂货店</li>
-  <li>嫌疑人x的献身</li>
-  <li>挪威的森林</li>
-  <li>麦田的守望者</li>
-  <li>悟空传</li>
-  <li>大江东去（第一、二部）</li>
-  <li>犯罪心理画像</li>
-  <li>我与地坛</li>
-  <li>皮囊</li>
-  <li>边城</li>
-  <li>曾国藩传</li>
-  <li>天才在左疯子在右</li>
+  <li>教父（美 马里奥·普佐）</li>
+  <li>白鹿原（陈忠实）</li>
+  <li>呐喊（鲁迅）</li>
+  <li>解忧杂货店（日 东野圭吾）</li>
+  <li>嫌疑人 x 的献身（日 东野圭吾）</li>
+  <li>挪威的森林（日 村上春树）</li>
+  <li>麦田的守望者（美 J.D.塞林格）</li>
+  <li>悟空传（今何在–曾雨）</li>
+  <li>大江东去（阿耐）</li>
+  <li>犯罪心理画像（李玟瑾）</li>
+  <li>我与地坛（史铁生）</li>
+  <li>皮囊（蔡崇达）</li>
+  <li>边城（沈从文）</li>
+  <li>曾国藩传（张宏杰）</li>
+  <li>天才在左疯子在右（高铭）</li>
   <li>李世民秘史</li>
-  <li>芙蓉镇</li>
-  <li>人生本来如寄</li>
-  <li>呼兰河传</li>
-  <li>亲爱的安德烈</li>
-  <li>尘埃落定</li>
-  <li>人间失格</li>
-  <li>十字街84号</li>
-  <li>图解美国史</li>
-  <li>黑客与画家</li>
+  <li>芙蓉镇（古华）</li>
+  <li>人生本来如寄（梁实秋）</li>
+  <li>呼兰河传（萧红）</li>
+  <li>亲爱的安德烈（龙应台）</li>
+  <li>尘埃落定（阿来）</li>
+  <li>人间失格（日 太宰治）</li>
+  <li>查令十字街 84 号（美 海伦·汉芙）</li>
+  <li>图解美国史（姚尧）</li>
+  <li>黑客与画家（Paul Graham）</li>
   <li>少女</li>
-  <li>关键对话</li>
+  <li>关键对话（美 科里·帕特森）</li>
   <li>人类简史</li>
   <li>激荡四十年</li>
   <li>周正毅问题调查</li>
@@ -516,28 +333,63 @@
   <li>河西走廊</li>
   <li>我的奋斗</li>
   <li>高效工作</li>
-  <li>日本行脚[9]</li>
-  <li>反脆弱[9]</li>
-  <li>活法[9]</li>
-  <li>Beyond the label[9]</li>
-  <li>资本主义简史[9]</li>
-  <li>茶经[9]</li>
-  <li>宿命[9]</li>
-  <li>沉思录[9]</li>
+  <li>日本行脚</li>
+  <li>反脆弱</li>
+  <li>活法</li>
+  <li>Beyond the label</li>
+  <li>资本主义简史</li>
+  <li>茶经</li>
+  <li>宿命</li>
+  <li>沉思录</li>
+  <li>海边的卡夫卡</li>
+  <li>亲密关系</li>
+  <li>八次危机</li>
+  <li>仓央嘉措诗传</li>
+  <li>恶意</li>
+  <li>月亮与六便士</li>
+  <li>非暴力沟通</li>
+  <li>浮生六记</li>
+  <li>小狗钱钱</li>
+  <li>墨菲定律</li>
+  <li>爱的沟通</li>
+  <li>钢铁、枪炮和病菌</li>
+  <li>山月记 （日 中岛敦）</li>
+  <li>影响力 （美 罗伯特·西奥迪尼）</li>
+  <li>穷查理宝典 （美 考夫曼）</li>
+  <li>老人与海 （美 海鸣威）</li>
+  <li>万历十五年 （美籍华人 黄仁宇）</li>
+  <li>低智商社会 （日 大前研一）</li>
+  <li>解读中国经济 （林毅夫）</li>
+  <li>如何阅读一本书 （美 莫提默·J. 艾德勒、查尔斯·范多伦）</li>
+  <li>白说 （白岩松）</li>
+  <li>洞穴奇案 （美 萨伯）</li>
+  <li>重说中国近代史 （张鸣 人大历史学教授）</li>
+  <li>晚熟的人（莫言）</li>
+  <li>遥远的救世主（豆豆）</li>
+  <li>人生海海（麦家）</li>
+  <li>置身事内（兰小欢）</li>
+  <li>蛤蟆先生去看心理医生（[英] 罗伯特·戴博德）</li>
+  <li>中县干部（冯军旗）</li>
+  <li>人性的弱点（[美] 戴尔·卡耐基）</li>
+  <li>自卑与超越（[奥地利] 阿尔弗雷德·阿德勒）</li>
+  <li>知行合一王阳明（度阴山）</li>
+  <li>稀缺：我们是如何陷入贫穷与忙碌的（[美] 穆来纳森、沙菲尔）</li>
 </ul>
 
 <h4 id="非技术未完结">非技术未完结</h4>
+
 <ul>
-  <li>仓央嘉措诗传</li>
   <li>黄金时代</li>
   <li>拿破仑传</li>
   <li>智囊</li>
   <li>杨澜访谈录</li>
   <li>乌克兰拖拉机简史</li>
   <li>东晋门阀政治</li>
-  <li>浮生六记</li>
   <li>数码摄影教程</li>
-  <li>沉思录</li>
+  <li>少有人走的路（美 斯科特·派克）</li>
+  <li>社会性动物</li>
+  <li>国富论</li>
+  <li>罪与罚</li>
 </ul>
 
                 
@@ -607,20 +459,25 @@
         </a>
         
         
-                <a data-sort="0017" 
+                <a data-sort="0022" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
                     title="数据库"
                     rel="5">数据库</a>
         
-                <a data-sort="0020" 
+                <a data-sort="0025" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书</a>
         
-                <a data-sort="0020" 
-                    href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
-                    title="消息队列"
-                    rel="2">消息队列
+                <a data-sort="0025" 
+                    href="/archive/?tag=%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93"
+                    title="年度总结"
+                    rel="2">年度总结</a>
+        
+                <a data-sort="0025" 
+                    href="/archive/?tag=Docker"
+                    title="Docker"
+                    rel="2">Docker
     </div>
 </section>
 
@@ -680,6 +537,14 @@
 
 
     <!-- Footer -->
+
+
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("", "");</script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
 <footer>
     <div class="container">
         <div class="row">
@@ -709,7 +574,7 @@
   
 </ul>
                 <p class="copyright text-muted">
-                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span> | <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> | <span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
+                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span><span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
                    <!-- <a href="http://gfwant.com">want</a> | -->
                   <iframe
                       style="margin-left: 2px; margin-bottom:-5px;"
@@ -718,7 +583,7 @@
                   </iframe>
                 </p>
                 <p class="copyright text-muted">
-                    Copyright &copy; want 2020
+                    Copyright &copy; want 2023
                      <!-- <a href="http://gfwant.com">want</a> | -->
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
@@ -877,193 +742,6 @@
 
 
 <!-- Multi-Lingual -->
-
-
-
-  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 
 <!-- Image to hack wechat -->

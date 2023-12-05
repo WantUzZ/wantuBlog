@@ -70,188 +70,8 @@
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
@@ -520,7 +340,7 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 <span class="na">produces</span><span class="pi">:</span>
  <span class="pi">-</span> <span class="s2">"</span><span class="s">application/json"</span>
 <span class="na">paths</span><span class="pi">:</span>
-  <span class="s">/api/v1/queryAllGroupMemberChatRecordByChatroomId</span><span class="pi">:</span>
+  <span class="na">/api/v1/queryAllGroupMemberChatRecordByChatroomId</span><span class="pi">:</span>
     <span class="na">post</span><span class="pi">:</span>
       <span class="na">summary</span><span class="pi">:</span> <span class="s">查询群组所有节点之间的聊天记录.</span>
       <span class="na">consumes</span><span class="pi">:</span>
@@ -531,7 +351,7 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
           <span class="na">description</span><span class="pi">:</span> <span class="s">请求体对象</span>
           <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
           <span class="na">schema</span><span class="pi">:</span>
-            <span class="s">$ref</span><span class="pi">:</span> <span class="s2">"</span><span class="s">#/definitions/queryAllGroupMemberChatRecordByChatroomIdReq"</span>
+            <span class="na">$ref</span><span class="pi">:</span> <span class="s2">"</span><span class="s">#/definitions/queryAllGroupMemberChatRecordByChatroomIdReq"</span>
       <span class="na">responses</span><span class="pi">:</span>
         <span class="na">200</span><span class="pi">:</span>
           <span class="na">description</span><span class="pi">:</span> <span class="s">A responsed object</span>      
@@ -550,7 +370,7 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
         <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">5m'</span>
       <span class="na">size</span><span class="pi">:</span> 
         <span class="na">type</span><span class="pi">:</span> <span class="s">integer</span>
-        <span class="na">example</span><span class="pi">:</span> <span class="s">20</span>
+        <span class="na">example</span><span class="pi">:</span> <span class="m">20</span>
       <span class="na">sort</span><span class="pi">:</span> 
         <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
         <span class="na">example</span><span class="pi">:</span> <span class="s1">'</span><span class="s">desc'</span>
@@ -577,16 +397,16 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 10
 11
 </pre></td><td class="rouge-code"><pre><span class="c1">//先执行一下npm install</span>
-<span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span> 
-<span class="kd">var</span> <span class="nx">opn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'opn'</span><span class="p">);</span> 
+<span class="kd">var</span> <span class="nx">opn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">opn</span><span class="dl">'</span><span class="p">);</span> 
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
-  <span class="nx">opn</span><span class="p">(</span><span class="s1">'http://localhost:3000/api-doc'</span><span class="p">);</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'App listening on port 3000!'</span><span class="p">);</span>
+  <span class="nx">opn</span><span class="p">(</span><span class="dl">'</span><span class="s1">http://localhost:3000/api-doc</span><span class="dl">'</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">App listening on port 3000!</span><span class="dl">'</span><span class="p">);</span>
 <span class="p">});</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">'/api-doc'</span><span class="p">,</span> <span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="s1">'public'</span><span class="p">));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api-doc</span><span class="dl">'</span><span class="p">,</span> <span class="nx">express</span><span class="p">.</span><span class="kd">static</span><span class="p">(</span><span class="dl">'</span><span class="s1">public</span><span class="dl">'</span><span class="p">));</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>8、运行node index.js会启用swagger-ui功能，自动打开api展示页面，但是页面是默认的官网上的东西；<br />
 9、将api/swagger文件夹下的/swagger.yaml文件复制到public文件夹下，打开public/index.html，在脚本中修改url为’./swagger.yaml’,刷新浏览器，即可看到我们的内容<br />
@@ -606,20 +426,20 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 13
 14
 15
-</pre></td><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp'</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">yaml</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'js-yaml'</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'path'</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'fs'</span><span class="p">);</span>
+</pre></td><td class="rouge-code"><pre><span class="kd">var</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">gulp</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">yaml</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">js-yaml</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">fs</span><span class="dl">'</span><span class="p">);</span>
 
 <span class="c1">// 建立api/swagger的swagger.yaml到public下的swagger.yaml联系</span>
-<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'swagger'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
-    <span class="kd">var</span> <span class="nx">doc</span> <span class="o">=</span> <span class="nx">yaml</span><span class="p">.</span><span class="nx">safeLoad</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'./api/swagger/swagger.yaml'</span><span class="p">)));</span> 
-    <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'./public/swagger.yaml'</span><span class="p">),</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">doc</span><span class="p">,</span><span class="kc">null</span><span class="p">,</span><span class="s1">' '</span><span class="p">));</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="dl">'</span><span class="s1">swagger</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">doc</span> <span class="o">=</span> <span class="nx">yaml</span><span class="p">.</span><span class="nx">safeLoad</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">'</span><span class="s1">./api/swagger/swagger.yaml</span><span class="dl">'</span><span class="p">)));</span> 
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="dl">'</span><span class="s1">./public/swagger.yaml</span><span class="dl">'</span><span class="p">),</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">doc</span><span class="p">,</span><span class="kc">null</span><span class="p">,</span><span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">));</span>
 <span class="p">});</span>
 
 <span class="c1">// 实时更新</span>
-<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'default'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
-    <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s1">'./api/swagger/swagger.yaml'</span><span class="p">,[</span><span class="s1">'swagger'</span><span class="p">]);</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="dl">'</span><span class="s1">default</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="dl">'</span><span class="s1">./api/swagger/swagger.yaml</span><span class="dl">'</span><span class="p">,[</span><span class="dl">'</span><span class="s1">swagger</span><span class="dl">'</span><span class="p">]);</span>
 <span class="p">})</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>11、再看下package.json中的内容：</p>
@@ -647,31 +467,31 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
 22
 23
 </pre></td><td class="rouge-code"><pre><span class="p">{</span><span class="w">
-  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"doc-api"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"main"</span><span class="p">:</span><span class="w"> </span><span class="s2">"index.js"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"node index.js"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"swg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"swagger project edit"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gulp"</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"doc-api"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"main"</span><span class="p">:</span><span class="w"> </span><span class="s2">"index.js"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"node index.js"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"swg"</span><span class="p">:</span><span class="w"> </span><span class="s2">"swagger project edit"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gulp"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="s2">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">"want"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ISC"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"devDependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"express"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^4.15.2"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"swagger"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.7.5"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.9.1"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"js-yaml"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.8.3"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"opn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5.0.0"</span><span class="w">
+  </span><span class="nl">"author"</span><span class="p">:</span><span class="w"> </span><span class="s2">"want"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ISC"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"devDependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"express"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^4.15.2"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"swagger"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.7.5"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"gulp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.9.1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"js-yaml"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.8.3"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"opn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5.0.0"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="s2">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"cors"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^2.8.5"</span><span class="w">
+  </span><span class="nl">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"cors"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^2.8.5"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></pre></td></tr></tbody></table></code></pre></div></div>
 <p>12、新增readme.md添加使用说明：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -702,7 +522,7 @@ swagger-editor是一个在线的文档编辑文件工具，有助于整个框架
       <li>multipart/form-data</li>
       <li>text/plain
 那么很明显，consumes的值为application/json肯定是要发送预检请求(OPTION)的。那么如何处理。我暂时的做法是在项目中放掉OPTION请求，一旦预检请求没有响应那么后续的请求是不会发送的。
-        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -799,20 +619,25 @@ else
         </a>
         
         
-                <a data-sort="0017" 
+                <a data-sort="0022" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
                     title="数据库"
                     rel="5">数据库</a>
         
-                <a data-sort="0020" 
+                <a data-sort="0025" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书</a>
         
-                <a data-sort="0020" 
-                    href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
-                    title="消息队列"
-                    rel="2">消息队列
+                <a data-sort="0025" 
+                    href="/archive/?tag=%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93"
+                    title="年度总结"
+                    rel="2">年度总结</a>
+        
+                <a data-sort="0025" 
+                    href="/archive/?tag=Docker"
+                    title="Docker"
+                    rel="2">Docker
     </div>
 </section>
 
@@ -872,6 +697,14 @@ else
 
 
     <!-- Footer -->
+
+
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("", "");</script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
 <footer>
     <div class="container">
         <div class="row">
@@ -901,7 +734,7 @@ else
   
 </ul>
                 <p class="copyright text-muted">
-                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span> | <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> | <span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
+                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span><span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
                    <!-- <a href="http://gfwant.com">want</a> | -->
                   <iframe
                       style="margin-left: 2px; margin-bottom:-5px;"
@@ -910,7 +743,7 @@ else
                   </iframe>
                 </p>
                 <p class="copyright text-muted">
-                    Copyright &copy; want 2020
+                    Copyright &copy; want 2023
                      <!-- <a href="http://gfwant.com">want</a> | -->
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
@@ -1069,193 +902,6 @@ else
 
 
 <!-- Multi-Lingual -->
-
-
-
-  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 
 <!-- Image to hack wechat -->

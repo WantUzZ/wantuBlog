@@ -1,4 +1,4 @@
-I"-<<h2 id="前言">前言</h2>
+I"p=<h2 id="前言">前言</h2>
 <p>   图是一种常见的数据结构，其反映数据所对应元素之间的几何关系和拓扑关系。图数据库是一种非关系型数据库。它应用图形理论存储实体之间的关系信息。最常见例子就是社会网络中人与人之间的关系。关系型数据库用于存储“关系型”数据的效果并不好，其查询复杂、缓慢、超出预期，而图形数据库的独特设计恰恰弥补了这个缺陷。<br />
    Neo4j是一个高性能的,NOSQL图形数据库，它将结构化数据存储在网络上而不是表中。它是一个嵌入式的、基于磁盘的、具备完全的事务特性的Java持久化引擎，但是它将结构化数据存储在网络(从数学角度叫做图)上而不是表中。Neo4j也可以被看作是一个高性能的图引擎，该引擎具有成熟数据库的所有特性。程序员工作在一个面向对象的、灵活的网络结构下而不是严格、静态的表中——但是他们可以享受到具备完全的事务特性、企业级的数据库的所有好处。<br />
   cypher是用于neo4j的查询语言。<br />
@@ -7,12 +7,12 @@
 <h2 id="正文">正文</h2>
 <h4 id="crud">CRUD</h4>
 <p><strong>增</strong><br />
-<code class="highlighter-rouge">节点：</code><br />
+<code class="language-plaintext highlighter-rouge">节点：</code><br />
     create (n:xxx{att:value}) //单节点<br />
     create (n),(m);//多节点，注意创建多节点的时候自定义变量(前面的n、m是用于捕获结果)不能重复,即create (n),(n);是会报错的。<br />
     create (n:label1:lable2:label3) //带标签的节点。标签可以用来创建索引，从而有助于优化对节点的查询。标签的命名规则：数字、字母、下划线，首字母不能是数字。<br />
     create (n:xxx{att1:value1})//创建带属性的节点。<br />
-<code class="highlighter-rouge">关系：</code><br />
+<code class="language-plaintext highlighter-rouge">关系：</code><br />
     create：<br />
         create (n1:xx)-[r:xxx]-&gt;(n2:x) //创建单关系<br />
         create (n1:xx)-[r:xxx]-&gt;(n2:x),(n11:xx)-[r1:xxx]-&gt;(n22:x)//创建多关系<br />
@@ -27,29 +27,29 @@
         megre (n:xxx{att:value}) Merge好似if-else语句，基本逻辑是先检测merge后面的条件，看看有没有匹配的返回值，如果有则执行on merge分支，如果没有则走on create。<br />
     create unique与merge区别：Create Unique部分匹配就可以，而Merge则只有整个模式都匹配才创建，否则什么也不做。<br />
 <strong>改</strong><br />
-<code class="highlighter-rouge">更新属性值:</code>&lt;br
+<code class="language-plaintext highlighter-rouge">更新属性值:</code>&lt;br
     match (n:xxx{att:value}) set n.att = newValue return n<br />
     除了create 和 delete 以外其他语句都必须要以return结尾<br />
-<code class="highlighter-rouge">更新标签:</code><br />
+<code class="language-plaintext highlighter-rouge">更新标签:</code><br />
     match (n:lable1:label2) set n:newLabel1:newLabel2 return n;<br />
-<code class="highlighter-rouge">更改关系:</code><br />
+<code class="language-plaintext highlighter-rouge">更改关系:</code><br />
     先删除旧的关系，再建立新的关系。<br />
 <strong>删</strong><br />
-<code class="highlighter-rouge">delete:</code><br />
+<code class="language-plaintext highlighter-rouge">delete:</code><br />
     不建议使用match (n) delete n （强保护机制，必要要先删除关系再删除节点）<br />
     而是使用：match (n) detach delete n (弱保护机制)<br />
-<code class="highlighter-rouge">remove:专门删除属性、标签</code><br />
+<code class="language-plaintext highlighter-rouge">remove:专门删除属性、标签</code><br />
     match (n:xxx{att:value}) remove n.att return n;//删除节点的某一个属性<br />
     match (n) remove n:label//删除某一个标签，注意如果标签有约束，需要先删除约束：DROP CONSTRAINT ON (p:lable) ASSERT p.id IS UNIQUE<br />
     match (n) where n.id = xxx set n.att = null;//将某个属性设置为null也是删除属性的一种方法。<br />
 <strong>查</strong><br />
-<code class="highlighter-rouge">match(查询)...where:</code><br />
+<code class="language-plaintext highlighter-rouge">match(查询)...where:</code><br />
     在match之前可以进行定位用以加快查询速度。<br />
     常见聚合操作：count、distinct、max、min…<br /></p>
 
 <h4 id="标签限定">标签限定</h4>
 <p>  在version2开始引入对标签的限定。暂时只有unique能用。</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre>create constraint on (n:MALE) assert n.name is unique;
 可以确保name属性是唯一的。
@@ -72,7 +72,7 @@ where不能单独使用，只能用在match、optionalmatch、start、with的后
 where从句中使用模式：
 5.1. 对于一个集合，如果是空集，那么代表false，非空代表true。可以使用in关键字来进一步限定。(这种做法在数据量大的时候会导致查询速度非常慢，在match之前进行定位可以解决)。=～ 不等于。点号和[]是相等，但是用法讲究。对于[]，其间必须是常量。<br />
 5.2. 使用exists()函数进行属性校验。<br />
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre> match (x)
@@ -80,7 +80,7 @@ where从句中使用模式：
  return x.name
 </pre></td></tr></tbody></table></code></pre></div>    </div>
     <p>5.3. 字符串匹配：starts with、ends with、contains<br /></p>
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre> match (x)
@@ -90,7 +90,7 @@ where从句中使用模式：
     <p>5.4. 其他从句：<br />
  5.4.1. order排序(默认是升序，支持混排)<br />
  5.4.2. limit限制返回数，skip跳过前多少个数据。<br /></p>
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre> match (n)
@@ -118,7 +118,7 @@ union的用法与SQL一样，用于连接两个Match，返回结果中剔除了�
 <p><img src="/img/neo4j-apoc.jpg" alt="cql未优化前" /></p>
 <h4 id="最短路径">最短路径</h4>
 <p>  说到图就绕不开图算法中的寻路算法。其中最为常用的就是最短路算法。neo4J自身提供了一个最短路的函数–shortestPath。</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -162,7 +162,7 @@ match (n:account{id:'wxid_zfgv7wjpdajk11'}),(m:account{id:'wxid_htl2hw3r0fbt12'}
     注意：Adding the unique constraint will implicitly add an index on that property. If the constraint is dropped, but the index is still needed, the index will have to be created explicitly.–截取至官方文档。唯一约束会自动创建索引。删除约束后需手动创建该索引。<br />
     删约束：<br />
     DROP CONSTRAINT ON (book:Book) ASSERT book.isbn IS UNIQUE<br /></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -172,7 +172,7 @@ where n.attName = attValue&lt;br&gt;
 return n&lt;br&gt;
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>使用scan给Cypher Query Planner先扫描所有标签然后再执行后续的过滤，这种做法的结果意味着优秀的性能，毕竟使用标签本身可以不必考虑那些不必要的数据。这种做法的性能是较好的。<br /></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -188,7 +188,7 @@ return n&lt;br&gt;
 
 <h4 id="优化举例">优化举例</h4>
 <p>优化前的cql:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -208,7 +208,7 @@ RETURN path
 <p>查询速度非常慢，因为节点走了全部节点扫描。原因是match (n)中并没有对标签进行限制。所以我们建立的索引是没有用处的。<br />
 <img src="/img/neo4jno1.jpg" alt="cql未优化前" />
 优化后的cql，主要就是使用字符串拼接的方式将具体的节点进行定位。<br /></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4

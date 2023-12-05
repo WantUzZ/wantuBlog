@@ -16,7 +16,6 @@
     <meta property="og:type" content="article">
     <meta property="og:description" content="  MongoDB 是非关系型数据库的典型。官网对它的描述是：基于分布式文件存储的数据库，其拥有高性能、可扩展、易部署、易使用，存储数据非常方便等优势。
 本文旨在列举实际工作中常用到的一些知识点，以及其相关的扩展知识。系统的学习请参阅官方文档。
-
 ">
     
     <meta property="article:published_time" content="2019-08-09T06:09:00Z">
@@ -71,188 +70,8 @@
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
@@ -452,6 +271,21 @@
   5、无需跨文档或跨表的事物及复杂的join查询支持。（4.0之后支持多文档事物，多文档事物可以理解为关系型数据库的多行事物。）<br /></p>
 
 <h2 id="内容">内容</h2>
+<h4 id="schema定义实践">Schema定义实践</h4>
+<p>针对表结构定义这件事而言，重要的应该是仔细。扣原型上的每一个地方，当然出于一些功能上的实现，我们也需要再补充一些字段。<br />
+1、表名的确定。大部分还是跟业务涉及的实体对应。<br />
+2、字段名称要符合规范。复数字段对应的字段名称必须是复数。<br />
+3、对一些不太会进行修改的引用字段可以考虑内嵌一些常用的冗余属性。比如说商品表、标签表。商品表中有一个字段tags。那么可以考虑将tags定义成如下所示的结构，因为业务上对标签显示最多的只有对其名称的显示。<br /></p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="nx">tags</span><span class="p">:[{</span>
+        <span class="na">_id</span><span class="p">:</span> <span class="p">{</span> <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">ObjectId</span><span class="dl">'</span><span class="p">,</span> <span class="na">ref</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Tag</span><span class="dl">'</span> <span class="p">},</span>
+        <span class="na">name</span><span class="p">:</span> <span class="nb">String</span><span class="p">,</span>
+      <span class="p">}],</span> <span class="c1">// 标签</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>4、功能性一致的字段，用一个对象进行内嵌，而非水平的展开结构。比如说一张表有许多统计字段，可以将这些字段统一规整到statistics字段下。<br /></p>
 
 <h4 id="curd-简诉">CURD 简诉</h4>
 
@@ -459,7 +293,7 @@
 
 <p>举例：</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -509,7 +343,7 @@
 
 <p>查询的时候比方说要查年龄大于 22 并且喜欢的学习（study）的人。</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -533,10 +367,10 @@
 6
 </pre></td><td class="rouge-code"><pre><span class="p">{</span>
   <span class="nl">$or</span><span class="p">:</span> <span class="p">[{</span> <span class="na">age</span><span class="p">:</span> <span class="p">{</span> <span class="na">$gt</span><span class="p">:</span> <span class="mi">20</span> <span class="p">},</span> <span class="na">age</span><span class="p">:</span> <span class="p">{</span> <span class="na">$lt</span><span class="p">:</span> <span class="mi">10</span> <span class="p">}</span> <span class="p">}],</span>
-  <span class="na">hobby</span><span class="p">:</span><span class="s1">'study'</span>
+  <span class="nx">hobby</span><span class="p">:</span><span class="dl">'</span><span class="s1">study</span><span class="dl">'</span>
 <span class="p">}</span>
 
-<span class="err">等同与</span><span class="nx">MySQL</span><span class="err">中的</span> <span class="nx">where</span> <span class="nx">hobby</span> <span class="o">=</span> <span class="s1">'study'</span> <span class="nx">and</span> <span class="p">(</span><span class="nx">age</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="nx">or</span> <span class="nx">age</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">);</span>
+<span class="nx">等同与MySQL中的</span> <span class="nx">where</span> <span class="nx">hobby</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">study</span><span class="dl">'</span> <span class="nx">and</span> <span class="p">(</span><span class="nx">age</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="nx">or</span> <span class="nx">age</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">);</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <h4 id="mongoose">mongoose</h4>
 <p>  mongoose是一个主流操作MongoDB的node模块。<a href="https://mongoosejs.com/docs/">mongoose官方文档</a><br />
@@ -558,19 +392,19 @@
 14
 15
 16
-</pre></td><td class="rouge-code"><pre><span class="mi">1</span><span class="p">.</span> <span class="nx">mongoose</span><span class="err">的</span><span class="nx">find</span><span class="err">不同于</span><span class="nx">aggregate</span><span class="err">方法。前者会自动将一个是</span><span class="nx">ObjectId</span><span class="err">的字符串转为</span><span class="nx">ObjectId</span><span class="p">,</span><span class="err">亦或是将一个</span><span class="nx">moment</span><span class="err">对象转为</span><span class="nb">Date</span><span class="err">类型，后者则需要手动的去转换。</span>
-<span class="mi">2</span><span class="p">.</span> <span class="err">理解</span><span class="nx">aggregate</span><span class="err">。这个应该算是</span><span class="nx">MongoDB</span><span class="err">的东西。官方文档上有这么一段话：</span><span class="nx">The</span> <span class="nx">aggregation</span> <span class="nx">pipeline</span> <span class="nx">is</span> <span class="nx">a</span> <span class="nx">framework</span> <span class="k">for</span> <span class="nx">data</span> <span class="nx">aggregation</span> <span class="nx">modeled</span> <span class="nx">on</span> <span class="nx">the</span> <span class="nx">concept</span> <span class="k">of</span> <span class="nx">data</span> <span class="nx">processing</span> <span class="nx">pipelines</span><span class="p">.</span> <span class="nx">Documents</span> <span class="nx">enter</span> <span class="nx">a</span> <span class="nx">multi</span><span class="o">-</span><span class="nx">stage</span> <span class="nx">pipeline</span> <span class="nx">that</span> <span class="nx">transforms</span> <span class="nx">the</span> <span class="nx">documents</span> <span class="nx">into</span> <span class="nx">aggregated</span> <span class="nx">results</span><span class="p">.</span><span class="err">翻译过来就是</span><span class="p">:</span><span class="err">聚合管道是基于数据处理管道概念建模的数据聚合框架。</span> <span class="err">文档进入多阶段流水线，该流水线将文档转换为汇总结果。</span>
-<span class="err">个人理解：</span><span class="nx">aggregate</span><span class="err">就是对指定数据（满足</span><span class="nx">$match</span><span class="err">条件）串行的执行其中定义的操作的过程。</span><span class="nx">aggregate</span><span class="err">的参数是一个数组，结合文档所说其实每一个元素就是一个阶段，每个阶段我们可以对上阶段处理完的数据进行本阶段定义好的方式去加工数据。</span>
-<span class="mi">3</span><span class="p">.</span><span class="nx">populate</span><span class="err">方法，多层填充。例子</span><span class="p">:</span>
-<span class="kd">const</span> <span class="nx">user</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">models</span><span class="p">.</span><span class="nx">User</span>
+</pre></td><td class="rouge-code"><pre><span class="mi">1</span><span class="p">.</span> <span class="nx">mongoose的find不同于aggregate方法</span><span class="err">。</span><span class="nx">前者会自动将一个是ObjectId的字符串转为ObjectId</span><span class="p">,</span><span class="nx">亦或是将一个moment对象转为Date类型</span><span class="err">，</span><span class="nx">后者则需要手动的去转换</span><span class="err">。</span>
+<span class="mi">2</span><span class="p">.</span> <span class="nx">理解aggregate</span><span class="err">。</span><span class="nx">这个应该算是MongoDB的东西</span><span class="err">。</span><span class="nx">官方文档上有这么一段话</span><span class="err">：</span><span class="nx">The</span> <span class="nx">aggregation</span> <span class="nx">pipeline</span> <span class="nx">is</span> <span class="nx">a</span> <span class="nx">framework</span> <span class="k">for</span> <span class="nx">data</span> <span class="nx">aggregation</span> <span class="nx">modeled</span> <span class="nx">on</span> <span class="nx">the</span> <span class="nx">concept</span> <span class="k">of</span> <span class="nx">data</span> <span class="nx">processing</span> <span class="nx">pipelines</span><span class="p">.</span> <span class="nx">Documents</span> <span class="nx">enter</span> <span class="nx">a</span> <span class="nx">multi</span><span class="o">-</span><span class="nx">stage</span> <span class="nx">pipeline</span> <span class="nx">that</span> <span class="nx">transforms</span> <span class="nx">the</span> <span class="nx">documents</span> <span class="nx">into</span> <span class="nx">aggregated</span> <span class="nx">results</span><span class="p">.</span><span class="nx">翻译过来就是</span><span class="p">:</span><span class="nx">聚合管道是基于数据处理管道概念建模的数据聚合框架</span><span class="err">。</span> <span class="nx">文档进入多阶段流水线</span><span class="err">，</span><span class="nx">该流水线将文档转换为汇总结果</span><span class="err">。</span>
+<span class="nx">个人理解</span><span class="err">：</span><span class="nx">aggregate就是对指定数据</span><span class="err">（</span><span class="nx">满足$match条件</span><span class="err">）</span><span class="nx">串行的执行其中定义的操作的过程</span><span class="err">。</span><span class="nx">aggregate的参数是一个数组</span><span class="err">，</span><span class="nx">结合文档所说其实每一个元素就是一个阶段</span><span class="err">，</span><span class="nx">每个阶段我们可以对上阶段处理完的数据进行本阶段定义好的方式去加工数据</span><span class="err">。</span>
+<span class="mi">3</span><span class="p">.</span><span class="nx">populate方法</span><span class="err">，</span><span class="nx">多层填充</span><span class="err">。</span><span class="nx">例子</span><span class="p">:</span>
+<span class="kd">const</span> <span class="nx">user</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">models</span><span class="p">.</span><span class="nx">User</span>
       <span class="p">.</span><span class="nx">findOne</span><span class="p">({</span>
         <span class="na">_id</span><span class="p">:</span> <span class="nx">args</span><span class="p">.</span><span class="nx">id</span>
       <span class="p">})</span>
-      <span class="p">.</span><span class="nx">populate</span><span class="p">(</span><span class="s1">'children'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">populate</span><span class="p">(</span><span class="dl">'</span><span class="s1">children</span><span class="dl">'</span><span class="p">)</span>
       <span class="p">.</span><span class="nx">populate</span><span class="p">({</span>
-        <span class="na">path</span><span class="p">:</span> <span class="s1">'children'</span><span class="p">,</span>
+        <span class="na">path</span><span class="p">:</span> <span class="dl">'</span><span class="s1">children</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">populate</span><span class="p">:</span> <span class="p">{</span>
-          <span class="na">path</span><span class="p">:</span> <span class="s1">'avatar'</span>
+          <span class="na">path</span><span class="p">:</span> <span class="dl">'</span><span class="s1">avatar</span><span class="dl">'</span>
         <span class="p">}</span>
       <span class="p">});</span>
 <span class="c1">//填充children后再针对children的avatar再进行填充。</span>
@@ -642,7 +476,7 @@
   <li>3、一个复合索引最多可以有 31 个字段</li>
 </ul>
 
-<p>刚刚开始建 schema 的时候没必要过多的索引的，后面有需要再建索引。<br /></p>
+<p>刚刚开始建 schema 的时候没必要过多的索引的，后面有需要再建索引。至于出现索引数据过大的情况，可以使用stats()方法进行协助查看各个索引的存储占用情况，针对不必要的索引进行清理即可。<br /></p>
 
 <p>mongoose创建索引：</p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -658,7 +492,7 @@
 <h4 id="关联表">关联表</h4>
 <p>通过3.2版本的新功能$lookup来进行。<br />
 语法：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -681,7 +515,7 @@
 </pre></td></tr></tbody></table></code></pre></div></div>
 
 <p>例子：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -715,22 +549,22 @@ MongoDB使用PCRE (Perl Compatible Regular Expression) 作为正则表达式语�
 7
 8
 9
-</pre></td><td class="rouge-code"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="na">post_text</span><span class="p">:{</span><span class="na">$regex</span><span class="p">:</span><span class="s2">"xxx"</span><span class="p">}})</span> 
-<span class="err">或者</span>
+</pre></td><td class="rouge-code"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="na">post_text</span><span class="p">:{</span><span class="na">$regex</span><span class="p">:</span><span class="dl">"</span><span class="s2">xxx</span><span class="dl">"</span><span class="p">}})</span> 
+<span class="nx">或者</span>
 <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="na">post_text</span><span class="p">:</span><span class="sr">/xxx/</span><span class="p">})</span>
 
 <span class="c1">//不区分大小写</span>
-<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="na">post_text</span><span class="p">:{</span><span class="na">$regex</span><span class="p">:</span><span class="s2">"xxx"</span><span class="p">,</span><span class="na">$options</span><span class="p">:</span><span class="s2">"$i"</span><span class="p">}})</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="na">post_text</span><span class="p">:{</span><span class="na">$regex</span><span class="p">:</span><span class="dl">"</span><span class="s2">xxx</span><span class="dl">"</span><span class="p">,</span><span class="na">$options</span><span class="p">:</span><span class="dl">"</span><span class="s2">$i</span><span class="dl">"</span><span class="p">}})</span>
 
 <span class="c1">// 还支持在数组字段中使用正则表达式来查找内容 tags为数组字段</span>
-<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="na">tags</span><span class="p">:{</span><span class="na">$regex</span><span class="p">:</span><span class="s2">"xxx"</span><span class="p">}})</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="na">tags</span><span class="p">:{</span><span class="na">$regex</span><span class="p">:</span><span class="dl">"</span><span class="s2">xxx</span><span class="dl">"</span><span class="p">}})</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 
 <p>注意：正则中使用变量。需要使用eval将组合的字符串进行转换，不能直接将字符串拼接后传入正则表达式。<br /></p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre></td><td class="rouge-code"><pre><span class="kd">let</span> <span class="nx">name</span><span class="o">=</span><span class="kr">eval</span><span class="p">(</span><span class="s2">"/"</span> <span class="o">+</span> <span class="err">变量值</span><span class="nx">key</span> <span class="o">+</span><span class="s2">"/i"</span><span class="p">);</span>
-<span class="nl">title</span><span class="p">:</span><span class="kr">eval</span><span class="p">(</span><span class="s2">"/"</span><span class="o">+</span><span class="nx">title</span><span class="o">+</span><span class="s2">"/i"</span><span class="p">)</span>    <span class="c1">// 等同于 title:{$regex:title,$Option:"$i"}   </span>
+</pre></td><td class="rouge-code"><pre><span class="kd">let</span> <span class="nx">name</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="dl">"</span><span class="s2">/</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">变量值key</span> <span class="o">+</span><span class="dl">"</span><span class="s2">/i</span><span class="dl">"</span><span class="p">);</span>
+<span class="nl">title</span><span class="p">:</span><span class="nb">eval</span><span class="p">(</span><span class="dl">"</span><span class="s2">/</span><span class="dl">"</span><span class="o">+</span><span class="nx">title</span><span class="o">+</span><span class="dl">"</span><span class="s2">/i</span><span class="dl">"</span><span class="p">)</span>    <span class="c1">// 等同于 title:{$regex:title,$Option:"$i"}   </span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 
 <h4 id="相关书籍">相关书籍</h4>
@@ -832,20 +666,25 @@ MongoDB使用PCRE (Perl Compatible Regular Expression) 作为正则表达式语�
         </a>
         
         
-                <a data-sort="0017" 
+                <a data-sort="0022" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
                     title="数据库"
                     rel="5">数据库</a>
         
-                <a data-sort="0020" 
+                <a data-sort="0025" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书</a>
         
-                <a data-sort="0020" 
-                    href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
-                    title="消息队列"
-                    rel="2">消息队列
+                <a data-sort="0025" 
+                    href="/archive/?tag=%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93"
+                    title="年度总结"
+                    rel="2">年度总结</a>
+        
+                <a data-sort="0025" 
+                    href="/archive/?tag=Docker"
+                    title="Docker"
+                    rel="2">Docker
     </div>
 </section>
 
@@ -905,6 +744,14 @@ MongoDB使用PCRE (Perl Compatible Regular Expression) 作为正则表达式语�
 
 
     <!-- Footer -->
+
+
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("", "");</script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
 <footer>
     <div class="container">
         <div class="row">
@@ -934,7 +781,7 @@ MongoDB使用PCRE (Perl Compatible Regular Expression) 作为正则表达式语�
   
 </ul>
                 <p class="copyright text-muted">
-                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span> | <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> | <span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
+                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span><span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
                    <!-- <a href="http://gfwant.com">want</a> | -->
                   <iframe
                       style="margin-left: 2px; margin-bottom:-5px;"
@@ -943,7 +790,7 @@ MongoDB使用PCRE (Perl Compatible Regular Expression) 作为正则表达式语�
                   </iframe>
                 </p>
                 <p class="copyright text-muted">
-                    Copyright &copy; want 2020
+                    Copyright &copy; want 2023
                      <!-- <a href="http://gfwant.com">want</a> | -->
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
@@ -1102,193 +949,6 @@ MongoDB使用PCRE (Perl Compatible Regular Expression) 作为正则表达式语�
 
 
 <!-- Multi-Lingual -->
-
-
-
-  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 
 <!-- Image to hack wechat -->

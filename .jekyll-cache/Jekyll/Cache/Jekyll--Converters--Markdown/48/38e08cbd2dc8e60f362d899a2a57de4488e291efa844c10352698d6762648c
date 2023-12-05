@@ -1,4 +1,4 @@
-I"�*<h2 id="前言">前言</h2>
+I"G+<h2 id="前言">前言</h2>
 <p>docker是开发人员和系统管理员使用容器开发、部署和运行应用程序的平台。使用Linux容器部署应用程序称为容器化。容器不是新的，但是它们用于轻松部署应用程序。<br />
 容器化的优势：<br />
 1、灵活，再复杂的应用也可以集装箱化。<br />
@@ -25,17 +25,17 @@ CE社区版、EE企业版量体裁衣咯。前者免费,后者收费，但是更
 <p>dockerhub在墙外面，下镜像很慢。所以…<br /></p>
 <h4 id="docker常用命令">docker常用命令</h4>
 <p><strong>版本:</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre>docker --versioin 版本信息
 docker info docker安装细节,为避免权限错误最好加sudo运行
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>帮助:</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>docker --help
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>镜像:</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -49,7 +49,7 @@ docker image ls imageName 根据仓库名列出镜像
 docker image rm imageName/imageId 删除本地镜像
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>容器:</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -81,7 +81,7 @@ docker rm containerName/containerId 删除某个容器
 docker rm 'docker ps -a -q' 列出所有容器，-q列出所有的容器的ID，然后传递给rm一次删除
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>构建:</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>docker build . 创建镜像使用当前目录作为上下文。大多数情况下最好从空目录(项目目录)开始作为上下文。
 </pre></td></tr></tbody></table></code></pre></div></div>
 <h4 id="镜像构建">镜像构建</h4>
@@ -126,10 +126,10 @@ docker build .
 </span><span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span>
 
 <span class="c1"># Copy the current directory contents into the container at /app
-</span><span class="n">COPY</span> <span class="o">.</span> <span class="o">/</span><span class="n">app</span>
+</span><span class="n">COPY</span> <span class="p">.</span> <span class="o">/</span><span class="n">app</span>
 
 <span class="c1"># Install any needed packages specified in requirements.txt
-</span><span class="n">RUN</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">trusted</span><span class="o">-</span><span class="n">host</span> <span class="n">pypi</span><span class="o">.</span><span class="n">python</span><span class="o">.</span><span class="n">org</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+</span><span class="n">RUN</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">trusted</span><span class="o">-</span><span class="n">host</span> <span class="n">pypi</span><span class="p">.</span><span class="n">python</span><span class="p">.</span><span class="n">org</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="p">.</span><span class="n">txt</span>
 
 <span class="c1"># Make port 80 available to the world outside this container
 </span><span class="n">EXPOSE</span> <span class="mi">80</span>

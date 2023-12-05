@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="关于程序与设计、黑客与画家 | 王涛，Web & Mobile Lover，Software Engineer，UX Designer | 这里是 @want王涛 的个人博客，与你一起发现更大的世界。">
+    <meta name="keywords"  content="王涛, want王涛, want, huxpro, @huxpro, 王涛的博客, Hux Blog, 博客, 个人网站, 互联网, Web, JavaScript, 大数据">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="环境搭建 - 老王 | want">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="2021年年初接到一个搭建新测试环境的活。
+">
+    
+    <meta property="article:published_time" content="2020-12-03T20:12:00Z">
+    
+    
+    <meta property="article:author" content="wantu">
+    
+    
+    <meta property="article:tag" content="Linux">
+    
+    <meta property="article:tag" content="Docker">
+    
+    <meta property="article:tag" content="pm2">
+    
+    
+    <meta property="og:image" content="http://localhost:4000/img/wantu.jpg">
+    <meta property="og:url" content="http://localhost:4000/2020/12/03/buildServer/">
+    <meta property="og:site_name" content="老王 | want">
+    
+    <title>环境搭建 - 老王 | want</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2020/12/03/buildServer/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script>AV.initialize("", "");</script>
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">want</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/portfolio/">你好</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/post-bg-rwd.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/post-bg-rwd.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+<header class="intro-header" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=Linux" title="Linux">Linux</a>
+                        
+                        <a class="tag" href="/archive/?tag=Docker" title="Docker">Docker</a>
+                        
+                        <a class="tag" href="/archive/?tag=pm2" title="pm2">pm2</a>
+                        
+                    </div>
+                    <h1>环境搭建</h1>
+                    
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by wantu on December 3, 2020</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+                <p>2021年年初接到一个搭建新测试环境的活。</p>
+
+<h2 id="要求">要求</h2>
+<ol>
+  <li>服务器OS得为CentOS</li>
+  <li>大部分的中间件跑到Docker</li>
+  <li>原先数据迁移到新的测试服务器</li>
+  <li>拉起原先的服务</li>
+</ol>
+
+<h2 id="具体实施">具体实施</h2>
+
+<h3 id="安装centos">安装CentOS</h3>
+<ol>
+  <li>下载软件用以制作启动盘
+ 1.1 下载UltralIso 用来制作启动盘。 教程 - https://jingyan.baidu.com/article/d621e8da4aae592865913f0e.html
+ 1.2 下载之后直接试用 下载地址：https://pan.baidu.com/s/1vi9__14DsWH-F0KfaC2bdw#list/path=%2F（已保存到本人的百度云盘/软件/软碟通）</li>
+  <li>制作启动盘
+ 2.1 选择X86版本。CentOSQL8 因为是做服务器所以minimal即可。（centos8.2没有找到镜像，我是直接到这个地方找的vault.centos.org）
+ 2.2【重要】 用管理员身份打开UltralIso，否则在写入硬盘映像的时候无法读取到U盘。
+ 2.3 接下来参考博文：https://blog.csdn.net/lianshaohua/article/details/88381039
+ 一定要注意下面标红色的部分！！！我在制作启动盘的时候将LABEL信息设置为CentOSQ-8，这个一定要记住。
+  2.4 把LABEL的信息修改成小于11位的长度
+  2.5 插入U盘
+  2.6 点击顶部菜单中的<strong>启动</strong> 选择 <strong>写入硬盘映像</strong>
+  2.7 硬盘驱动器选择你的U盘，写入方式usb+hdd+
+  2.8 点击写入</li>
+  <li>安装
+  3.1、把U盘插在电脑上（最好是后面的USB口，有些电脑的前置USB口不支持U盘启动）
+  3.2、进入电脑的BIOS界面（网上百度，win10是按住shift关机 然后启动电脑的时候按住f2）
+  3.3、BIOS设置启动 参考博文：https://blog.csdn.net/weixin_42625184/article/details/105219865
+  本人安装的时候在制作启动盘的时候将LABEL设置为CentOSQL-8,进入安装选择界面的时候我们选择最上面的直接安装选项，按e键进行编辑，然后将光标移动到第三行，将相关内容进行删减，使其与LABEL对上。</li>
+  <li>手动分区：
+ 阿里云建议：https://developer.aliyun.com/article/539989
+ 总共1800G容量
+   /boot 	500M
+   /usr 	15G
+   /var	5G
+   /home	1600G
+   / 	 	50G
+   /tmp 	5G
+   swap 	32G</li>
+</ol>
+
+<p>【后采用】后面又进行了一次安装，认为不需要分太多的分区，只要/ /boot /boot/efi swap
+  其中swap分区跟内存有关一般设置为内存的一半，但是如果服务器内存过大也可以少设置一点</p>
+
+<p>cat /proc/version  //查看系统版本和内核版本</p>
+<h3 id="联网设置静态ip">联网&amp;设置静态IP</h3>
+
+<p>联网的话：</p>
+<ol>
+  <li>找一根网线（简单）</li>
+  <li>设置Wi-Fi</li>
+</ol>
+
+<p>设置静态IP：
+  CentOS中的网络配置：
+   CentOS中网卡配置文件通常是在/etc/sysconfig/network-scripts/路径下，文件名称一般是“ifcfg-设备名称”形式，例如设备名称是eth0，那么文件名称就是“ifcfg-eth0”(0是数字“零”)。设备名称可以通过ifconfig命令查看。可以通过命令 vi /etc/sysconfig/network-scripts/ifcfg-eth0 编辑。
+  具体:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="rouge-code"><pre>  TYPE="Ethernet"
+  BOOTPROTO="none"
+  DEFROUTE="yes"
+  IPV4_FAILURE_FATAL="no"
+  IPV6INIT="yes"
+  IPV6_AUTOCONF="yes"
+  IPV6_DEFROUTE="yes"
+  IPV6_FAILURE_FATAL="no"
+  IPV6_ADDR_GEN_MODE="stable-privacy"
+  NAME="enp3s0"
+  UUID="xxxx-8f3a-42dc-90f6-3f80020d4f6b"
+  DEVICE="enp3s0"
+  ONBOOT="yes"
+  IPADDR=xxx.xx.xx.xx
+  GATEWAY=xxx.xx.xx.1
+  DNS1=8.8.8.8
+  DNS2=114.114.114.114
+  NETMASK=255.255.255.0
+  PREFIX=24
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>配置完之后记得重启一下网络服务。</p>
+
+<h3 id="数据迁移">数据迁移</h3>
+
+<p>redis:通过主从复制完成。
+<strong>相关命令</strong></p>
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre>redis-cli -h 172.19.89.14 // 登陆某一台redis
+slaveof 172.19.88.60 20001 // 将自己设置为某个Redis实例的从库
+
+// 查看当前redis的 slave-read-only 配置
+redis-cli -h 172.19.89.14 -p 6379 -a pwd123 config  get slave-read-only // 有密码
+redis-cli -h 172.19.89.149 -p 6379 config get slave-read-only // 无密码
+
+// 检查旧redis链接情况
+redis-cli -h 172.19.88.60 -p 20001 client list  |awk -F'addr=' '{print$2}' | awk '{print$1}'|awk -F':' '{print$1}'|sort |uniq -c|sort -nr
+
+// 查看当前Redis实例的角色，判断连接是否断开
+redis-cli -h 172.19.89.149 -p 6379 info |grep role
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><strong>mongodb: mongodump&amp;mongorestore</strong></p>
+
+<ol>
+  <li>将所有数据库导出到指定目录
+mongodump -h 172.19.88.50 -o /home/want/mongodb</li>
+  <li>mongorestore还原数据库
+mongorestore -r -h 172.19.89.149 –drop /home/want/mongodb
+mongoresotre 支持-h可选项，所以不需要用scp将相关文件传输到对应的服务器上。</li>
+</ol>
+
+<p><strong>mysql: mysqldump (将全部的数据库导成为一个sql文件)</strong></p>
+<ol>
+  <li>mysqldump -h 172.19.88.50 -u root -p –all-databases &gt; /usr/local/sqlfile.sql // 本地文件路径随意</li>
+  <li>登陆到指定MySQL实例上
+mysql -h xxx.xx.xxx.xx -u -username -p</li>
+  <li>将sql文件恢复到指定MySQL数据库实例中
+source /usr/local/sqlfile.sql</li>
+</ol>
+
+<h3 id="docker下载以及相关容器的部署">Docker下载以及相关容器的部署</h3>
+<ol>
+  <li>安装Docker。略～</li>
+  <li>安装docker-compose。略～</li>
+  <li>启动容器。通过docker-compose进行启动(创建网络，docker-compose.yml书写等，具体略～)</li>
+</ol>
+
+<h3 id="安装nginx配置nginx">安装Nginx&amp;配置Nginx</h3>
+<p>安装Nginx
+1.sudo yum install nginx</p>
+
+<p>启用Nginx
+sudo systemctl enable nginx 
+sudo systemctl start nginx</p>
+
+<p>验证服务是否运行
+sudo systemctl status nginx</p>
+
+<p>调整防火墙
+sudo firewall-cmd –permanent –zone=public –add-service=http
+sudo firewall-cmd –permanent –zone=public –add-service=https
+sudo firewall-cmd –reload</p>
+
+<p>测试能否正常访问
+在另一台电脑的地址栏中输入：http://xxx.xx.xx.xx</p>
+
+<p>Nginx配置:
+~</p>
+<h2 id="后记">后记</h2>
+<h3 id="参考">参考</h3>
+<ol>
+  <li>https://www.jianshu.com/p/52e3a005fc42</li>
+  <li>mongo: https://www.jianshu.com/p/667fd4fd6ff7</li>
+  <li>redis: https://juejin.cn/post/6844904127093440520</li>
+  <li>mysql: https://blog.csdn.net/zhangzhongzhong/article/details/54949191</li>
+</ol>
+
+                
+                
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2020/12/03/network-tcpip/" data-toggle="tooltip" data-placement="top" title="TCP/IP相关知识">
+                        Previous<br>
+                        <span>TCP/IP相关知识</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2021/07/17/chinaHistory/" data-toggle="tooltip" data-placement="top" title="中国近代史">
+                        Next<br>
+                        <span>中国近代史</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        </a>
+        
+        
+                <a data-sort="0022" 
+                    href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
+                    title="数据库"
+                    rel="5">数据库</a>
+        
+                <a data-sort="0025" 
+                    href="/archive/?tag=%E4%B9%A6"
+                    title="书"
+                    rel="2">书</a>
+        
+                <a data-sort="0025" 
+                    href="/archive/?tag=%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93"
+                    title="年度总结"
+                    rel="2">年度总结</a>
+        
+                <a data-sort="0025" 
+                    href="/archive/?tag=Docker"
+                    title="Docker"
+                    rel="2">Docker
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: ''
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+
+    <!-- Footer -->
+
+
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("", "");</script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/WantUzZ">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+                <p class="copyright text-muted">
+                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span><span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
+                   <!-- <a href="http://gfwant.com">want</a> | -->
+                  <iframe
+                      style="margin-left: 2px; margin-bottom:-5px;"
+                      frameborder="0" scrolling="0" width="100px" height="20px"
+                      src="" >
+                  </iframe>
+                </p>
+                <p class="copyright text-muted">
+                    Copyright &copy; want 2023
+                     <!-- <a href="http://gfwant.com">want</a> | -->
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true -->
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'gfwant.com';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog (selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

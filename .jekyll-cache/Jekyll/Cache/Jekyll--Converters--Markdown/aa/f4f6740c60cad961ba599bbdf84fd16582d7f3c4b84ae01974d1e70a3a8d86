@@ -1,4 +1,4 @@
-I"�<h2 id="前言">前言</h2>
+I"��<h2 id="前言">前言</h2>
 <h4 id="官方文档地址">官方文档地址</h4>
 <p>  <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">官方文档</a><br />
   <a href="https://scsundefined.gitbooks.io/elasticsearch-reference-cn/content/">中文文档翻译</a><br /></p>
@@ -115,7 +115,7 @@
         <span class="p">{</span> <span class="dl">"</span><span class="s2">add</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">index</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">test1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">alias</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">alias1</span><span class="dl">"</span> <span class="p">}</span> <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
-<span class="err">或者是：</span><span class="nx">PUT</span> <span class="o">/</span><span class="p">{</span><span class="nx">index</span><span class="p">}</span><span class="sr">/_alias/</span><span class="p">{</span><span class="nx">name</span><span class="p">}</span>
+<span class="nx">或者是</span><span class="err">：</span><span class="nx">PUT</span> <span class="o">/</span><span class="p">{</span><span class="nx">index</span><span class="p">}</span><span class="sr">/_alias/</span><span class="p">{</span><span class="nx">name</span><span class="p">}</span>
 
 <span class="c1">//移除索引别名</span>
 <span class="nx">POST</span> <span class="o">/</span><span class="nx">_aliases</span>
@@ -243,7 +243,7 @@ must_not:查询文档一定不能被包含。<br /></p>
 18
 19
 20
-</pre></td><td class="rouge-code"><pre><span class="p">(</span><span class="err">通过</span><span class="nx">API</span><span class="err">调用</span><span class="nx">search</span><span class="err">方法</span><span class="p">)</span><span class="err">：</span>
+</pre></td><td class="rouge-code"><pre><span class="p">(</span><span class="nx">通过API调用search方法</span><span class="p">)</span><span class="err">：</span>
 <span class="p">{</span>
 	<span class="dl">"</span><span class="s2">index</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">chat</span><span class="dl">"</span><span class="p">,</span>
 	<span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -256,7 +256,7 @@ must_not:查询文档一定不能被包含。<br /></p>
 		<span class="p">}</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-<span class="p">(</span><span class="nx">elasticsearch</span><span class="o">-</span><span class="nx">head</span><span class="err">中使用</span><span class="p">)</span>
+<span class="p">(</span><span class="nx">elasticsearch</span><span class="o">-</span><span class="nx">head中使用</span><span class="p">)</span>
 <span class="nx">GET</span><span class="p">:</span> <span class="o">/</span><span class="nx">index</span><span class="o">/</span><span class="nx">_search</span><span class="p">?</span><span class="nx">scroll</span> <span class="o">=</span> <span class="mi">10</span><span class="nx">m</span>
 <span class="p">{</span>
     <span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">match_all</span><span class="dl">"</span><span class="p">:</span> <span class="p">{}},</span>
@@ -265,7 +265,7 @@ must_not:查询文档一定不能被包含。<br /></p>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。scrollId在失效时间内是存在的，但是es维护它是需要额外的开销的，好习惯：每次查询结束进行手动的清除scrollId.<br /></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -445,7 +445,7 @@ must_not:查询文档一定不能被包含。<br /></p>
   先将index-buffer中文档解析完成的segment写入到filesystem cache之中，这样避免了比较损耗性能io操作，又可以使document可以被搜索。这个从index-buffer中取数据到filesystem cache中的过程叫作refresh。<br />
   index-buffer:缓存新数据的地方。当其满了或者refresh/flush interval到了，就会以segment file的形式写入到filesystem cache并最终写入到磁盘。默认是 10%heap size。<br />
 <a href="https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-indices-refresh">REFRESH-API</a> <br /></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre>POST /twitter/_refresh  指定刷新Twitter
@@ -460,7 +460,7 @@ POST /_refresh 全部刷新
 <h2 id="问题">问题</h2>
 <h4 id="为啥主分片的数量后期无法修改">为啥主分片的数量后期无法修改？</h4>
 <p>es通过以下公式计算文档对应的分片：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre>shard = hash(routing) % number_of_primary_shards

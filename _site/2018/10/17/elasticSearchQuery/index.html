@@ -77,188 +77,8 @@ ES背景故事
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
@@ -555,25 +375,25 @@ ES背景故事
 </pre></td><td class="rouge-code"><pre><span class="c1">//新增索引别名</span>
 <span class="nx">POST</span> <span class="o">/</span><span class="nx">_aliases</span>
 <span class="p">{</span>
-    <span class="s2">"actions"</span> <span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span> <span class="s2">"add"</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">"index"</span> <span class="p">:</span> <span class="s2">"test1"</span><span class="p">,</span> <span class="s2">"alias"</span> <span class="p">:</span> <span class="s2">"alias1"</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="dl">"</span><span class="s2">actions</span><span class="dl">"</span> <span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="dl">"</span><span class="s2">add</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">index</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">test1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">alias</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">alias1</span><span class="dl">"</span> <span class="p">}</span> <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
-<span class="err">或者是：</span><span class="nx">PUT</span> <span class="o">/</span><span class="p">{</span><span class="nx">index</span><span class="p">}</span><span class="sr">/_alias/</span><span class="p">{</span><span class="nx">name</span><span class="p">}</span>
+<span class="nx">或者是</span><span class="err">：</span><span class="nx">PUT</span> <span class="o">/</span><span class="p">{</span><span class="nx">index</span><span class="p">}</span><span class="sr">/_alias/</span><span class="p">{</span><span class="nx">name</span><span class="p">}</span>
 
 <span class="c1">//移除索引别名</span>
 <span class="nx">POST</span> <span class="o">/</span><span class="nx">_aliases</span>
 <span class="p">{</span>
-    <span class="s2">"actions"</span> <span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span> <span class="s2">"remove"</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">"index"</span> <span class="p">:</span> <span class="s2">"test1"</span><span class="p">,</span> <span class="s2">"alias"</span> <span class="p">:</span> <span class="s2">"alias1"</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="dl">"</span><span class="s2">actions</span><span class="dl">"</span> <span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="dl">"</span><span class="s2">remove</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">index</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">test1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">alias</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">alias1</span><span class="dl">"</span> <span class="p">}</span> <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
 <span class="c1">//重命名索引别名，此操作是原子操作。</span>
 <span class="nx">POST</span> <span class="o">/</span><span class="nx">_aliases</span>
 <span class="p">{</span>
-    <span class="s2">"actions"</span> <span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span> <span class="s2">"remove"</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">"index"</span> <span class="p">:</span> <span class="s2">"test1"</span><span class="p">,</span> <span class="s2">"alias"</span> <span class="p">:</span> <span class="s2">"alias1"</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span> <span class="s2">"add"</span> <span class="p">:</span> <span class="p">{</span> <span class="s2">"index"</span> <span class="p">:</span> <span class="s2">"test2"</span><span class="p">,</span> <span class="s2">"alias"</span> <span class="p">:</span> <span class="s2">"alias1"</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="dl">"</span><span class="s2">actions</span><span class="dl">"</span> <span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="dl">"</span><span class="s2">remove</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">index</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">test1</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">alias</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">alias1</span><span class="dl">"</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="dl">"</span><span class="s2">add</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">index</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">test2</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">alias</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">alias1</span><span class="dl">"</span> <span class="p">}</span> <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
 
@@ -620,15 +440,15 @@ must_not:查询文档一定不能被包含。<br /></p>
 15
 </pre></td><td class="rouge-code"><pre><span class="nx">GET</span> <span class="o">/</span><span class="nx">_search</span>
 <span class="p">{</span>
-  <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span> 
-    <span class="s2">"bool"</span><span class="p">:</span> <span class="p">{</span> 
-      <span class="s2">"must"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span> <span class="s2">"match"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"title"</span><span class="p">:</span>   <span class="s2">"Search"</span>        <span class="p">}},</span> 
-        <span class="p">{</span> <span class="s2">"match"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"Elasticsearch"</span> <span class="p">}}</span>  
+  <span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> 
+    <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> 
+      <span class="dl">"</span><span class="s2">must</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="dl">"</span><span class="s2">match</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">title</span><span class="dl">"</span><span class="p">:</span>   <span class="dl">"</span><span class="s2">Search</span><span class="dl">"</span>        <span class="p">}},</span> 
+        <span class="p">{</span> <span class="dl">"</span><span class="s2">match</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">content</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Elasticsearch</span><span class="dl">"</span> <span class="p">}}</span>  
       <span class="p">],</span>
-      <span class="s2">"filter"</span><span class="p">:</span> <span class="p">[</span> 
-        <span class="p">{</span> <span class="s2">"term"</span><span class="p">:</span>  <span class="p">{</span> <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"published"</span> <span class="p">}},</span> 
-        <span class="p">{</span> <span class="s2">"range"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"publish_date"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"gte"</span><span class="p">:</span> <span class="s2">"2015-01-01"</span> <span class="p">}}}</span> 
+      <span class="dl">"</span><span class="s2">filter</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span> 
+        <span class="p">{</span> <span class="dl">"</span><span class="s2">term</span><span class="dl">"</span><span class="p">:</span>  <span class="p">{</span> <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">published</span><span class="dl">"</span> <span class="p">}},</span> 
+        <span class="p">{</span> <span class="dl">"</span><span class="s2">range</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">publish_date</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">gte</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2015-01-01</span><span class="dl">"</span> <span class="p">}}}</span> 
       <span class="p">]</span>
     <span class="p">}</span>
   <span class="p">}</span>
@@ -687,29 +507,29 @@ must_not:查询文档一定不能被包含。<br /></p>
 18
 19
 20
-</pre></td><td class="rouge-code"><pre><span class="p">(</span><span class="err">通过</span><span class="nx">API</span><span class="err">调用</span><span class="nx">search</span><span class="err">方法</span><span class="p">)</span><span class="err">：</span>
+</pre></td><td class="rouge-code"><pre><span class="p">(</span><span class="nx">通过API调用search方法</span><span class="p">)</span><span class="err">：</span>
 <span class="p">{</span>
-	<span class="s2">"index"</span><span class="p">:</span> <span class="s2">"chat"</span><span class="p">,</span>
-	<span class="s2">"from"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-	<span class="s2">"size"</span><span class="p">:</span> <span class="s2">"1"</span><span class="p">,</span>
-	<span class="s2">"scroll"</span><span class="p">:</span> <span class="s2">"5m"</span><span class="p">,</span><span class="c1">//5分钟之后失效</span>
-	<span class="s2">"body"</span><span class="p">:</span> <span class="p">{</span>
-		<span class="s2">"query"</span><span class="p">:</span> <span class="p">{},</span>
-		<span class="s2">"sort"</span><span class="p">:</span> <span class="p">{</span>
-			<span class="s2">"time"</span><span class="p">:</span> <span class="s2">"desc"</span>
+	<span class="dl">"</span><span class="s2">index</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">chat</span><span class="dl">"</span><span class="p">,</span>
+	<span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+	<span class="dl">"</span><span class="s2">size</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
+	<span class="dl">"</span><span class="s2">scroll</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">5m</span><span class="dl">"</span><span class="p">,</span><span class="c1">//5分钟之后失效</span>
+	<span class="dl">"</span><span class="s2">body</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+		<span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">:</span> <span class="p">{},</span>
+		<span class="dl">"</span><span class="s2">sort</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+			<span class="dl">"</span><span class="s2">time</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span>
 		<span class="p">}</span>
 	<span class="p">}</span>
 <span class="p">}</span>
-<span class="p">(</span><span class="nx">elasticsearch</span><span class="o">-</span><span class="nx">head</span><span class="err">中使用</span><span class="p">)</span>
+<span class="p">(</span><span class="nx">elasticsearch</span><span class="o">-</span><span class="nx">head中使用</span><span class="p">)</span>
 <span class="nx">GET</span><span class="p">:</span> <span class="o">/</span><span class="nx">index</span><span class="o">/</span><span class="nx">_search</span><span class="p">?</span><span class="nx">scroll</span> <span class="o">=</span> <span class="mi">10</span><span class="nx">m</span>
 <span class="p">{</span>
-    <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"match_all"</span><span class="p">:</span> <span class="p">{}},</span>
-    <span class="s2">"sort"</span> <span class="p">:</span> <span class="p">[</span><span class="s2">"_doc"</span><span class="p">],</span> 
-    <span class="s2">"size"</span><span class="p">:</span>  <span class="mi">1000</span>
+    <span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">match_all</span><span class="dl">"</span><span class="p">:</span> <span class="p">{}},</span>
+    <span class="dl">"</span><span class="s2">sort</span><span class="dl">"</span> <span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">_doc</span><span class="dl">"</span><span class="p">],</span> 
+    <span class="dl">"</span><span class="s2">size</span><span class="dl">"</span><span class="p">:</span>  <span class="mi">1000</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
 <p>scroll分页请求头必须携带一个scroll属性，表示scroll的失效时间。第一次请求之后会除了数据还有一个scroll_id返回回来，接下来的请求我们只需要将scroll和scroll_id作为请求参数就可以不停的获取下一批数据。scrollId在失效时间内是存在的，但是es维护它是需要额外的开销的，好习惯：每次查询结束进行手动的清除scrollId.<br /></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -773,8 +593,8 @@ must_not:查询文档一定不能被包含。<br /></p>
   <span class="nx">searchRBN</span><span class="p">:</span> <span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span><span class="o">-&gt;</span>
     <span class="nx">dsl</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">cloneDeep</span> <span class="nx">DSL</span><span class="p">.</span><span class="nx">COMMUNICATION_RECORD_BETWEEN_NODES</span>
     <span class="nx">dsl</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">index</span>
-    <span class="k">if</span> <span class="nx">query</span><span class="p">.</span><span class="nx">sort</span> <span class="nx">and</span> <span class="nx">query</span><span class="p">.</span><span class="nx">sort</span> <span class="nx">is</span> <span class="s1">'asc'</span>
-      <span class="nx">dsl</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">sort</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">time</span> <span class="o">=</span> <span class="s1">'asc'</span>
+    <span class="k">if</span> <span class="nx">query</span><span class="p">.</span><span class="nx">sort</span> <span class="nx">and</span> <span class="nx">query</span><span class="p">.</span><span class="nx">sort</span> <span class="nx">is</span> <span class="dl">'</span><span class="s1">asc</span><span class="dl">'</span>
+      <span class="nx">dsl</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">sort</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">time</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">asc</span><span class="dl">'</span>
 
     <span class="nx">dsl</span><span class="p">.</span><span class="nx">scroll</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">scroll</span> <span class="k">if</span> <span class="nx">query</span><span class="p">.</span><span class="nx">scroll</span>
     <span class="nx">dsl</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">bool</span><span class="p">.</span><span class="nx">should</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">bool</span><span class="p">.</span><span class="nx">must</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">term</span><span class="p">.</span><span class="nx">source</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">source</span>
@@ -836,15 +656,15 @@ must_not:查询文档一定不能被包含。<br /></p>
 13
 </pre></td><td class="rouge-code"><pre><span class="nx">GET</span> <span class="nx">twitter</span><span class="o">/</span><span class="nx">_search</span>
 <span class="p">{</span>
-    <span class="s2">"size"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"match"</span> <span class="p">:</span> <span class="p">{</span>
-            <span class="s2">"title"</span> <span class="p">:</span> <span class="s2">"elasticsearch"</span>
+    <span class="dl">"</span><span class="s2">size</span><span class="dl">"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">match</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">title</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">elasticsearch</span><span class="dl">"</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="s2">"sort"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">"date"</span><span class="p">:</span> <span class="s2">"asc"</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">"_id"</span><span class="p">:</span> <span class="s2">"desc"</span><span class="p">}</span>
+    <span class="dl">"</span><span class="s2">sort</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="dl">"</span><span class="s2">date</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">asc</span><span class="dl">"</span><span class="p">},</span>
+        <span class="p">{</span><span class="dl">"</span><span class="s2">_id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span><span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre></div></div>
@@ -866,16 +686,16 @@ must_not:查询文档一定不能被包含。<br /></p>
 15
 </pre></td><td class="rouge-code"><pre><span class="nx">GET</span> <span class="nx">twitter</span><span class="o">/</span><span class="nx">_search</span>
 <span class="p">{</span>
-    <span class="s2">"size"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s2">"query"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"match"</span> <span class="p">:</span> <span class="p">{</span>
-            <span class="s2">"title"</span> <span class="p">:</span> <span class="s2">"elasticsearch"</span>
+    <span class="dl">"</span><span class="s2">size</span><span class="dl">"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">query</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">match</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">title</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">elasticsearch</span><span class="dl">"</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="s2">"search_after"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1463538857</span><span class="p">,</span> <span class="s2">"654323"</span><span class="p">],</span>
-    <span class="s2">"sort"</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">"date"</span><span class="p">:</span> <span class="s2">"asc"</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">"_id"</span><span class="p">:</span> <span class="s2">"desc"</span><span class="p">}</span>
+    <span class="dl">"</span><span class="s2">search_after</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1463538857</span><span class="p">,</span> <span class="dl">"</span><span class="s2">654323</span><span class="dl">"</span><span class="p">],</span>
+    <span class="dl">"</span><span class="s2">sort</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="dl">"</span><span class="s2">date</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">asc</span><span class="dl">"</span><span class="p">},</span>
+        <span class="p">{</span><span class="dl">"</span><span class="s2">_id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span><span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
 <span class="c1">//search_afetr就是根据你的sort排序规则，填写上一次获取的最后一个数据的值，我们第一次查的是按照date、_id排序，所以填写上次获取的最后一个数据的date和_id即可。</span>
@@ -889,7 +709,7 @@ must_not:查询文档一定不能被包含。<br /></p>
   先将index-buffer中文档解析完成的segment写入到filesystem cache之中，这样避免了比较损耗性能io操作，又可以使document可以被搜索。这个从index-buffer中取数据到filesystem cache中的过程叫作refresh。<br />
   index-buffer:缓存新数据的地方。当其满了或者refresh/flush interval到了，就会以segment file的形式写入到filesystem cache并最终写入到磁盘。默认是 10%heap size。<br />
 <a href="https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#api-indices-refresh">REFRESH-API</a> <br /></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre>POST /twitter/_refresh  指定刷新Twitter
@@ -904,7 +724,7 @@ POST /_refresh 全部刷新
 <h2 id="问题">问题</h2>
 <h4 id="为啥主分片的数量后期无法修改">为啥主分片的数量后期无法修改？</h4>
 <p>es通过以下公式计算文档对应的分片：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 </pre></td><td class="rouge-code"><pre>shard = hash(routing) % number_of_primary_shards
@@ -981,20 +801,25 @@ POST /_refresh 全部刷新
         </a>
         
         
-                <a data-sort="0017" 
+                <a data-sort="0022" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
                     title="数据库"
                     rel="5">数据库</a>
         
-                <a data-sort="0020" 
+                <a data-sort="0025" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书</a>
         
-                <a data-sort="0020" 
-                    href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
-                    title="消息队列"
-                    rel="2">消息队列
+                <a data-sort="0025" 
+                    href="/archive/?tag=%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93"
+                    title="年度总结"
+                    rel="2">年度总结</a>
+        
+                <a data-sort="0025" 
+                    href="/archive/?tag=Docker"
+                    title="Docker"
+                    rel="2">Docker
     </div>
 </section>
 
@@ -1054,6 +879,14 @@ POST /_refresh 全部刷新
 
 
     <!-- Footer -->
+
+
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("", "");</script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
 <footer>
     <div class="container">
         <div class="row">
@@ -1083,7 +916,7 @@ POST /_refresh 全部刷新
   
 </ul>
                 <p class="copyright text-muted">
-                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span> | <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> | <span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
+                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span><span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
                    <!-- <a href="http://gfwant.com">want</a> | -->
                   <iframe
                       style="margin-left: 2px; margin-bottom:-5px;"
@@ -1092,7 +925,7 @@ POST /_refresh 全部刷新
                   </iframe>
                 </p>
                 <p class="copyright text-muted">
-                    Copyright &copy; want 2020
+                    Copyright &copy; want 2023
                      <!-- <a href="http://gfwant.com">want</a> | -->
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
@@ -1251,193 +1084,6 @@ POST /_refresh 全部刷新
 
 
 <!-- Multi-Lingual -->
-
-
-
-  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 
 <!-- Image to hack wechat -->

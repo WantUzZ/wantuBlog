@@ -14,9 +14,12 @@
     <meta property="og:title" content="Redis实操 - 老王 | want">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="解决什么问题
+    <meta property="og:description" content="为什么要用Redis以及会带来哪些问题？
+用的问题
 
-">
+  性能。我们在实际业务的编码中肯定会同数据库进行交互，碰到一些复杂的业务时会执行一些时间过久且执行的结果不频繁变动的SQL。这个时候我们可以考虑
+将结果放到缓存中，这样后面的查询请求就能够迅速响应。
+  并发。在大并发的场景下，所有请求直接访问数据库，数据库会出现连接异常。我们可以考虑使用Redis做一个缓冲操作，让请求先访问到Redi...">
     
     <meta property="article:published_time" content="2019-06-14T03:09:00Z">
     
@@ -70,188 +73,8 @@
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
@@ -433,30 +256,61 @@
                 <!-- Multi-Lingual -->
                 
 
-                <h2 id="解决什么问题">解决什么问题</h2>
+                <h1 id="为什么要用redis以及会带来哪些问题">为什么要用Redis以及会带来哪些问题？</h1>
+<h2 id="用的问题">用的问题</h2>
+<ol>
+  <li>性能。我们在实际业务的编码中肯定会同数据库进行交互，碰到一些复杂的业务时会执行一些时间过久且执行的结果不频繁变动的SQL。这个时候我们可以考虑
+将结果放到缓存中，这样后面的查询请求就能够迅速响应。</li>
+  <li>并发。在大并发的场景下，所有请求直接访问数据库，数据库会出现连接异常。我们可以考虑使用Redis做一个缓冲操作，让请求先访问到Redis,而不是直接访问数据库。</li>
+</ol>
 
-<h2 id="内容">内容</h2>
-<h4 id="安装">安装</h4>
-<p>1、先安装docker
-2、搜索镜像
-3、下载镜像
-4、试用镜像运行一个容器</p>
-<h4 id="基础知识">基础知识</h4>
-<p>redis 几种key的数据类型：
-    1、字符串
-    2、哈希
-    3、列表
-    4、集合
-    5、有序集合</p>
+<h2 id="可能带来的问题">可能带来的问题</h2>
+<ol>
+  <li>Redis数据和数据库数据不一致的问题</li>
+  <li>缓存雪崩问题</li>
+  <li>缓存击穿问题</li>
+  <li>缓存的并发竞争问题</li>
+</ol>
 
-<h4 id="哨兵机制">哨兵机制</h4>
+<h1 id="基础">基础</h1>
+<h2 id="基本数据结构">基本数据结构</h2>
+<p><strong>string</strong> Redis都是以唯一的key字符串作为名称，然后通过这个key来获取value。值得注意的是Redis的字符串是动态字符串是可以修改的字符串，内部结构类似于Java的ArrayList，采用预分配冗余空间的方式来减少内存频繁分配。当字符串的长度小于1M时，扩容都是加倍现有的空间，如果超过1M，扩容1次只会多扩容1M的空间，需要注意的是字符串的最大长度是512M。<br />
+list。Redis的list相当于Java的LinkedList，注意它是链表不是数组，删除和插入非常快，但是查询的性能慢。当列表弹出最后一个元素的时候该数据结构自动会被删除，内存被回收。Rediscover的底层存储还不是一个简单的linkedlist，而是被称之为快速列表quicklist的一个结构。首先在列表元素较少的情况下会使用一块连续的内存存储空间，这个结构就是ziplist即是压缩列表，当数量较多的时候才会改成quicklist。此举的原因是普通的链表需要的附加指针空间太大，会比较浪费空间，而且会加重内存的碎片化。<br /></p>
 
-<h4 id="发布订阅">发布订阅</h4>
+<p><strong>hash</strong> Redis的字典相当于Java中的HashMap，它是无序字典，内部实现的结构也是数组加链表的实现方式，不同的是Redis字典的值只能是字符串。另外他们的rehash的方式不一样，Java的HashMap在字典很大的时，rehash是个耗时的操作，需要一次性全部rehash。Redis为了提高性能，采用的是渐进式rehash策略。渐进式rehash会在rehash的同时保留两个hash结构，查询时会同时查询两个hash结构，然后在后续的定时任务中以及hash操作指令中，循序渐进地将旧hash的内容一点点迁移到新的hash结构中，当迁移完成，就会使用新的hash结构取而代之。hash结构不同于字符串一次性需要全部序列化整个对象，hash可以将对用户结构中的每个字段单独存储，获取对象信息时也可以进行部分获取。hash的缺点在于hash结构的存储消耗要高于单个字符串。<br />
+<strong>set</strong> Redis的set相当于Java中的HashSet，它内部的键值对是无序的唯一的。它的内部实现相当于一个特殊的字典，字典所有value都是NULL。当集合最后一个元素移除之后，数据结构自动删除，内存被回收。常用的业务场景：储存中将用户ID。因为去重功能，可以保证一个用户不会中奖2次。<br />
+<strong>zset</strong> 类似于Java中的SortedSet和HashMap的结合体。一方面它是一个set，保证了内部value的唯一性，另一方面它可以为每个value赋予一个score，这个代表value的排序权重，它内部使用一种叫做跳跃列表的数据结构.<br /></p>
+<h2 id="到底选字符串还是哈希">到底选字符串还是哈希</h2>
+<p>取决于怎么访问数据。<br />
+选字符串的场景：<br />
+1、大多数我们访问了对象上的大多数字段。<br />
+2、key的类型存在差异<br />
+选hash的场景：<br />
+1、大多数只访问单个字段<br />
+2、 始终知道哪些字段可用。<br /></p>
 
-<h4 id="分布式锁">分布式锁</h4>
+<h2 id="容器对象的通用规则">容器对象的通用规则</h2>
+<ol>
+  <li>create if not exists。如果容器不存在，那就创建一个，再进行操作。</li>
+  <li>drop if no elements。如果容器元素没有了，那么立即删除元素，释放内存。</li>
+</ol>
 
-<h4 id="思考与总结">思考与总结</h4>
+<h2 id="过期时间">过期时间</h2>
+<p>Redis的所有数据结构都可以设置过期时间，时间到了，Redis会自动删除响应的对象。需要注意的是过期是以对象为单位的，比如hash结构的过期是以整个hash对象的过期，而不是其中某个子key。还有一个地方需要注意，如果一个字符串已经设置了过期时间，然后你调用了set方法修改了它，它的过期时间会消失。</p>
 
+<h2 id="hyperloglog">HyperLogLog</h2>
+<p>HyperLogLog数据结构的使用场景：数据量特别巨大，但是对统计的精确度要求不高的情况下，HyperLogLog推荐使用。因为HyperLogLog总共占用12K的内存而set会随着数据增长而线性增长。
+12K占用的算法是在Redis的HyperLogLog实现中用到的是2^14个桶，每个桶需要6bits来存储，最大可以表示maxbits=63，于是总共内存占用就是 2^14 * 6 / 8 = 12K<br />
+两命令：pfadd, pfcount</p>
+
+<h2 id="布隆过滤器">布隆过滤器</h2>
+<p>使用的业务场景：专门用来解决去重问题，在起到去重的同时在空间上还能节省百分之旧事以上，只是稍微有那么点不准确。<br />
+几个命令：bf.add bf.madd bf.exists bf.mexists。注意Redis版本需要在4.0以上。<br />
+布隆过滤器使用的目的不是为力存储对象，而是标记对象，以在后续能判断此对象是否被标记过。<br />
+原理：
+每个布隆过滤器对应到Redis中的数据结构就是一个大型的位数组和几个不一样的无偏hash函数。所谓的无偏就是能够把元素的hash值算的比较均匀。
+向布隆过滤器中添加key时，会使用多个hash函数对key进行hash算得一个整数索引值然后对位数组长度进行取模运算得到一个位置，每个hash函数都会算得一个不同的位置。再把位数组的这几个位置都置为1就完成隆add操作。<br />
+向布隆过滤器询问key是否存在时，就跟add一样，也会把hash的几个位置都算出来，看看位数组中这几个位置是否都是1，只要有一个位为0那说明布隆过滤器中这个key不存在，如果都是1也布能说明这个key就一定存在，只是极有可能存在。<br /></p>
 
                 
                 
@@ -525,20 +379,25 @@
         </a>
         
         
-                <a data-sort="0017" 
+                <a data-sort="0022" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
                     title="数据库"
                     rel="5">数据库</a>
         
-                <a data-sort="0020" 
+                <a data-sort="0025" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书</a>
         
-                <a data-sort="0020" 
-                    href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
-                    title="消息队列"
-                    rel="2">消息队列
+                <a data-sort="0025" 
+                    href="/archive/?tag=%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93"
+                    title="年度总结"
+                    rel="2">年度总结</a>
+        
+                <a data-sort="0025" 
+                    href="/archive/?tag=Docker"
+                    title="Docker"
+                    rel="2">Docker
     </div>
 </section>
 
@@ -598,6 +457,14 @@
 
 
     <!-- Footer -->
+
+
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("", "");</script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
 <footer>
     <div class="container">
         <div class="row">
@@ -627,7 +494,7 @@
   
 </ul>
                 <p class="copyright text-muted">
-                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span> | <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> | <span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
+                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span><span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
                    <!-- <a href="http://gfwant.com">want</a> | -->
                   <iframe
                       style="margin-left: 2px; margin-bottom:-5px;"
@@ -636,7 +503,7 @@
                   </iframe>
                 </p>
                 <p class="copyright text-muted">
-                    Copyright &copy; want 2020
+                    Copyright &copy; want 2023
                      <!-- <a href="http://gfwant.com">want</a> | -->
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
@@ -795,193 +662,6 @@
 
 
 <!-- Multi-Lingual -->
-
-
-
-  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 
 <!-- Image to hack wechat -->

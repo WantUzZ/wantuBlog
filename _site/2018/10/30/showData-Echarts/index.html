@@ -67,188 +67,8 @@
 
   <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
   <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
   <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
@@ -442,14 +262,14 @@
 <img src="/img/echartsShow.jpg" alt="查询执行路径图" />
 <strong>引入相关的js文件</strong></p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre> <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">"/lib/echarts/echarts.min.js"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
+</pre></td><td class="rouge-code"><pre> <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="dl">"</span><span class="s2">/lib/echarts/echarts.min.js</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
 </span></pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>在前端页面上预留一个div用以展示相关的图表</strong></p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"chart"</span> <span class="nx">style</span><span class="o">=</span><span class="s2">"height: 400px;width: 100%;padding: 5px;"</span><span class="o">&gt;&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="dl">"</span><span class="s2">chart</span><span class="dl">"</span> <span class="nx">style</span><span class="o">=</span><span class="dl">"</span><span class="s2">height: 400px;width: 100%;padding: 5px;</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/div</span><span class="err">&gt;
 </span></pre></td></tr></tbody></table></code></pre></div></div>
 <p><strong>初始化</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre> var c1 = echarts.init(document.getElementById('chart1'));
  var c1_option;
@@ -541,42 +361,42 @@
 83
 84
 </pre></td><td class="rouge-code"><pre><span class="c1">//这是一个较全的例子</span>
-<span class="kd">var</span> <span class="nx">month_legend</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'上年同期'</span><span class="p">,</span><span class="s1">'上期数据'</span><span class="p">,</span><span class="s1">'当期数据'</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">month_legend</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">上年同期</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">上期数据</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">当期数据</span><span class="dl">'</span><span class="p">];</span>
 <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-    <span class="na">url</span><span class="p">:</span> <span class="s2">"/xxxx"</span><span class="p">,</span>
-    <span class="na">type</span><span class="p">:</span> <span class="s2">"post"</span><span class="p">,</span>
+    <span class="na">url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/xxxx</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">post</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">data</span><span class="p">:</span> <span class="p">{</span>
         <span class="c1">//请求参数</span>
     <span class="p">},</span>
     <span class="na">success</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">//初始化echarts</span>
-        <span class="kd">var</span> <span class="nx">c1</span> <span class="o">=</span> <span class="nx">echarts</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'chart1'</span><span class="p">));</span>
+        <span class="kd">var</span> <span class="nx">c1</span> <span class="o">=</span> <span class="nx">echarts</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">chart1</span><span class="dl">'</span><span class="p">));</span>
         <span class="kd">var</span> <span class="nx">c1_option</span><span class="p">;</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">tag</span> <span class="o">==</span> <span class="s1">'success'</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">tag</span> <span class="o">==</span> <span class="dl">'</span><span class="s1">success</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">//渲染Echarts</span>
             <span class="kd">function</span> <span class="nx">draw_echar1</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
                 <span class="c1">//单个柱状图中间字体的设置</span>
                 <span class="kd">var</span> <span class="nx">seriesLabel</span> <span class="o">=</span> <span class="p">{</span>
                         <span class="na">normal</span><span class="p">:</span> <span class="p">{</span>
                             <span class="na">show</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                            <span class="na">textBorderColor</span><span class="p">:</span> <span class="s1">'#33'</span><span class="p">,</span>
+                            <span class="na">textBorderColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">#33</span><span class="dl">'</span><span class="p">,</span>
                             <span class="na">textBorderWidth</span><span class="p">:</span> <span class="mi">2</span>
                         <span class="p">}</span>
                     <span class="p">}</span>
                 <span class="c1">//图表的设置</span>
                 <span class="nx">c1_option</span> <span class="o">=</span> <span class="p">{</span>
                         <span class="na">title</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">text</span><span class="p">:</span> <span class="s1">'天气统计'</span>
+                            <span class="na">text</span><span class="p">:</span> <span class="dl">'</span><span class="s1">天气统计</span><span class="dl">'</span>
                         <span class="p">},</span>
                         <span class="na">tooltip</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">trigger</span><span class="p">:</span> <span class="s1">'axis'</span><span class="p">,</span>
+                            <span class="na">trigger</span><span class="p">:</span> <span class="dl">'</span><span class="s1">axis</span><span class="dl">'</span><span class="p">,</span>
                             <span class="na">axisPointer</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'shadow'</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">shadow</span><span class="dl">'</span>
                             <span class="p">}</span>
                         <span class="p">},</span>
                         <span class="na">legend</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="s1">'北京'</span><span class="p">,</span> <span class="s1">'上海'</span><span class="p">,</span> <span class="s1">'深圳'</span><span class="p">]</span>
+                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">北京</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">上海</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">深圳</span><span class="dl">'</span><span class="p">]</span>
                         <span class="p">},</span>
                         <span class="na">grid</span><span class="p">:</span> <span class="p">{</span>
                             <span class="na">left</span><span class="p">:</span> <span class="mi">100</span>
@@ -588,34 +408,34 @@
                             <span class="p">}</span>
                         <span class="p">},</span>
                         <span class="na">yAxis</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">type</span><span class="p">:</span> <span class="s1">'value'</span><span class="p">,</span>
-                            <span class="na">name</span><span class="p">:</span> <span class="s1">'天数'</span><span class="p">,</span>
+                            <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">value</span><span class="dl">'</span><span class="p">,</span>
+                            <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">天数</span><span class="dl">'</span><span class="p">,</span>
                             <span class="na">axisLabel</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="na">formatter</span><span class="p">:</span> <span class="s1">'{value}'</span>
+                                <span class="na">formatter</span><span class="p">:</span> <span class="dl">'</span><span class="s1">{value}</span><span class="dl">'</span>
                             <span class="p">}</span>
                         <span class="p">},</span>
                         <span class="na">xAxis</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="na">type</span><span class="p">:</span> <span class="s1">'category'</span><span class="p">,</span>
+                            <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">category</span><span class="dl">'</span><span class="p">,</span>
                             <span class="na">inverse</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="s1">'晴天'</span><span class="p">,</span> <span class="s1">'多云'</span><span class="p">,</span> <span class="s1">'下雨'</span><span class="p">]</span>
+                            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">晴天</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">多云</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">下雨</span><span class="dl">'</span><span class="p">]</span>
                         <span class="p">},</span>
                         <span class="c1">//一般来说series属性直接拿后台组装的数据前端不负责数据的组装</span>
                         <span class="na">series</span><span class="p">:</span> <span class="p">[</span>
                             <span class="p">{</span>
-                                <span class="na">name</span><span class="p">:</span> <span class="s1">'北京'</span><span class="p">,</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+                                <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">北京</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
                                 <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">165</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
                                 <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span>
                             <span class="p">},</span>
                             <span class="p">{</span>
-                                <span class="na">name</span><span class="p">:</span> <span class="s1">'上海'</span><span class="p">,</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+                                <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">上海</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
                                 <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
                                 <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">110</span><span class="p">]</span>
                             <span class="p">},</span>
                             <span class="p">{</span>
-                                <span class="na">name</span><span class="p">:</span> <span class="s1">'深圳'</span><span class="p">,</span>
-                                <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+                                <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">深圳</span><span class="dl">'</span><span class="p">,</span>
+                                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
                                 <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
                                 <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">220</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">63</span><span class="p">]</span>
                             <span class="p">}</span>
@@ -648,20 +468,20 @@
 20
 </pre></td><td class="rouge-code"><pre><span class="p">[</span>
     <span class="p">{</span>
-        <span class="na">name</span><span class="p">:</span> <span class="s1">'北京'</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">北京</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">165</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
         <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="na">name</span><span class="p">:</span> <span class="s1">'上海'</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">上海</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
         <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">110</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="na">name</span><span class="p">:</span> <span class="s1">'深圳'</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="s1">'bar'</span><span class="p">,</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">深圳</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">label</span><span class="p">:</span> <span class="nx">seriesLabel</span><span class="p">,</span>
         <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">220</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">63</span><span class="p">]</span>
     <span class="p">}</span>
@@ -676,7 +496,7 @@
 <p>1、echarts封装的很不错，所以很多设置可能只是一个属性的设置，请多在官方实例中进行尝试修改，并记住常用的属性设置。<br /></p>
 <h4 id="常用属性">常用属性</h4>
 <p><em>后续继续补充</em></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -782,20 +602,25 @@ series//展示设置
         </a>
         
         
-                <a data-sort="0017" 
+                <a data-sort="0022" 
                     href="/archive/?tag=%E6%95%B0%E6%8D%AE%E5%BA%93"
                     title="数据库"
                     rel="5">数据库</a>
         
-                <a data-sort="0020" 
+                <a data-sort="0025" 
                     href="/archive/?tag=%E4%B9%A6"
                     title="书"
                     rel="2">书</a>
         
-                <a data-sort="0020" 
-                    href="/archive/?tag=%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"
-                    title="消息队列"
-                    rel="2">消息队列
+                <a data-sort="0025" 
+                    href="/archive/?tag=%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93"
+                    title="年度总结"
+                    rel="2">年度总结</a>
+        
+                <a data-sort="0025" 
+                    href="/archive/?tag=Docker"
+                    title="Docker"
+                    rel="2">Docker
     </div>
 </section>
 
@@ -855,6 +680,14 @@ series//展示设置
 
 
     <!-- Footer -->
+
+
+  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("", "");</script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
 <footer>
     <div class="container">
         <div class="row">
@@ -884,7 +717,7 @@ series//展示设置
   
 </ul>
                 <p class="copyright text-muted">
-                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span> | <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span> | <span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
+                  <span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人次</span><span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span><span id="busuanzi_container_page_pv">本文总阅读<span id="busuanzi_value_page_pv"></span>次</span>
                    <!-- <a href="http://gfwant.com">want</a> | -->
                   <iframe
                       style="margin-left: 2px; margin-bottom:-5px;"
@@ -893,7 +726,7 @@ series//展示设置
                   </iframe>
                 </p>
                 <p class="copyright text-muted">
-                    Copyright &copy; want 2020
+                    Copyright &copy; want 2023
                      <!-- <a href="http://gfwant.com">want</a> | -->
                     <iframe
                         style="margin-left: 2px; margin-bottom:-5px;"
@@ -1052,193 +885,6 @@ series//展示设置
 
 
 <!-- Multi-Lingual -->
-
-
-
-  <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("", "");</script>
-  <script>
-    //新增访问次数
-    function addCount(Counter) {
-      // 页面（博客文章）中的信息：leancloud_visitors
-      // id为page.url， data-flag-title为page.title
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("visited_times");// 将点击次数加1
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = counter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            // 执行这里，说明LeanCloud中还没有记录此文章
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("post_title", title);// 把文章标题
-            newcounter.set("post_url", url); // 文章url
-            newcounter.set("visited_times", 1); // 初始点击次数：1次
-            newcounter.save(null, { // 上传到LeanCloud服务器中
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                var newTimes = newcounter.get('visited_times');
-                $element.find('.leancloud-visitors-count').text(newTimes);
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //仅根据url和title查出当前访问次数，不做+1操作
-    function showCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      // 只根据文章的url查询LeanCloud服务器中的数据
-      query.equalTo("post_url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {//说明LeanCloud中已经记录了这篇文章
-            var counter = results[0];
-            var $element = $(document.getElementById(url));
-            var newTimes = counter.get('visited_times');
-            $element.find('.leancloud-visitors-count').text(newTimes);
-          } else {
-            //如果表里没查到记录，那就是异常情况了
-            console.log('异常情况，不应该没记录的');
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    //调用API获取IP
-    function getVisitorIpAndJudge() {
-      var ip;
-      var options = {
-        type: 'POST',
-        dataType: "json",
-        //async: false, //jquery3中可以直接使用回调函数，不用再指定async
-        url: "https://freegeoip.net/json/?callback=?"
-      };
-      $.ajax(options)
-      .done(function(data, textStatus, jqXHR) {
-        if(textStatus == "success") {
-          ip = data.ip;
-        }
-        judgeVisitor(ip)
-      });
-    }
-
-    //判断访客是否已访问过该文章，及访问时间，符合条件则增加一次访问次数
-    function judgeVisitor(ip) {
-      var Counter = AV.Object.extend("visited_times");
-      var Visitor = AV.Object.extend("visitors_record");
-
-      var $postInfo = $(".leancloud_visitors");
-      var post_url = $postInfo.attr('id').trim();
-
-      var query = new AV.Query(Visitor);
-
-      query.equalTo("visitor_ip", ip);
-      query.equalTo("post_url", post_url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            console.log('该IP已访问过该文章');
-
-            var oldVisitor = results[0];
-
-            var lastTime = oldVisitor.updatedAt;
-            var curTime = new Date();
-
-            var timePassed = curTime.getTime() - lastTime.getTime();
-
-            if(timePassed > 1 * 60 * 1000) {
-              console.log('距离该IP上一次访问该文章已超过了1分钟，更新访问记录，并增加访问次数');
-
-              addCount(Counter);
-
-              oldVisitor.fetchWhenSave(true);
-              oldVisitor.save(null, {
-                success: function(oldVisitor) { },
-                error: function(oldVisitor, error) {
-                  console.log('Failed to save visitor record, with error message: ' + error.message);
-                }
-              });
-            } else {
-              console.log('这是该IP 1分钟内重复访问该文章，不更新访问记录，不增加访问次数');
-              showCount(Counter);
-            }
-          } else {
-            console.log('该IP第一次访问该文章，保存新的访问记录，并增加访问次数');
-
-            addCount(Counter);
-
-            var newVisitor = new Visitor();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newVisitor.setACL(acl);
-            newVisitor.set("visitor_ip", ip);
-            newVisitor.set("post_url", post_url);
-            newVisitor.save(null, { // 上传到LeanCloud服务器中
-              success: function(newVisitor) { },
-              error: function(newVisitor, error) {
-                console.log('Failed to create visitor record, with error message: ' + error.message);
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-          addCount(Counter);
-        }
-      });
-    }
-
-    $(function() {
-      if ($('.leancloud_visitors').length == 1) {
-        // 文章页面，调用判断方法，对符合条件的访问增加访问次数
-        getVisitorIpAndJudge();
-      } else if ($('.post-link').length > 1){
-        // 首页 暂未使用
-        // showHitCount(Counter);
-      }
-    });
-  </script>
 
 
 <!-- Image to hack wechat -->

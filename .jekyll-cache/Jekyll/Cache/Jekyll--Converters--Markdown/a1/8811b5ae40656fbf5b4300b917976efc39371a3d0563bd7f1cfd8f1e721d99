@@ -1,4 +1,4 @@
-I"|0<p><strong>相关代码已经托管到github上，欢迎指正bug.<a href="https://github.com/WantUzZ/Algorithm-implementation">戳我</a></strong></p>
+I"�0<p><strong>相关代码已经托管到github上，欢迎指正bug.<a href="https://github.com/WantUzZ/Algorithm-implementation">戳我</a></strong></p>
 <h2 id="排序">排序</h2>
 <h4 id="冒泡">冒泡</h4>
 <p>  冒泡排序，就跟它的名字一样，你可以想象一条🐟现在在一个湖底。鱼肚子里面是我们将要排序的数据。这个鱼每隔一段时间会打个嗝（吐个泡泡），而这个泡泡中的数总是鱼肚子里面的最大值或者最小值。然后一个小朋友在岸上拿了一个泡泡收集器，把它吐出的泡泡一个一个按顺序放进机器里面。最后整个泡泡收集器中的数据都是有序的了。</p>
@@ -11,8 +11,8 @@
 7
 8
 9
-</pre></td><td class="rouge-code"><pre><span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="err">待排序数组</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="err">的长度</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-    <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="nx">j</span><span class="o">&lt;</span><span class="err">待排序数组</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="err">的长度</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="nx">i</span><span class="p">;</span><span class="nx">j</span><span class="o">++</span><span class="p">){</span>
+</pre></td><td class="rouge-code"><pre><span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">待排序数组</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="nx">的长度</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="nx">j</span><span class="o">&lt;</span><span class="nx">待排序数组</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="nx">的长度</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="nx">i</span><span class="p">;</span><span class="nx">j</span><span class="o">++</span><span class="p">){</span>
         <span class="k">if</span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span><span class="o">&gt;</span><span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]){</span>
             <span class="kd">let</span> <span class="nx">temp</span> <span class="o">=</span> <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
             <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">=</span> <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
@@ -34,7 +34,7 @@
 <h4 id="希尔排序">希尔排序</h4>
 <p>  希尔排序是一种分治思想的体现。<br />
 <strong>关于分治：</strong></p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
