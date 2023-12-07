@@ -11,7 +11,7 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="状态机 - 老王 | want">
+    <meta property="og:title" content="有限状态机 - 老王 | want">
     
     <meta property="og:type" content="article">
     <meta property="og:description" content="背景
@@ -30,7 +30,7 @@
     <meta property="og:url" content="http://localhost:4000/2022/06/02/stateMachine/">
     <meta property="og:site_name" content="老王 | want">
     
-    <title>状态机 - 老王 | want</title>
+    <title>有限状态机 - 老王 | want</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -219,7 +219,7 @@
                         <a class="tag" href="/archive/?tag=%E7%8A%B6%E6%80%81%E6%9C%BA" title="状态机">状态机</a>
                         
                     </div>
-                    <h1>状态机</h1>
+                    <h1>有限状态机</h1>
                     
                     <h2 class="subheading"></h2>
                     <span class="meta">Posted by wantu on June 2, 2022</span>
@@ -250,13 +250,114 @@
 
                 <h1 id="背景">背景</h1>
 
-<p>运营系统，需求管理。</p>
+<p>接手的需求是一个状态多，流程流转复杂。如果按照传统的编程思路，可能需要使用 if-else 来实现，但是这样的实现方式不利于扩展，而且不利于维护。
+有限状态机在解决这种场景是比较合适的。网上的轮子很多，但是大多数都是 Java 的实现，因为整体的思想不难，所以考虑自己进行实现。</p>
 
-<h1 id="介绍">介绍</h1>
+<p><img src="/img/2023_blog_img/状态机_01.jpg" alt="需求状态流转" /></p>
 
-<h1 id="实践">实践</h1>
+<h1 id="状态机">状态机</h1>
 
-<h1 id="总结">总结</h1>
+<h2 id="状态机的定义">状态机的定义</h2>
+
+<p>状态机是一种控制流的结构，它包含一组状态，每个状态都有一组动作，当状态机处于某个状态时，会执行对应的动作。</p>
+
+<h2 id="有限状态机的特点">有限状态机的特点</h2>
+
+<ul>
+  <li>状态机的状态是有限的，且状态之间是有依赖关系的。</li>
+  <li>状态机的状态是独立的，不受其他状态的影响。</li>
+</ul>
+
+<h2 id="状态机的基本概念">状态机的基本概念</h2>
+
+<p>第一个是 State ，状态。一个状态机至少要包含两个状态。例如 门有 open 和 closed 两个状态。<br />
+第二个是 Event ，事件。事件就是执行某个操作的触发条件或者口令。对于自动门，“按下开门按钮”就是一个事件。<br />
+第三个是 Action ，动作。事件发生以后要执行动作。例如事件是“按开门按钮”，动作是“开门”。编程的时候，一个 Action 一般就对应一个函数。<br />
+第四个是 Transition ，变换。也就是从一个状态变化为另一个状态。例如“开门过程”就是一个变换。</p>
+
+<h1 id="设计实现">设计实现</h1>
+
+<h2 id="核心表结构设计">核心表结构设计</h2>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="k">create</span> <span class="k">table</span> <span class="n">t_state_machine</span>
+<span class="p">(</span>
+    <span class="n">id</span>           <span class="nb">int</span> <span class="n">auto_increment</span>
+        <span class="k">primary</span> <span class="k">key</span><span class="p">,</span>
+    <span class="n">project_name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span> <span class="k">default</span> <span class="s1">''</span>  <span class="k">not</span> <span class="k">null</span> <span class="k">comment</span> <span class="s1">'项目描述'</span><span class="p">,</span>
+    <span class="n">name</span>         <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>             <span class="k">not</span> <span class="k">null</span> <span class="k">comment</span> <span class="s1">'状态过渡触发方法名'</span><span class="p">,</span>
+    <span class="nv">`desc`</span>       <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>             <span class="k">null</span> <span class="k">comment</span> <span class="s1">'需求触发动作'</span><span class="p">,</span>
+    <span class="nv">`from`</span>       <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span> <span class="k">default</span> <span class="s1">'0'</span> <span class="k">not</span> <span class="k">null</span><span class="p">,</span>
+    <span class="n">from_desc</span>    <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>             <span class="k">null</span><span class="p">,</span>
+    <span class="nv">`to`</span>         <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>                   <span class="k">not</span> <span class="k">null</span><span class="p">,</span>
+    <span class="n">to_desc</span>      <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>             <span class="k">null</span><span class="p">,</span>
+    <span class="n">wx_obj</span>       <span class="nb">varchar</span><span class="p">(</span><span class="mi">2048</span><span class="p">)</span>            <span class="k">null</span> <span class="k">comment</span> <span class="s1">'推送微信配置'</span>
+<span class="p">);</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="核心代码实现">核心代码实现</h2>
+
+<h3 id="状态机类">状态机类</h3>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="nx">DemandStateMachine</span> <span class="p">{</span>
+    <span class="k">async</span> <span class="nx">initTransition</span><span class="p">(</span><span class="nx">event</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">demand</span><span class="p">?:</span> <span class="nx">Demand</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 在这进行转换的状态流转校验</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+
+    <span class="k">async</span> <span class="nx">Action1</span><span class="p">(</span><span class="nx">params</span><span class="p">:</span> <span class="kr">any</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">initTransition</span><span class="p">(</span><span class="dl">'</span><span class="s1">EventName</span><span class="dl">'</span><span class="p">,</span> <span class="nx">demand</span><span class="p">)</span>
+        <span class="c1">// Action 触发的后置业务逻辑</span>
+        <span class="p">...</span>
+        <span class="c1">//一连串后续操作收口到事物中进行处理</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="接口文件">接口文件</h3>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="c1">// 1. 注入状态机实例对象</span>
+<span class="c1">// 2. 参数校验</span>
+<span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">checkPermission</span><span class="p">(</span><span class="nx">params</span><span class="p">);</span>
+<span class="c1">// 3. 调用实例方法</span>
+<span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nx">demandStateMachine</span><span class="p">.</span><span class="nx">Action1</span><span class="p">(</span><span class="nx">params</span><span class="p">);</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
 
                 
                 
